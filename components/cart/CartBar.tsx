@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, ChevronUp, Minus, Plus, ShoppingCart, Trash2 } from 'lucide-react'
@@ -15,6 +15,8 @@ interface ActiveFlyout {
   targetY: number
 }
 
+const emptySubscribe = () => () => {}
+
 export function CartBar() {
   const items = useCartStore((s) => s.items)
   const total_paise = useCartStore((s) => s.total_paise)
@@ -26,20 +28,14 @@ export function CartBar() {
   const clearCart = useCartStore((s) => s.clearCart)
   const clearFlyout = useCartStore((s) => s.clearFlyout)
 
-  const [mounted, setMounted] = useState(false)
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  )
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [flyout, setFlyout] = useState<ActiveFlyout | null>(null)
-  const [badgeBounceKey, setBadgeBounceKey] = useState(0)
   const cartIconRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  useEffect(() => {
-    if (!lastAddedAt) return
-    setBadgeBounceKey((k) => k + 1)
-  }, [lastAddedAt])
 
   useEffect(() => {
     if (!flyoutEvent || typeof window === 'undefined') return
@@ -52,29 +48,29 @@ export function CartBar() {
       ? iconRect.top + iconRect.height / 2
       : window.innerHeight - 44
 
-    setFlyout({
-      id: flyoutEvent.id,
-      startX: flyoutEvent.x,
-      startY: flyoutEvent.y,
-      targetX,
-      targetY,
-    })
+    const startTimer = window.setTimeout(() => {
+      setFlyout({
+        id: flyoutEvent.id,
+        startX: flyoutEvent.x,
+        startY: flyoutEvent.y,
+        targetX,
+        targetY,
+      })
+    }, 0)
 
-    const timer = window.setTimeout(() => {
+    const endTimer = window.setTimeout(() => {
       setFlyout(null)
       clearFlyout()
     }, 560)
 
-    return () => window.clearTimeout(timer)
+    return () => {
+      window.clearTimeout(startTimer)
+      window.clearTimeout(endTimer)
+    }
   }, [flyoutEvent, clearFlyout])
 
-  useEffect(() => {
-    if (total_items === 0) {
-      setDrawerOpen(false)
-    }
-  }, [total_items])
-
   const ready = mounted && (hasHydrated || items.length > 0)
+  const showDrawer = drawerOpen && total_items > 0
 
   return (
     <>
@@ -130,7 +126,7 @@ export function CartBar() {
             <div className="pointer-events-auto mx-auto max-w-2xl">
               {/* Quick Expandable Cart Peek */}
               <AnimatePresence>
-                {drawerOpen && (
+                {showDrawer && (
                   <motion.div
                     initial={{ opacity: 0, y: 12, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -142,7 +138,10 @@ export function CartBar() {
                       <h4 className="text-sm font-bold text-[var(--text)]">Your Tray</h4>
                       <button
                         type="button"
-                        onClick={clearCart}
+                        onClick={() => {
+                          setDrawerOpen(false)
+                          clearCart()
+                        }}
                         className="inline-flex cursor-pointer items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-[var(--danger)] hover:bg-[var(--danger)]/10"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
@@ -205,7 +204,7 @@ export function CartBar() {
                   >
                     <ShoppingCart className="h-5 w-5" />
                     <motion.span
-                      key={badgeBounceKey}
+                      key={lastAddedAt}
                       initial={{ scale: 0.7 }}
                       animate={{ scale: [1, 1.35, 0.92, 1] }}
                       transition={{ duration: 0.35 }}
@@ -222,7 +221,7 @@ export function CartBar() {
                       </span>
                       <ChevronUp
                         className={`h-4 w-4 opacity-80 transition-transform ${
-                          drawerOpen ? 'rotate-180' : ''
+                          showDrawer ? 'rotate-180' : ''
                         }`}
                       />
                     </p>
@@ -232,6 +231,7 @@ export function CartBar() {
 
                 <Link
                   href="/checkout"
+                  onClick={() => setDrawerOpen(false)}
                   className="inline-flex h-11 min-h-[44px] shrink-0 items-center gap-1.5 rounded-xl bg-white px-4 text-sm font-bold text-[var(--primary)] shadow-sm transition-transform hover:bg-[var(--bg)] active:scale-95 sm:px-5"
                 >
                   <span>Checkout</span>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState, useSyncExternalStore } from 'react'
 import { motion } from 'framer-motion'
 import { Clock, Coffee, Cookie, Flame, Plus, Soup, Utensils } from 'lucide-react'
 import type { MenuItem } from '@/lib/types'
@@ -51,6 +51,18 @@ function getCategoryVisual(categoryName?: string) {
   }
 }
 
+function subscribeReducedMotion(onStoreChange: () => void) {
+  if (typeof window === 'undefined') return () => {}
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+  mq.addEventListener('change', onStoreChange)
+  return () => mq.removeEventListener('change', onStoreChange)
+}
+
+function getReducedMotionSnapshot() {
+  if (typeof window === 'undefined') return false
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
 export function MenuCard({
   item,
   categoryName,
@@ -62,16 +74,11 @@ export function MenuCard({
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, active: false })
   const [spot, setSpot] = useState({ x: 50, y: 50 })
   const [imgError, setImgError] = useState(false)
-  const [reducedMotion, setReducedMotion] = useState(false)
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReducedMotion(mq.matches)
-    const onChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches)
-    mq.addEventListener('change', onChange)
-    return () => mq.removeEventListener('change', onChange)
-  }, [])
+  const reducedMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotionSnapshot,
+    () => false
+  )
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (reducedMotion || !item.in_stock || !cardRef.current) return

@@ -83,6 +83,7 @@ function AuthFormBody({
   const isRegister = mode === 'register'
   const inputId = isRegister ? 'register-college-email' : 'signin-college-email'
   const otpPrefix = isRegister ? 'register-otp' : 'signin-otp'
+  const emailLocal = email.includes('@') ? email.split('@')[0] : email
 
   return (
     <div className="w-full">
@@ -133,30 +134,39 @@ function AuthFormBody({
                 >
                   College Email Address
                 </label>
-                <div className="relative mt-2">
-                  <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)]">
+                <div
+                  className={`relative mt-2 flex h-12 min-h-[44px] w-full items-center rounded-xl border bg-[var(--bg)] transition-all ${
+                    !hasTypedEmail
+                      ? 'border-[var(--border)] focus-within:border-[var(--primary)] focus-within:ring-3 focus-within:ring-[var(--primary)]/15'
+                      : isEmailValid
+                      ? 'border-[var(--success)] focus-within:ring-3 focus-within:ring-[var(--success)]/15'
+                      : 'border-[var(--danger)] focus-within:ring-3 focus-within:ring-[var(--danger)]/15'
+                  }`}
+                >
+                  <span className="pointer-events-none pl-3.5 pr-2 text-[var(--text-muted)]">
                     <Mail className="h-4 w-4" />
                   </span>
                   <input
                     id={inputId}
-                    type="email"
-                    inputMode="email"
-                    autoComplete="email"
-                    value={email}
-                    onChange={(e) => onEmailChange(e.target.value)}
-                    placeholder="4mt21cs001@mite.ac.in"
-                    className={`h-12 min-h-[44px] w-full rounded-xl border bg-[var(--bg)] pl-10 pr-11 text-base sm:text-sm text-[var(--text)] placeholder:text-[var(--text-muted)]/70 outline-none transition-all ${
-                      !hasTypedEmail
-                        ? 'border-[var(--border)] focus:border-[var(--primary)] focus:ring-3 focus:ring-[var(--primary)]/15'
-                        : isEmailValid
-                        ? 'border-[var(--success)] focus:ring-3 focus:ring-[var(--success)]/15'
-                        : 'border-[var(--danger)] focus:ring-3 focus:ring-[var(--danger)]/15'
-                    }`}
+                    type="text"
+                    inputMode="text"
+                    autoComplete="username"
+                    value={emailLocal}
+                    onChange={(e) => {
+                      const raw = e.target.value.toLowerCase().replace(/\s+/g, '')
+                      const cleaned = raw.replace(/@mite\.ac\.in$/i, '').replace(/@.*$/, '')
+                      onEmailChange(cleaned ? `${cleaned}@mite.ac.in` : '')
+                    }}
+                    placeholder="4mt21cs001"
+                    className="h-full flex-1 bg-transparent py-2 pl-0 pr-1 text-base sm:text-sm text-[var(--text)] placeholder:text-[var(--text-muted)]/60 outline-none"
                   />
+                  <span className="pointer-events-none select-none pr-3 text-sm font-medium text-[var(--text-muted)] sm:text-xs">
+                    @mite.ac.in
+                  </span>
                   {hasTypedEmail && (
                     <span
                       aria-live="polite"
-                      className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2"
+                      className="pointer-events-none pr-3.5"
                     >
                       {isEmailValid ? (
                         <CheckCircle2
@@ -166,7 +176,7 @@ function AuthFormBody({
                       ) : (
                         <XCircle
                           className="h-5 w-5 text-[var(--danger)]"
-                          aria-label="Invalid email domain"
+                          aria-label="Invalid email format"
                         />
                       )}
                     </span>
@@ -176,15 +186,15 @@ function AuthFormBody({
                 <div className="mt-2 min-h-[20px] flex flex-wrap items-center justify-between gap-2 text-xs">
                   {!hasTypedEmail ? (
                     <span className="text-[var(--text-muted)]">
-                      Must end with <code className="font-mono">@mite.ac.in</code>
+                      Enter your USN or username (e.g. <code className="font-mono">4mt21cs001</code>)
                     </span>
                   ) : isEmailValid ? (
                     <span className="font-medium text-[var(--success)]">
-                      Valid MITE address
+                      Valid MITE address ({trimmedEmail})
                     </span>
                   ) : (
                     <span className="font-medium text-[var(--danger)]">
-                      Only exact @mite.ac.in addresses are accepted
+                      Please enter a valid USN or username
                     </span>
                   )}
 

@@ -199,21 +199,27 @@ export function PortalLoginForm({
               >
                 Email
               </label>
-              <div className="relative mt-1.5">
-                <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)]">
+              <div className="relative mt-1.5 flex h-12 min-h-[44px] w-full items-center rounded-xl border border-[var(--border)] bg-[var(--bg)] transition-all focus-within:border-[var(--primary)] focus-within:ring-3 focus-within:ring-[var(--primary)]/15">
+                <span className="pointer-events-none pl-3.5 pr-2 text-[var(--text-muted)]">
                   <Mail className="h-4 w-4" />
                 </span>
                 <input
                   id={`${portal}-email`}
-                  type="email"
-                  inputMode="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="text"
+                  autoComplete="username"
+                  value={email.includes('@') ? email.split('@')[0] : email}
+                  onChange={(e) => {
+                    const raw = e.target.value.toLowerCase().replace(/\s+/g, '')
+                    const cleaned = raw.replace(/@mite\.ac\.in$/i, '').replace(/@.*$/, '')
+                    setEmail(cleaned ? `${cleaned}@mite.ac.in` : '')
+                  }}
                   disabled={submitting || isLocked}
-                  placeholder={placeholderEmail}
-                  className="h-12 min-h-[44px] w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] pl-10 pr-4 text-sm text-[var(--text)] placeholder:text-[var(--text-muted)]/60 outline-none transition-all focus:border-[var(--primary)] focus:ring-3 focus:ring-[var(--primary)]/15 disabled:opacity-60"
+                  placeholder={placeholderEmail.split('@')[0]}
+                  className="h-full flex-1 bg-transparent py-2 pl-0 pr-1 text-sm text-[var(--text)] placeholder:text-[var(--text-muted)]/60 outline-none disabled:opacity-60"
                 />
+                <span className="pointer-events-none select-none pr-3.5 text-sm font-medium text-[var(--text-muted)]">
+                  @mite.ac.in
+                </span>
               </div>
             </div>
 

@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
+import { isSupabaseConfigured } from '@/lib/supabase/config'
 import type { Category, MenuItem, OrderWithItems, PickupSlot } from '@/lib/types'
 import { StaffHeader } from '@/components/staff/StaffHeader'
 import { SlotHeatmap } from '@/components/staff/SlotHeatmap'
@@ -140,7 +141,7 @@ export default function KitchenBoardPage() {
 
   // Realtime Supabase subscription
   useEffect(() => {
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    if (!isSupabaseConfigured()) {
       return
     }
     const supabase = createClient()

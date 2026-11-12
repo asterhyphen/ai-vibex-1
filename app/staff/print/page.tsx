@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
+import { isSupabaseConfigured } from '@/lib/supabase/config'
 import type { PrintJob } from '@/lib/types'
 import { formatPaise } from '@/lib/utils/format'
 import { StaffHeader } from '@/components/staff/StaffHeader'
@@ -84,7 +85,7 @@ export default function PrintQueuePage() {
   }, [])
 
   useEffect(() => {
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    if (!isSupabaseConfigured()) {
       return
     }
     const supabase = createClient()

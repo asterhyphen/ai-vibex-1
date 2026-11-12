@@ -16,6 +16,7 @@ import {
   ShieldCheck,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { isSupabaseConfigured } from '@/lib/supabase/config'
 import type { PrintJob } from '@/lib/types'
 import { formatPaise } from '@/lib/utils/format'
 import { ThemeToggle } from '@/components/auth/ThemeToggle'
@@ -72,11 +73,7 @@ function PrintJobTrackingContent() {
   }, [jobId])
 
   useEffect(() => {
-    if (
-      !jobId ||
-      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    ) {
+    if (!jobId || !isSupabaseConfigured()) {
       return
     }
     const supabase = createClient()

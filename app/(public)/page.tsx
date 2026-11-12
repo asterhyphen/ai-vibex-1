@@ -138,7 +138,7 @@ export default function LandingPage() {
               SkipQ
             </span>
             <span className="text-[11px] font-medium text-[var(--text-muted)]">
-              Pre-Order &amp; Print
+              Skip the queue
             </span>
           </span>
         </Link>
@@ -187,7 +187,7 @@ export default function LandingPage() {
                 variants={fadeUp}
                 className="mt-5 max-w-xl text-base sm:text-lg leading-relaxed text-[var(--text-muted)]"
               >
-                Pre-order your canteen meals, pick up with a QR scan. Reserve a
+                Pre-order your canteen meals and printing documents, pick up with a QR scan. Reserve a
                 10-minute break slot, track kitchen prep live, and send PDFs to
                 the campus print counter in one tap.
               </motion.p>
@@ -212,23 +212,7 @@ export default function LandingPage() {
                 </a>
               </motion.div>
 
-              <motion.div
-                variants={fadeUp}
-                className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs sm:text-sm text-[var(--text-muted)]"
-              >
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-[var(--success)]" />
-                  Open 08:00 AM – 08:00 PM
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-[var(--accent)]" />
-                  10-min pickup slots
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-[var(--primary)]" />
-                  Contactless QR counter
-                </span>
-              </motion.div>
+              
             </motion.div>
 
             {/* Right Half: Lazy-loaded 3D HeroScene */}
@@ -357,12 +341,12 @@ export default function LandingPage() {
               <p className="flex items-center gap-2 text-sm text-[var(--text)]">
                 <Sparkles className="h-4 w-4 shrink-0 text-[var(--accent)]" />
                 <span>
-                  &ldquo;I order two masala dosas before walking out of the lab and
+                  &ldquo;I order two avocado toasts and an espresso and
                   grab them hot in 45 seconds.&rdquo;
                 </span>
               </p>
               <span className="shrink-0 text-xs font-semibold text-[var(--text-muted)]">
-                — 6th Sem CSE, MITE Moodabidri
+                — Ahmed, 5th Sem ISE, MITE Moodabidri
               </span>
             </motion.div>
           </motion.div>
@@ -387,9 +371,7 @@ export default function LandingPage() {
                 'radial-gradient(ellipse 70% 60% at 50% 110%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 70%)',
             }}
           />
-          <p className="relative text-xs font-semibold text-[var(--accent)]">
-            Exclusively for MITE campus
-          </p>
+          
           <p className="relative mt-3 text-sm sm:text-base text-[var(--text-muted)] max-w-lg mx-auto leading-relaxed">
             Built for MITE campus breaks — order ahead, pay in seconds, and
             pick up with a QR scan.

@@ -98,7 +98,7 @@ function GiantBrandWord({ reduced }: { reduced: boolean }) {
 export function LandingFooter() {
   const reduced = useReducedMotion() ?? false
   const ref = useRef<HTMLElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-80px 0px' })
+  const inView = useInView(ref, { once: true, amount: 0.15 })
 
   const lineVariants: Variants = {
     hidden: { opacity: 0, y: 14 },
@@ -131,7 +131,7 @@ export function LandingFooter() {
           variants={reduced ? undefined : lineVariants}
           className="text-sm font-medium text-white/45 tracking-wide"
         >
-          © MITE {new Date().getFullYear()}
+          © MITE 2026
         </motion.p>
 
         {/* Right side — nav + socials */}

@@ -1,7 +1,14 @@
 'use client'
 
+import { useRef } from 'react'
 import Link from 'next/link'
-import { motion, useReducedMotion, type Variants } from 'framer-motion'
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  type Variants,
+} from 'framer-motion'
 import {
   ArrowRight,
   ChevronDown,
@@ -83,18 +90,39 @@ const STATS = [
 
 export default function LandingPage() {
   const prefersReducedMotion = useReducedMotion()
+  const footerRevealRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: footerRevealRef,
+    offset: ['start end', 'end end'],
+  })
+  const sheetRadius = useTransform(scrollYProgress, [0, 1], [20, 48])
+  const sheetScale = useTransform(scrollYProgress, [0, 1], [1, 0.985])
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[var(--bg)] text-[var(--text)] overflow-x-clip">
-      {/* Subtle brand hero gradient wash */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[780px]"
-        style={{
-          background:
-            'radial-gradient(ellipse 80% 55% at 20% 0%, color-mix(in srgb, var(--primary) 16%, transparent), transparent 70%), radial-gradient(ellipse 65% 50% at 88% 12%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 68%), linear-gradient(180deg, color-mix(in srgb, var(--primary) 5%, var(--bg)) 0%, var(--bg) 100%)',
-        }}
-      />
+    <div className="relative min-h-screen flex flex-col bg-[#0D0608] text-[var(--text)] overflow-x-clip">
+      {/* Curved top page sheet that reveals the dark footer underneath */}
+      <motion.div
+        style={
+          prefersReducedMotion
+            ? undefined
+            : {
+                borderBottomLeftRadius: sheetRadius,
+                borderBottomRightRadius: sheetRadius,
+                scale: sheetScale,
+                transformOrigin: 'top center',
+              }
+        }
+        className="relative z-10 flex flex-col bg-[var(--bg)] rounded-b-[36px] sm:rounded-b-[48px] shadow-[0_28px_70px_-15px_rgba(0,0,0,0.6)] overflow-x-clip"
+      >
+        {/* Subtle brand hero gradient wash */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[780px]"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 55% at 20% 0%, color-mix(in srgb, var(--primary) 16%, transparent), transparent 70%), radial-gradient(ellipse 65% 50% at 88% 12%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 68%), linear-gradient(180deg, color-mix(in srgb, var(--primary) 5%, var(--bg)) 0%, var(--bg) 100%)',
+          }}
+        />
 
       {/* Top Navigation */}
       <header className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 pt-5 pb-3 flex items-center justify-between">
@@ -140,13 +168,7 @@ export default function LandingPage() {
               animate="show"
               className="lg:col-span-6 flex flex-col items-start text-left"
             >
-              <motion.div
-                variants={fadeUp}
-                className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3.5 py-1.5 text-xs font-semibold text-[var(--primary)] shadow-xs"
-              >
-                <ShieldCheck className="h-3.5 w-3.5 text-[var(--accent)]" />
-                <span>Exclusive for @mite.ac.in students &amp; faculty</span>
-              </motion.div>
+            
 
               <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08] text-[var(--text)]">
                 <span className="block overflow-hidden pb-1">
@@ -408,9 +430,14 @@ export default function LandingPage() {
           </div>
         </motion.div>
       </section>
+      </motion.div>
 
-      {/* ── Mobbin-style dark footer ─────────────────────────────────── */}
-      <LandingFooter />
+      {/* ── Mobbin-style sticky reveal dark footer ──────────────────── */}
+      <div ref={footerRevealRef} className="relative z-0 -mt-12 pt-12 bg-[#0D0608]">
+        <div className="sticky bottom-0">
+          <LandingFooter />
+        </div>
+      </div>
     </div>
   )
 }

@@ -260,7 +260,7 @@ function PlainLanguageModalBody({
             </p>
           ) : (
             <div className="space-y-2.5">
-              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)]">
+              <p className="text-xs font-semibold text-[var(--text-muted)]">
                 Detected items ({matchedEntries.length})
               </p>
               <div className="max-h-60 space-y-2 overflow-y-auto pr-0.5">
@@ -303,7 +303,7 @@ function PlainLanguageModalBody({
                           >
                             <Minus className="h-3.5 w-3.5" />
                           </button>
-                          <span className="min-w-[1.5rem] text-center text-sm font-bold text-[var(--text)]">
+                          <span className="min-w-[1.5rem] text-center text-sm font-bold text-[var(--text)] tabular-nums">
                             {entry.qty}
                           </span>
                           <button
@@ -353,7 +353,7 @@ function PlainLanguageModalBody({
                 className="mt-2 inline-flex h-12 min-h-[44px] w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <ShoppingCart className="h-4 w-4" />
-                <span>
+                <span className="tabular-nums">
                   Add to cart · {totalQty} {totalQty === 1 ? 'item' : 'items'} ({formatPaise(totalPaise)})
                 </span>
               </button>

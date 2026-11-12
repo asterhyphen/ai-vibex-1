@@ -359,7 +359,7 @@ export function CheckoutClient({
             </svg>
           </div>
 
-          <h1 className="mt-5 text-2xl font-bold text-[var(--text)]">Order Confirmed!</h1>
+          <h1 className="mt-5 text-2xl font-bold text-[var(--text)]">Order confirmed</h1>
           <p className="mt-1 text-sm text-[var(--text-muted)]">
             Order code{' '}
             <span className="font-mono font-bold text-[var(--primary)]">
@@ -470,10 +470,10 @@ export function CheckoutClient({
         {/* Compact Order Summary Strip */}
         <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)]">
-              Order Summary · {total_items} {total_items === 1 ? 'item' : 'items'}
+            <span className="text-xs font-semibold text-[var(--text-muted)] tabular-nums">
+              Order summary · {total_items} {total_items === 1 ? 'item' : 'items'}
             </span>
-            <span className="text-sm font-bold text-[var(--text)]">
+            <span className="text-sm font-bold text-[var(--text)] tabular-nums">
               {formatPaise(total_paise)}
             </span>
           </div>
@@ -618,7 +618,7 @@ export function CheckoutClient({
                         )}
                       >
                         <div className="flex items-start justify-between gap-1">
-                          <span className="text-xs font-bold text-[var(--text)] sm:text-sm">
+                          <span className="text-xs font-bold text-[var(--text)] tabular-nums sm:text-sm">
                             {formatSlotRange(slot.slot_start, slot.slot_end)}
                           </span>
                         </div>
@@ -633,7 +633,7 @@ export function CheckoutClient({
                         <div className="mt-2 space-y-1">
                           <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
                             <span>{isFull ? 'Full' : 'Load'}</span>
-                            <span className="font-mono font-semibold">
+                            <span className="font-mono font-semibold tabular-nums">
                               {slot.used_units}/{slot.capacity_units}
                             </span>
                           </div>

@@ -346,8 +346,8 @@ export async function POST(request: Request) {
       await Promise.allSettled([
         db.from('notifications').insert({
           user_id: user.id,
-          title: 'Order confirmed!',
-          body: `Order confirmed! Pick up at ${slotLabel}`,
+          title: 'Order confirmed',
+          body: `Order confirmed. Pick up at ${slotLabel}`,
           kind: 'success',
         }),
         db.from('sms_log').insert({

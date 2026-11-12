@@ -107,7 +107,7 @@ function ItemSheetBody({
             )}
           </div>
 
-          <p className="text-2xl font-bold text-[var(--primary)]">
+          <p className="text-2xl font-bold text-[var(--primary)] tabular-nums">
             {formatPaise(item.price_paise)}
           </p>
         </div>
@@ -116,7 +116,7 @@ function ItemSheetBody({
         <div className="grid grid-cols-3 gap-2">
           <div className="flex flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface-2)]/70 px-2 py-2.5 text-center">
             <Clock className="h-4 w-4 text-[var(--accent)]" />
-            <span className="mt-1 text-[11px] font-semibold text-[var(--text)]">
+            <span className="mt-1 text-[11px] font-semibold text-[var(--text)] tabular-nums">
               {formatPrepTime(item.prep_seconds)}
             </span>
             <span className="text-[10px] text-[var(--text-muted)]">Prep time</span>
@@ -178,7 +178,7 @@ function ItemSheetBody({
             >
               <Minus className="h-4 w-4" />
             </button>
-            <span className="min-w-[2.25rem] text-center text-base font-bold text-[var(--text)]">
+            <span className="min-w-[2.25rem] text-center text-base font-bold text-[var(--text)] tabular-nums">
               {qty}
             </span>
             <button
@@ -204,7 +204,7 @@ function ItemSheetBody({
             )}
           >
             <ShoppingBag className="h-4 w-4" />
-            <span>
+            <span className="tabular-nums">
               {item.in_stock
                 ? `Add to cart · ${formatPaise(item.price_paise * qty)}`
                 : 'Out of stock'}

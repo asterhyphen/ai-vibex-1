@@ -61,7 +61,7 @@ export function TopBar({ profile, email }: TopBarProps) {
             </Link>
             <div className="min-w-0">
               <h1 className="truncate text-base font-bold text-[var(--text)] sm:text-xl">
-                {greeting}, {displayFirstName}! 👋
+                {greeting}, {displayFirstName}
               </h1>
               <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
                 <span>MITE Campus Canteen</span>

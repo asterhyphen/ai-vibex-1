@@ -201,7 +201,7 @@ export function MenuCard({
             )}
 
             {/* Prep time badge */}
-            <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full border border-[var(--border)]/70 bg-[var(--surface)]/90 px-2 py-0.5 text-[11px] font-medium text-[var(--text)] shadow-xs backdrop-blur-sm">
+            <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full border border-[var(--border)]/70 bg-[var(--surface)]/90 px-2 py-0.5 text-[11px] font-medium text-[var(--text)] shadow-xs backdrop-blur-sm tabular-nums">
               <Clock className="h-3 w-3 text-[var(--accent)]" />
               {formatPrepTime(item.prep_seconds)}
             </span>
@@ -254,7 +254,7 @@ export function MenuCard({
           </div>
 
           <div className="flex items-center justify-between gap-2 pt-1">
-            <span className="text-base font-bold tracking-tight text-[var(--text)] sm:text-lg">
+            <span className="text-base font-bold tracking-tight text-[var(--text)] tabular-nums sm:text-lg">
               {formatPaise(item.price_paise)}
             </span>
 

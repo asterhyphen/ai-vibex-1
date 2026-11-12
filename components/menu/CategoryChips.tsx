@@ -22,7 +22,7 @@ export function CategoryChips({
     : undefined
 
   const chips = [
-    { id: 'all', name: 'All', icon: '🍽️', count: allCount },
+    { id: 'all', name: 'All', icon: '', count: allCount },
     ...categories.map((cat) => ({
       id: cat.id,
       name: cat.name,
@@ -67,7 +67,7 @@ export function CategoryChips({
               {typeof chip.count === 'number' && (
                 <span
                   className={cn(
-                    'rounded-full px-1.5 py-0.5 text-[11px] font-semibold leading-none',
+                    'rounded-full px-1.5 py-0.5 text-[11px] font-semibold leading-none tabular-nums',
                     isActive
                       ? 'bg-white/20 text-white'
                       : 'bg-[var(--surface-2)] text-[var(--text-muted)]'

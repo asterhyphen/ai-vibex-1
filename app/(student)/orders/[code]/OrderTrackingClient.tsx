@@ -64,7 +64,7 @@ const STEPPER_STEPS: {
   {
     key: 'collected',
     label: 'Collected',
-    description: 'Picked up — enjoy your meal!',
+    description: 'Picked up',
     Icon: PackageCheck,
   },
 ]
@@ -203,7 +203,7 @@ export function OrderTrackingClient({ initialOrder }: OrderTrackingClientProps) 
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       try {
         await navigator.clipboard.writeText(shareUrl)
-        toast.success('Tracking link copied! Open on any signed-in device.')
+        toast.success('Tracking link copied. Open on any signed-in device.')
         return
       } catch {
         // Fallback toast below
@@ -273,11 +273,11 @@ export function OrderTrackingClient({ initialOrder }: OrderTrackingClientProps) 
                 <Sparkles className="h-12 w-12 text-[var(--accent)]" />
               </div>
               <div className="space-y-2">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/80">
+                <p className="text-xs font-semibold text-white/80">
                   Fresh from the kitchen
                 </p>
-                <h2 className="text-4xl font-extrabold tracking-tight">
-                  Order #{order.code} is READY!
+                <h2 className="text-4xl font-bold tracking-tight tabular-nums">
+                  Order #{order.code} is ready
                 </h2>
                 <p className="text-sm text-white/85">
                   Head to the SkipQ pickup counter and show your QR code.
@@ -321,7 +321,7 @@ export function OrderTrackingClient({ initialOrder }: OrderTrackingClientProps) 
             <span>Home</span>
           </Link>
 
-          <span className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+          <span className="text-xs font-semibold text-[var(--text-muted)]">
             Live Tracker
           </span>
 
@@ -339,20 +339,20 @@ export function OrderTrackingClient({ initialOrder }: OrderTrackingClientProps) 
       <main className="mx-auto max-w-2xl space-y-6 px-4 pt-6 sm:px-6">
         {/* Big Order Code Heading */}
         <section className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 text-center shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+          <p className="text-xs font-semibold text-[var(--text-muted)]">
             Order Code
           </p>
-          <h1 className="mt-1 font-mono text-4xl font-extrabold tracking-tight text-[var(--primary)] sm:text-5xl">
+          <h1 className="mt-1 font-mono text-4xl font-bold tracking-tight text-[var(--primary)] tabular-nums sm:text-5xl">
             {order.code}
           </h1>
 
           <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-xs">
-            <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-2)] px-3 py-1 font-medium text-[var(--text)]">
+            <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-2)] px-3 py-1 font-medium text-[var(--text)] tabular-nums">
               <Clock className="h-3.5 w-3.5 text-[var(--accent)]" />
               Pickup slot: {slotLabel}
             </span>
             {order.eta_minutes && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-2)] px-3 py-1 font-medium text-[var(--text)]">
+              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-2)] px-3 py-1 font-medium text-[var(--text)] tabular-nums">
                 ETA: {order.eta_minutes} min
               </span>
             )}
@@ -438,12 +438,12 @@ export function OrderTrackingClient({ initialOrder }: OrderTrackingClientProps) 
                         className="flex items-center justify-between text-sm"
                       >
                         <span className="font-medium text-[var(--text)]">
-                          <span className="mr-2 font-mono font-bold text-[var(--primary)]">
+                          <span className="mr-2 font-mono font-bold text-[var(--primary)] tabular-nums">
                             {item.qty}×
                           </span>
                           {item.name_snapshot}
                         </span>
-                        <span className="font-semibold text-[var(--text)]">
+                        <span className="font-semibold text-[var(--text)] tabular-nums">
                           {formatPaise(item.unit_price_paise * item.qty)}
                         </span>
                       </li>
@@ -460,7 +460,7 @@ export function OrderTrackingClient({ initialOrder }: OrderTrackingClientProps) 
                 <div className="mt-5 flex items-center justify-between border-t border-[var(--border)] pt-4">
                   <div>
                     <p className="text-xs text-[var(--text-muted)]">Total</p>
-                    <p className="text-xl font-extrabold text-[var(--text)]">
+                    <p className="text-xl font-bold text-[var(--text)] tabular-nums">
                       {formatPaise(order.total_paise)}
                     </p>
                   </div>
@@ -506,13 +506,13 @@ export function OrderTrackingClient({ initialOrder }: OrderTrackingClientProps) 
                     )}
                   </div>
 
-                  <p className="mt-3 font-mono text-2xl font-extrabold tracking-wider text-[var(--primary)]">
+                  <p className="mt-3 font-mono text-2xl font-bold tracking-wider text-[var(--primary)] tabular-nums">
                     {order.code}
                   </p>
-                  <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text)]">
+                  <p className="text-xs font-semibold text-[var(--text)]">
                     Show at counter
                   </p>
-                  <p className="mt-2 rounded-full bg-[var(--surface-2)] px-3 py-1 font-mono text-[11px] font-medium text-[var(--text-muted)]">
+                  <p className="mt-2 rounded-full bg-[var(--surface-2)] px-3 py-1 font-mono text-[11px] font-medium text-[var(--text-muted)] tabular-nums">
                     Manual OTP: {manualOtp}
                   </p>
                   <p className="mt-2 inline-flex items-center gap-1 text-[11px] text-[var(--text-muted)]">
@@ -543,7 +543,7 @@ export function OrderTrackingClient({ initialOrder }: OrderTrackingClientProps) 
             aria-label="Order progress"
             className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm"
           >
-            <h2 className="mb-5 text-sm font-bold uppercase tracking-wide text-[var(--text-muted)]">
+            <h2 className="mb-5 text-sm font-semibold text-[var(--text-muted)]">
               Live Progress
             </h2>
 

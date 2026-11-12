@@ -57,7 +57,7 @@ const STATUS_BADGE: Record<
     className: 'bg-[var(--accent)]/20 text-[var(--accent)]',
   },
   ready: {
-    label: 'Ready for Pickup!',
+    label: 'Ready for pickup',
     className: 'bg-[var(--success)] text-white',
   },
   collected: {
@@ -334,7 +334,7 @@ export function HomeClient({
                       {STATUS_BADGE[activeOrder.status].label}
                     </span>
                   </div>
-                  <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)]">
+                  <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)] tabular-nums">
                     <span>
                       {activeOrder.order_items?.reduce((s, i) => s + i.qty, 0) ?? 0} items ·{' '}
                       {formatPaise(activeOrder.total_paise)}

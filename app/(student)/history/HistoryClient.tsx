@@ -179,8 +179,8 @@ export function HistoryClient({ orders, menuItems }: HistoryClientProps) {
         {/* Live orders banner if any */}
         {activeOrders.length > 0 && (
           <section className="space-y-3">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">
-              Active Orders ({activeOrders.length})
+            <h2 className="text-xs font-semibold text-[var(--text-muted)]">
+              Active orders ({activeOrders.length})
             </h2>
             <div className="space-y-3">
               {activeOrders.map((order) => (
@@ -221,8 +221,8 @@ export function HistoryClient({ orders, menuItems }: HistoryClientProps) {
 
         {/* Past Orders */}
         <section className="space-y-3">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">
-            Past Orders ({pastOrders.length})
+          <h2 className="text-xs font-semibold text-[var(--text-muted)]">
+            Past orders ({pastOrders.length})
           </h2>
 
           {pastOrders.length === 0 ? (
@@ -281,7 +281,7 @@ export function HistoryClient({ orders, menuItems }: HistoryClientProps) {
                         </p>
                       </div>
 
-                      <p className="text-lg font-bold text-[var(--text)]">
+                      <p className="text-lg font-bold text-[var(--text)] tabular-nums">
                         {formatPaise(order.total_paise)}
                       </p>
                     </div>

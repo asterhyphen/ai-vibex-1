@@ -214,7 +214,7 @@ export function CartBar({ liveMenuItems }: CartBarProps) {
                                   </span>
                                 )}
                               </div>
-                              <p className="text-xs text-[var(--text-muted)]">
+                              <p className="text-xs text-[var(--text-muted)] tabular-nums">
                                 {unavailable?.backAt
                                   ? `Back at ${unavailable.backAt}`
                                   : formatPaise(item.price_paise * item.qty)}
@@ -240,7 +240,7 @@ export function CartBar({ liveMenuItems }: CartBarProps) {
                                 >
                                   <Minus className="h-3.5 w-3.5" />
                                 </button>
-                                <span className="min-w-[1.5rem] text-center text-xs font-bold text-[var(--text)]">
+                                <span className="min-w-[1.5rem] text-center text-xs font-bold text-[var(--text)] tabular-nums">
                                   {item.qty}
                                 </span>
                                 <button
@@ -279,7 +279,7 @@ export function CartBar({ liveMenuItems }: CartBarProps) {
                       initial={{ scale: 0.7 }}
                       animate={{ scale: [1, 1.35, 0.92, 1] }}
                       transition={{ duration: 0.35 }}
-                      className="absolute -right-1 -top-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-[var(--accent)] px-1 text-[11px] font-bold text-white shadow-xs"
+                      className="absolute -right-1 -top-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-[var(--accent)] px-1 text-[11px] font-bold text-white shadow-xs tabular-nums"
                     >
                       {total_items}
                     </motion.span>
@@ -287,7 +287,7 @@ export function CartBar({ liveMenuItems }: CartBarProps) {
 
                   <div className="min-w-0">
                     <p className="flex items-center gap-1 text-sm font-semibold sm:text-base">
-                      <span className="truncate">
+                      <span className="truncate tabular-nums">
                         {total_items} {total_items === 1 ? 'item' : 'items'} · {formatPaise(total_paise)}
                       </span>
                       <ChevronUp
@@ -296,9 +296,9 @@ export function CartBar({ liveMenuItems }: CartBarProps) {
                         }`}
                       />
                     </p>
-                    <p className="truncate text-[11px] text-white/85">
+                    <p className="truncate text-[11px] text-white/85 tabular-nums">
                       {outOfStockCount > 0
-                        ? `⚠ ${outOfStockCount} out of stock — tap to update`
+                        ? `${outOfStockCount} out of stock — tap to update`
                         : 'Tap to review tray'}
                     </p>
                   </div>

@@ -11,6 +11,7 @@ import {
   ChefHat,
   Clock,
   Home,
+  Loader2,
   PackageCheck,
   QrCode,
   RotateCw,
@@ -91,6 +92,7 @@ export function OrderTrackingClient({ initialOrder }: OrderTrackingClientProps) 
   const [shimmerKey, setShimmerKey] = useState(0)
   const [qrDataUrl, setQrDataUrl] = useState<string>('')
   const [dismissedReadyForStatus, setDismissedReadyForStatus] = useState(false)
+  const [updatingEta, setUpdatingEta] = useState(false)
   const vibratedRef = useRef(false)
   const showReadyOverlay = order.status === 'ready' && !dismissedReadyForStatus
 
@@ -210,6 +212,36 @@ export function OrderTrackingClient({ initialOrder }: OrderTrackingClientProps) 
       }
     }
     toast.info(`Share link: ${shareUrl}`)
+  }
+
+  const canDelayEta = ['placed', 'awaiting_cash', 'accepted'].includes(order.status)
+
+  const handleRunningLate = async () => {
+    if (!canDelayEta || updatingEta) return
+    setUpdatingEta(true)
+    try {
+      const res = await fetch(`/api/orders/${encodeURIComponent(order.code)}/eta`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ delta_minutes: 5 }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        toast.error(data.error || 'Could not update arrival time')
+        return
+      }
+      setOrder((prev) => ({
+        ...prev,
+        eta_minutes: data.eta_minutes ?? prev.eta_minutes,
+        arrive_at: data.arrive_at ?? prev.arrive_at,
+        priority_score: data.priority_score ?? prev.priority_score,
+      }))
+      toast.success('Updated arrival time (+5 min). Kitchen priority adjusted.')
+    } catch {
+      toast.error('Network error while updating ETA')
+    } finally {
+      setUpdatingEta(false)
+    }
   }
 
   const currentStepIdx = getStepIndex(order.status)
@@ -344,6 +376,24 @@ export function OrderTrackingClient({ initialOrder }: OrderTrackingClientProps) 
               <span>
                 Pay {formatPaise(order.total_paise)} at the canteen counter to send this order to the kitchen.
               </span>
+            </div>
+          )}
+
+          {canDelayEta && (
+            <div className="mt-4 flex justify-center">
+              <button
+                type="button"
+                disabled={updatingEta}
+                onClick={handleRunningLate}
+                className="inline-flex h-11 min-h-[44px] cursor-pointer items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface-2)] px-4 text-xs font-semibold text-[var(--text)] transition-colors hover:border-[var(--primary)]/50 hover:bg-[var(--primary-soft)]/50 disabled:opacity-60"
+              >
+                {updatingEta ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-[var(--primary)]" />
+                ) : (
+                  <Clock className="h-3.5 w-3.5 text-[var(--primary)]" />
+                )}
+                <span>Running late? +5 min</span>
+              </button>
             </div>
           )}
         </section>

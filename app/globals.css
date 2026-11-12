@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+/* ============================================================
+   MITE Canteen — Brand Tokens
+   Light: Ivory & Burgundy  |  Dark: Burgundy Night
+   ============================================================ */
+
+:root {
+  /* Light theme — Ivory & Burgundy */
+  --bg:            #FAF7F4;
+  --surface:       #FFFFFF;
+  --surface-2:     #F3ECE8;
+  --border:        #E8DCD6;
+  --text:          #2B1117;
+  --text-muted:    #7B6A6D;
+  --primary:       #7A1F3D;
+  --primary-hover: #5E1530;
+  --primary-soft:  #F6E4EA;
+  --accent:        #B8893B;
+  --success:       #2E7D5B;
+  --warning:       #C98A1B;
+  --danger:        #B3261E;
+  --info:          #3B5B8C;
+
+  /* Alias for Tailwind @theme */
+  --background: var(--bg);
+  --foreground: var(--text);
+}
+
+.dark {
+  /* Dark theme — Burgundy Night */
+  --bg:            #14080C;
+  --surface:       #1E0E14;
+  --surface-2:     #2A131C;
+  --border:        #3D1E29;
+  --text:          #F6ECEC;
+  --text-muted:    #9E8085;
+  --primary:       #A83060;
+  --primary-hover: #C03870;
+  --primary-soft:  #3D1225;
+  --accent:        #D4A855;
+  --success:       #3DAD7A;
+  --warning:       #E0A020;
+  --danger:        #E04040;
+  --info:          #5B85CC;
+
+  --background: var(--bg);
+  --foreground: var(--text);
+}
+
+@theme inline {
+  --color-background:    var(--background);
+  --color-foreground:    var(--foreground);
+  --font-sans:           var(--font-inter);
+
+  /* Brand colors exposed as Tailwind utilities */
+  --color-primary:       var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft:  var(--primary-soft);
+  --color-accent:        var(--accent);
+  --color-success:       var(--success);
+  --color-warning:       var(--warning);
+  --color-danger:        var(--danger);
+  --color-info:          var(--info);
+  --color-bg:            var(--bg);
+  --color-surface:       var(--surface);
+  --color-surface-2:     var(--surface-2);
+  --color-border:        var(--border);
+  --color-text-brand:    var(--text);
+  --color-text-muted:    var(--text-muted);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-inter, Arial, sans-serif);
+}
+
+* {
+  border-color: var(--border);
+}

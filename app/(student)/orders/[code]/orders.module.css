@@ -1,0 +1,40 @@
+@keyframes stepPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(122, 31, 61, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(122, 31, 61, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(122, 31, 61, 0);
+  }
+}
+
+.activeStepDot {
+  animation: stepPulse 1.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+
+@keyframes qrShimmerSweep {
+  0% {
+    transform: translateX(-140%) skewX(-20deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateX(240%) skewX(-20deg);
+    opacity: 0;
+  }
+}
+
+.shimmerSweep {
+  animation: qrShimmerSweep 1.05s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activeStepDot,
+  .shimmerSweep {
+    animation: none;
+  }
+}

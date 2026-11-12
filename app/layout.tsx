@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
+import { Preloader } from '@/components/ui/Preloader'
 import { RealtimeAlertsProvider } from '@/components/ui/RealtimeAlertsProvider'
 import './globals.css'
 
@@ -36,6 +37,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Preloader />
           <RealtimeAlertsProvider>{children}</RealtimeAlertsProvider>
         </ThemeProvider>
       </body>

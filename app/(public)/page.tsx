@@ -1,6 +1,5 @@
 'use client'
 
-import { useRef, useState } from 'react'
 import Link from 'next/link'
 import { motion, useReducedMotion, type Variants } from 'framer-motion'
 import {
@@ -16,11 +15,11 @@ import {
   Zap,
 } from 'lucide-react'
 import { HeroScene } from '@/components/3d/HeroScene'
+import { BrandQMark } from '@/components/ui/BrandQMark'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import {
   fadeUp,
   maskRevealLine,
-  springConfig,
   stagger,
 } from '@/lib/utils/motion'
 
@@ -81,46 +80,6 @@ const STATS = [
   },
 ] as const
 
-function MagneticCta({ href }: { href: string }) {
-  const prefersReducedMotion = useReducedMotion()
-  const buttonRef = useRef<HTMLDivElement>(null)
-  const [offset, setOffset] = useState({ x: 0, y: 0 })
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (prefersReducedMotion || !buttonRef.current) return
-    const rect = buttonRef.current.getBoundingClientRect()
-    const centerX = rect.left + rect.width / 2
-    const centerY = rect.top + rect.height / 2
-    setOffset({
-      x: (e.clientX - centerX) * 0.3,
-      y: (e.clientY - centerY) * 0.3,
-    })
-  }
-
-  const handleMouseLeave = () => {
-    setOffset({ x: 0, y: 0 })
-  }
-
-  return (
-    <motion.div
-      ref={buttonRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      animate={prefersReducedMotion ? undefined : { x: offset.x, y: offset.y }}
-      transition={springConfig}
-      className="inline-flex w-full sm:w-auto"
-    >
-      <Link
-        href={href}
-        className="inline-flex w-full sm:w-auto min-h-[48px] items-center justify-center gap-2.5 rounded-xl bg-[var(--primary)] px-6 py-3.5 text-base font-semibold text-white shadow-md transition-all duration-200 hover:-translate-y-1 hover:bg-[var(--primary-hover)] hover:shadow-[0_14px_32px_-8px_rgba(122,31,61,0.55)] active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]"
-      >
-        <span>Continue with college email</span>
-        <ArrowRight className="h-4 w-4" />
-      </Link>
-    </motion.div>
-  )
-}
-
 export default function LandingPage() {
   const prefersReducedMotion = useReducedMotion()
 
@@ -142,8 +101,11 @@ export default function LandingPage() {
           href="/"
           className="inline-flex min-h-[44px] items-center gap-3 rounded-xl px-1.5 focus-visible:outline-2 focus-visible:outline-[var(--primary)]"
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--primary)] text-white shadow-sm">
-            <UtensilsCrossed className="h-5 w-5" />
+          <span
+            data-brand-q-target="true"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center"
+          >
+            <BrandQMark size={40} />
           </span>
           <span className="flex flex-col leading-tight">
             <span className="text-base font-bold tracking-tight text-[var(--text)]">
@@ -214,11 +176,17 @@ export default function LandingPage() {
                 variants={fadeUp}
                 className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto"
               >
-                <MagneticCta href="/login" />
+                <Link
+                  href="/login"
+                  className="inline-flex w-full sm:w-auto min-h-[48px] items-center justify-center gap-2.5 rounded-xl bg-[var(--primary)] px-6 py-3.5 text-base font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-[var(--primary-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]"
+                >
+                  <span>Continue with college email</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
 
                 <a
                   href="#features"
-                  className="inline-flex min-h-[48px] items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] px-5 py-3.5 text-sm font-semibold text-[var(--text)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--surface-2)]"
+                  className="inline-flex min-h-[48px] items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] px-5 py-3.5 text-sm font-semibold text-[var(--text)] transition-colors duration-200 hover:border-[var(--primary)] hover:bg-[var(--surface-2)]"
                 >
                   See how it works
                 </a>

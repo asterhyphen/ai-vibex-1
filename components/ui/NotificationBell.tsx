@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Bell, CheckCheck, Inbox } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { isSupabaseConfigured } from '@/lib/supabase/config'
 import type { Notification } from '@/lib/types'
 import { cn } from '@/lib/utils/format'
 import { useOptionalAlerts } from './RealtimeAlertsProvider'
@@ -57,10 +58,7 @@ export function NotificationBell({ className }: NotificationBellProps) {
 
   useEffect(() => {
     if (alertsCtx) return
-    if (
-      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    ) {
+    if (!isSupabaseConfigured()) {
       return
     }
 

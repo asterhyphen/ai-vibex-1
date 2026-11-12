@@ -13,6 +13,7 @@ import {
 import { useTheme } from 'next-themes'
 import { Toaster, toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
+import { isSupabaseConfigured } from '@/lib/supabase/config'
 import type { MenuItem, Notification, Order, OrderStatus } from '@/lib/types'
 import { SmsPopupQueue, type SmsMessage } from './SmsPopup'
 
@@ -29,13 +30,6 @@ interface AlertsContextValue {
 }
 
 const AlertsContext = createContext<AlertsContextValue | null>(null)
-
-function isSupabaseConfigured(): boolean {
-  return Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  )
-}
 
 export function useAlerts(): AlertsContextValue {
   const ctx = useContext(AlertsContext)

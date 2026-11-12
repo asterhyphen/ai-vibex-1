@@ -12,7 +12,7 @@ A hackathon-grade canteen and print pre-order system for **MITE (Mangalore Insti
 | Styling | Tailwind CSS v4 + CSS custom properties (WCAG AA Ivory & Burgundy / Burgundy Night) |
 | Typography | `Fraunces` (display headings), `Inter` (UI/body), `JetBrains Mono` (codes, OTPs, tabular prices) |
 | Database | Supabase (PostgreSQL + RLS + Realtime + Private Storage `print-jobs` & `menu-images`) |
-| Auth | Supabase Auth (`@mite.ac.in` email OTP for students/faculty; email + password for staff/admin) |
+| Auth | Supabase Auth (`@mite.ac.in` demo OTP `1234` for students/faculty; email + password for staff/admin) |
 | State | Zustand (`lib/stores/cart.ts`, `lib/stores/session.ts`) |
 | Validation | Zod (`lib/validators/*`) |
 | Animation & 3D | Framer Motion + Three.js / React Three Fiber / `@react-three/drei` (lazy-loaded hero) |
@@ -82,7 +82,7 @@ app/
   globals.css             ← ui agent (brand tokens, typography, WCAG AA contrast)
 
 components/
-  ui/                     ← ui agent (Button, Card, Badge, LoadingBar, ThemeToggle, NotificationBell, SmsPopup, RealtimeAlertsProvider)
+  ui/                     ← ui agent (BrandQMark, Preloader, Button, Card, Badge, LoadingBar, ThemeToggle, NotificationBell, SmsPopup, RealtimeAlertsProvider)
   auth/                   ← auth agent (OtpInput, PortalLoginForm, SmsPopup, ThemeToggle)
   menu/                   ← menu agent (MenuCard, CategoryChips, ItemSheet, PlainLanguageModal, TopBar)
   cart/                   ← menu agent (CartBar)
@@ -102,9 +102,8 @@ lib/
   utils/                  ← shared (format, motion, nlp, qr, server-auth)
 
 supabase/
-  migrations/             ← scaffold + supabase agent (001_initial_schema.sql, 002_enhancements_and_storage.sql)
-  seed.sql                ← scaffold + supabase agent
-  paste_in_sql_editor.sql ← supabase agent
+  final_setup.sql         ← supabase agent (consolidated idempotent schema, triggers, RLS, Realtime, Storage, seed)
+  README.md               ← supabase agent (SQL Editor instructions)
 
 middleware.ts             ← auth agent (role-based gates, rate limit, security headers)
 ```
@@ -140,19 +139,19 @@ middleware.ts             ← auth agent (role-based gates, rate limit, security
 
 | Role | Email | Password / Method |
 |---|---|---|
-| Student | `4mt21cs001@mite.ac.in` | Email OTP |
-| Student | `4mt22ec042@mite.ac.in` | Email OTP |
-| Faculty | `john.doe@mite.ac.in` | Email OTP |
-| Faculty | `priya.sharma@mite.ac.in` | Email OTP |
+| Student | `4mt21cs001@mite.ac.in` | Email OTP (`1234`) |
+| Student | `4mt22ec042@mite.ac.in` | Email OTP (`1234`) |
+| Faculty | `john.doe@mite.ac.in` | Email OTP (`1234`) |
+| Faculty | `priya.sharma@mite.ac.in` | Email OTP (`1234`) |
 | Canteen Staff | `canteen@mite.ac.in` | `Canteen@123` |
 | Print Staff | `print@mite.ac.in` | `Print@456` |
 | Admin | `admin@mite.ac.in` | `Admin@789` |
 
-> Seeded directly in `supabase/seed.sql` / `supabase/paste_in_sql_editor.sql`.
+> Seeded directly in `supabase/final_setup.sql`.
 
 ## Assumptions
 
-1. Students and faculty authenticate via `@mite.ac.in` email OTP; staff and admin accounts use email + password with 5-attempt lockout.
+1. Students and faculty authenticate via `@mite.ac.in` using the 4-digit demo OTP `1234` (backed by a Supabase session); staff and admin accounts use email + password with 5-attempt lockout.
 2. `@mite.ac.in` domain enforcement runs on client, `/api/auth/request`, and PostgreSQL `auth.users` triggers (rejecting lookalikes and multiple `@`).
 3. Payments (`online` UPI/Card/Wallet or `cash`) are demo-grade; `online` simulates a 2-second gateway confirmation, while `cash` requires staff cash collection before acceptance.
 4. SMS notifications are displayed in-app (`SmsPopup`) and logged to `sms_log` for audit.

@@ -115,8 +115,8 @@ export function LandingFooter() {
       ref={ref}
       className={[
         'relative overflow-hidden',
-        // Dark slab — in light mode: near-black;  dark mode: even deeper black
-        'bg-[#0D0608]',
+        // Rich deep burgundy slab
+        'bg-gradient-to-b from-[#2E0E1A] via-[#240A14] to-[#1A060E]',
       ].join(' ')}
     >
       {/* ── Top meta bar ─────────────────────────────────────────────── */}

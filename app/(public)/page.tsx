@@ -99,7 +99,7 @@ export default function LandingPage() {
   const sheetScale = useTransform(scrollYProgress, [0, 1], [1, 0.985])
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-[#0D0608] text-[var(--text)] overflow-x-clip">
+    <div className="relative min-h-screen flex flex-col bg-[#240A14] text-[var(--text)] overflow-x-clip">
       {/* Curved top page sheet that reveals the dark footer underneath */}
       <motion.div
         style={
@@ -432,8 +432,8 @@ export default function LandingPage() {
       </section>
       </motion.div>
 
-      {/* ── Mobbin-style sticky reveal dark footer ──────────────────── */}
-      <div ref={footerRevealRef} className="relative z-0 -mt-12 pt-12 bg-[#0D0608]">
+      {/* ── Mobbin-style sticky reveal burgundy footer ────────────────── */}
+      <div ref={footerRevealRef} className="relative z-0 -mt-12 pt-12 bg-[#240A14]">
         <div className="sticky bottom-0">
           <LandingFooter />
         </div>

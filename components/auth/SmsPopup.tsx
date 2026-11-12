@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Copy, MessageSquare, X } from 'lucide-react'
+import { Copy, MessageSquare, Smartphone, X } from 'lucide-react'
 
 interface SmsPopupProps {
   code: string | null
@@ -50,7 +50,7 @@ export function SmsPopup({
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-white/90">
-                    <span aria-hidden="true">📱</span>
+                    <Smartphone className="h-3.5 w-3.5 text-white/80" aria-hidden="true" />
                     <span>SkipQ</span>
                   </div>
                   <div className="flex items-center gap-1">
@@ -68,7 +68,7 @@ export function SmsPopup({
 
                 <p className="mt-0.5 text-sm leading-snug text-white/95">
                   Your verification code:{' '}
-                  <span className="font-mono text-base font-bold tracking-widest text-[#34C759]">
+                  <span className="font-mono text-base font-bold tracking-widest tabular-nums text-[#34C759]">
                     {code}
                   </span>
                 </p>

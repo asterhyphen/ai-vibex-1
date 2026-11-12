@@ -95,7 +95,7 @@ function AuthFormBody({
           )}
         </div>
         <div className="min-w-0">
-          <h1 className="text-xl font-extrabold tracking-tight text-[var(--text)]">
+          <h1 className="text-xl font-bold tracking-tight text-[var(--text)]">
             {isRegister ? 'Create Account' : 'Sign In'}
           </h1>
           <p className="text-xs text-[var(--text-muted)]">
@@ -190,7 +190,7 @@ function AuthFormBody({
 
                   {rolePreview && (
                     <span className="inline-flex items-center rounded-full bg-[var(--primary-soft)] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--primary)]">
-                      {rolePreview === 'student' ? 'Student 🎓' : 'Faculty ⭐'}
+                      {rolePreview === 'student' ? 'Student' : 'Faculty'}
                     </span>
                   )}
                 </div>
@@ -226,7 +226,7 @@ function AuthFormBody({
             >
               <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-2)] p-3.5 flex items-center justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-[11px] font-medium uppercase tracking-wider text-[var(--text-muted)]">
+                  <p className="text-[11px] font-medium text-[var(--text-muted)]">
                     Code sent to
                   </p>
                   <p className="truncate text-sm font-semibold text-[var(--text)]">
@@ -248,7 +248,7 @@ function AuthFormBody({
                 </label>
                 <p className="mb-3 text-center text-xs font-medium text-[var(--text-muted)]">
                   Demo OTP:{' '}
-                  <code className="rounded bg-[var(--primary-soft)] px-1.5 py-0.5 font-mono font-bold text-[var(--primary)]">
+                  <code className="rounded bg-[var(--primary-soft)] px-1.5 py-0.5 font-mono font-bold tabular-nums text-[var(--primary)]">
                     1234
                   </code>
                 </p>
@@ -284,7 +284,7 @@ function AuthFormBody({
                 {resendCooldown > 0 ? (
                   <p className="text-xs font-medium text-[var(--text-muted)]">
                     Resend OTP in{' '}
-                    <span className="font-mono font-bold text-[var(--text)]">
+                    <span className="font-mono font-bold tabular-nums text-[var(--text)]">
                       {resendCooldown}s
                     </span>
                   </p>
@@ -455,7 +455,7 @@ function LoginContent() {
         return
       }
 
-      toast.success('Email verified!')
+      toast.success('Email verified')
       const destination =
         data.redirect === '/home' && nextPath ? nextPath : data.redirect
       router.push(destination)
@@ -553,8 +553,8 @@ function LoginContent() {
                   isRegister ? 'translate-x-0' : '-translate-x-[20%]'
                 }`}
               >
-                <h2 className="text-3xl font-extrabold tracking-tight text-white">
-                  Welcome Back!
+                <h2 className="text-3xl font-bold tracking-tight text-white">
+                  Welcome Back
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-white/85">
                   Already registered with your MITE email? Sign in to pre-order meals and print jobs.
@@ -574,8 +574,8 @@ function LoginContent() {
                   isRegister ? 'translate-x-[20%]' : 'translate-x-0'
                 }`}
               >
-                <h2 className="text-3xl font-extrabold tracking-tight text-white">
-                  Hello, MITEian!
+                <h2 className="text-3xl font-bold tracking-tight text-white">
+                  Hello, MITEian
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-white/85">
                   New to MITE Canteen? Register with your @mite.ac.in email and skip the queue.
@@ -604,8 +604,8 @@ function LoginContent() {
                 exit={{ opacity: 0, y: -6 }}
                 transition={{ duration: 0.22 }}
               >
-                <h2 className="text-xl font-extrabold tracking-tight">
-                  {isRegister ? 'Hello, MITEian!' : 'Welcome Back!'}
+                <h2 className="text-xl font-bold tracking-tight">
+                  {isRegister ? 'Hello, MITEian' : 'Welcome Back'}
                 </h2>
                 <p className="mt-1 text-xs text-white/85">
                   {isRegister

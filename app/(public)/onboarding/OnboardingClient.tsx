@@ -86,7 +86,7 @@ export function OnboardingClient({
       setOtp('')
       setOtpError(false)
       setStep('otp')
-      toast.success('Verification SMS delivered!')
+      toast.success('Verification SMS delivered')
     } catch {
       toast.error('Could not send verification code')
     } finally {
@@ -130,7 +130,7 @@ export function OnboardingClient({
       }
       setPopupOpen(false)
       setStep('welcome')
-      toast.success('Phone verified!')
+      toast.success('Phone verified')
     } catch {
       setOtpError(true)
       toast.error('Unexpected error completing phone verification')
@@ -171,7 +171,7 @@ export function OnboardingClient({
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--primary-soft)] text-[var(--primary)]">
                 <ShieldCheck className="h-6 w-6" />
               </div>
-              <h1 className="text-xl font-extrabold text-[var(--text)]">
+              <h1 className="text-xl font-bold text-[var(--text)]">
                 Sign in first to verify your phone
               </h1>
               <p className="text-sm text-[var(--text-muted)]">
@@ -201,13 +201,13 @@ export function OnboardingClient({
                 >
                   <div>
                     <div className="inline-flex items-center gap-1.5 rounded-full bg-[var(--primary-soft)] px-3 py-1 text-xs font-semibold text-[var(--primary)]">
-                      {initialRole === 'faculty' ? 'Faculty · Priority ⭐' : 'Student 🎓'}
+                      {initialRole === 'faculty' ? 'Faculty · Priority' : 'Student'}
                     </div>
-                    <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-[var(--text)]">
+                    <h1 className="mt-3 text-2xl font-bold tracking-tight text-[var(--text)]">
                       Verify your mobile number
                     </h1>
                     <p className="mt-1 text-sm text-[var(--text-muted)]">
-                      {fullName ? `Hi ${fullName}! ` : ''}
+                      {fullName ? `Hi ${fullName}, ` : ''}
                       We&apos;ll send order-ready alerts to your phone.
                       {userEmail ? ` (${userEmail})` : ''}
                     </p>
@@ -235,12 +235,12 @@ export function OnboardingClient({
                         value={sanitizedPhone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="9876543210"
-                        className="h-12 min-h-[44px] w-full bg-transparent px-3.5 text-base font-medium tracking-wide text-[var(--text)] placeholder:text-[var(--text-muted)]/60 outline-none"
+                        className="h-12 min-h-[44px] w-full bg-transparent px-3.5 text-base font-medium tracking-wide tabular-nums text-[var(--text)] placeholder:text-[var(--text-muted)]/60 outline-none"
                       />
                     </div>
                     <p className="mt-2 text-xs text-[var(--text-muted)]">
                       Demo SMS: a verification bubble appears in the corner (Demo OTP:{' '}
-                      <code className="font-mono font-semibold text-[var(--text)]">
+                      <code className="font-mono font-semibold tabular-nums text-[var(--text)]">
                         1234
                       </code>
                       ).
@@ -278,11 +278,15 @@ export function OnboardingClient({
                   className="space-y-6"
                 >
                   <div>
-                    <h1 className="text-xl font-extrabold tracking-tight text-[var(--text)]">
+                    <h1 className="text-xl font-bold tracking-tight text-[var(--text)]">
                       Enter SMS verification code
                     </h1>
                     <p className="mt-1 text-sm text-[var(--text-muted)]">
-                      Sent to <span className="font-semibold text-[var(--text)]">+91 {sanitizedPhone}</span>.{' '}
+                      Sent to{' '}
+                      <span className="font-semibold tabular-nums text-[var(--text)]">
+                        +91 {sanitizedPhone}
+                      </span>
+                      .{' '}
                       <button
                         type="button"
                         onClick={() => {
@@ -313,7 +317,7 @@ export function OnboardingClient({
 
                   <p className="text-center text-xs text-[var(--text-muted)]">
                     Demo OTP:{' '}
-                    <code className="rounded bg-[var(--primary-soft)] px-1.5 py-0.5 font-mono font-bold text-[var(--primary)]">
+                    <code className="rounded bg-[var(--primary-soft)] px-1.5 py-0.5 font-mono font-bold tabular-nums text-[var(--primary)]">
                       1234
                     </code>
                   </p>
@@ -366,11 +370,11 @@ export function OnboardingClient({
                   <div>
                     <span className="inline-flex items-center rounded-full bg-[var(--primary-soft)] px-3.5 py-1 text-xs font-bold text-[var(--primary)]">
                       {verifiedRole === 'faculty'
-                        ? 'Faculty · Priority ⭐'
-                        : 'Student 🎓'}
+                        ? 'Faculty · Priority'
+                        : 'Student'}
                     </span>
-                    <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-[var(--text)]">
-                      Welcome to SkipQ! You&apos;re all set.
+                    <h1 className="mt-3 text-2xl font-bold tracking-tight text-[var(--text)]">
+                      Welcome to SkipQ. You&apos;re all set.
                     </h1>
                     <p className="mt-1.5 text-sm text-[var(--text-muted)]">
                       Taking you to today&apos;s menu…

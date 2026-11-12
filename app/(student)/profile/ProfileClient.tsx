@@ -125,12 +125,12 @@ export function ProfileClient({
           <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[var(--primary)] text-xl font-extrabold text-white shadow-sm">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[var(--primary)] text-xl font-bold text-white shadow-sm">
                   {initials || <User className="h-7 w-7" />}
                 </div>
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[var(--text)] truncate">
+                    <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--text)] truncate">
                       {displayName}
                     </h1>
                     <span
@@ -140,7 +140,7 @@ export function ProfileClient({
                           : 'bg-[var(--primary-soft)] text-[var(--primary)]'
                       }`}
                     >
-                      {isFaculty ? 'Faculty · Priority ⭐' : 'Student 🎓'}
+                      {isFaculty ? 'Faculty · Priority' : 'Student'}
                     </span>
                   </div>
                   <p className="mt-1 text-sm text-[var(--text-muted)] truncate">
@@ -168,7 +168,7 @@ export function ProfileClient({
                   <div>
                     <label
                       htmlFor="profile-full-name"
-                      className="block text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]"
+                      className="block text-xs font-semibold text-[var(--text-muted)]"
                     >
                       Full Name
                     </label>
@@ -184,7 +184,7 @@ export function ProfileClient({
                   <div>
                     <label
                       htmlFor="profile-department"
-                      className="block text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]"
+                      className="block text-xs font-semibold text-[var(--text-muted)]"
                     >
                       Department
                     </label>
@@ -230,7 +230,7 @@ export function ProfileClient({
             ) : (
               <dl className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-[var(--border)] pt-6">
                 <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-2)]/60 p-4">
-                  <dt className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+                  <dt className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-muted)]">
                     <User className="h-3.5 w-3.5 text-[var(--primary)]" />
                     <span>Full Name</span>
                   </dt>
@@ -240,7 +240,7 @@ export function ProfileClient({
                 </div>
 
                 <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-2)]/60 p-4">
-                  <dt className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+                  <dt className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-muted)]">
                     <Mail className="h-3.5 w-3.5 text-[var(--primary)]" />
                     <span>College Email</span>
                   </dt>
@@ -250,12 +250,12 @@ export function ProfileClient({
                 </div>
 
                 <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-2)]/60 p-4">
-                  <dt className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+                  <dt className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-muted)]">
                     <Phone className="h-3.5 w-3.5 text-[var(--primary)]" />
                     <span>Verified Phone</span>
                   </dt>
                   <dd className="mt-1.5 flex items-center justify-between gap-2">
-                    <span className="text-sm font-bold text-[var(--text)]">
+                    <span className="text-sm font-bold tabular-nums text-[var(--text)]">
                       {phone ? `+91 ${phone}` : 'Not linked'}
                     </span>
                     {phoneVerified && (
@@ -268,7 +268,7 @@ export function ProfileClient({
                 </div>
 
                 <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-2)]/60 p-4">
-                  <dt className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+                  <dt className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-muted)]">
                     <Building2 className="h-3.5 w-3.5 text-[var(--primary)]" />
                     <span>Department</span>
                   </dt>

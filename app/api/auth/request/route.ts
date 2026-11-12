@@ -5,6 +5,7 @@ import {
   checkApiRateLimit,
   checkOtpRateLimit,
   extractClientIp,
+  logRateLimitBlocked,
 } from '@/lib/rate-limit'
 import {
   EmailRequestSchema,
@@ -18,6 +19,11 @@ export async function POST(request: NextRequest) {
     const ip = extractClientIp(request.headers)
     const ipLimit = checkApiRateLimit(ip)
     if (!ipLimit.allowed) {
+      void logRateLimitBlocked({
+        path: '/api/auth/request',
+        retryAfter: ipLimit.retryAfter,
+        kind: 'api',
+      })
       return NextResponse.json(
         { error: 'Too many requests', retryAfter: ipLimit.retryAfter },
         {
@@ -61,6 +67,11 @@ export async function POST(request: NextRequest) {
   // Per-email OTP rate limit (3 req / min)
   const otpLimit = checkOtpRateLimit(email)
   if (!otpLimit.allowed) {
+    void logRateLimitBlocked({
+      path: '/api/auth/request',
+      retryAfter: otpLimit.retryAfter,
+      kind: 'otp',
+    })
     return NextResponse.json(
       { error: 'Too many requests', retryAfter: otpLimit.retryAfter },
       {

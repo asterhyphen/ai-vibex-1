@@ -121,6 +121,47 @@ export function getBlockedRequestsCount(): number {
   return getState().blockedCount
 }
 
+/**
+ * Fire-and-forget insert of rate-limit blocks into Supabase `audit_log`
+ * so Edge middleware and Node route handlers share blocked-request telemetry.
+ */
+export function logRateLimitBlocked(params: {
+  path: string
+  retryAfter: number
+  kind: 'api' | 'otp'
+}): Promise<void> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
+  const apiKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()
+
+  if (!url || !apiKey) {
+    return Promise.resolve()
+  }
+
+  const endpoint = `${url.replace(/\/+$/, '')}/rest/v1/audit_log`
+  return fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      apikey: apiKey,
+      Authorization: `Bearer ${apiKey}`,
+      Prefer: 'return=minimal',
+    },
+    body: JSON.stringify({
+      action: 'rate_limit_blocked',
+      table_name: 'api_rate_limit',
+      diff: {
+        path: params.path,
+        retryAfter: params.retryAfter,
+        kind: params.kind,
+      },
+    }),
+  })
+    .then(() => undefined)
+    .catch(() => undefined)
+}
+
 export function extractClientIp(headers: Headers): string {
   const forwarded = headers.get('x-forwarded-for')
   if (forwarded) {

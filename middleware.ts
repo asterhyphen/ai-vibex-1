@@ -1,7 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextFetchEvent, NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/middleware'
 import { isSupabaseConfigured } from '@/lib/supabase/config'
-import { checkApiRateLimit, extractClientIp } from '@/lib/rate-limit'
+import {
+  checkApiRateLimit,
+  extractClientIp,
+  logRateLimitBlocked,
+} from '@/lib/rate-limit'
 
 const STAFF_PATHS = /^\/staff(\/|$)/
 const ADMIN_PATHS = /^\/admin(\/|$)/
@@ -67,7 +71,11 @@ function withSecurityHeaders(
   return response
 }
 
-function redirectTo(pathname: string, request: NextRequest, search?: Record<string, string>) {
+function redirectTo(
+  pathname: string,
+  request: NextRequest,
+  search?: Record<string, string>
+) {
   const url = request.nextUrl.clone()
   url.pathname = pathname
   url.search = ''
@@ -89,7 +97,10 @@ function getAuthenticatedHomePath(
   return '/onboarding'
 }
 
-export async function middleware(request: NextRequest) {
+export async function middleware(
+  request: NextRequest,
+  event?: NextFetchEvent
+) {
   const { pathname } = request.nextUrl
   const requestHeaders = new Headers(request.headers)
 
@@ -98,6 +109,15 @@ export async function middleware(request: NextRequest) {
     const clientIp = extractClientIp(request.headers)
     const rateResult = checkApiRateLimit(clientIp)
     if (!rateResult.allowed) {
+      const logPromise = logRateLimitBlocked({
+        path: pathname,
+        retryAfter: rateResult.retryAfter,
+        kind: 'api',
+      })
+      if (event?.waitUntil) {
+        event.waitUntil(logPromise)
+      }
+
       return withSecurityHeaders(
         NextResponse.json(
           { error: 'Too many requests', retryAfter: rateResult.retryAfter },
@@ -119,7 +139,8 @@ export async function middleware(request: NextRequest) {
   })
 
   const publicPath = isPublicPath(pathname)
-  const checkEntryRedirect = pathname === '/' || pathname === '/login'
+  const checkEntryRedirect =
+    pathname === '/' || pathname === '/login' || pathname === '/staff/login'
 
   // Fast-path public static/auth/error routes that don't redirect logged-in users
   if (publicPath && !checkEntryRedirect) {
@@ -193,15 +214,23 @@ export async function middleware(request: NextRequest) {
     return redirectTo('/403', request, { reason: 'blocked' })
   }
 
+  // Redirect already-authenticated staff/admin visiting /staff/login to /staff
+  if (pathname === '/staff/login') {
+    if (role === 'shopkeeper' || role === 'admin') {
+      return redirectTo('/staff', request)
+    }
+    return withSecurityHeaders(response, pathname)
+  }
+
   // Redirect already-authenticated users visiting / or /login to their home
-  if (checkEntryRedirect) {
+  if (pathname === '/' || pathname === '/login') {
     return redirectTo(getAuthenticatedHomePath(role, phoneVerified), request)
   }
 
-  // /staff/* (except /staff/login)
+  // /staff/* (except /staff/login) — allow shopkeeper AND admin
   if (STAFF_PATHS.test(pathname) && pathname !== '/staff/login') {
-    if (role !== 'shopkeeper') {
-      if (role === 'student' || role === 'faculty' || role === 'admin') {
+    if (role !== 'shopkeeper' && role !== 'admin') {
+      if (role === 'student' || role === 'faculty') {
         return redirectTo('/403', request, { reason: 'staff' })
       }
       return redirectTo('/staff/login', request)

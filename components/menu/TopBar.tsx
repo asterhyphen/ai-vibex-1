@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { History, Printer, Sparkles, UtensilsCrossed } from 'lucide-react'
 import { ThemeToggle } from '@/components/auth/ThemeToggle'
@@ -30,7 +31,14 @@ export function TopBar({ profile, email }: TopBarProps) {
     return full.slice(0, 2).toUpperCase()
   })()
 
-  const greeting = getTimeGreeting()
+  const [greeting, setGreeting] = useState('Hello')
+
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      setGreeting(getTimeGreeting())
+    }, 0)
+    return () => window.clearTimeout(id)
+  }, [])
 
   return (
     <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-md">

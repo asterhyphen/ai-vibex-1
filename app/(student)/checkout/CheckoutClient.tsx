@@ -111,7 +111,7 @@ export function CheckoutClient({
     () => false
   )
   const [step, setStep] = useState<CheckoutStep>(1)
-  const [baseTimestampMs, setBaseTimestampMs] = useState<number>(() => Date.now())
+  const [baseTimestampMs, setBaseTimestampMs] = useState<number>(0)
   const [liveMenuMap, setLiveMenuMap] = useState<Map<string, MenuItem>>(
     () => new Map(initialMenuItems.map((m) => [m.id, m]))
   )
@@ -211,6 +211,7 @@ export function CheckoutClient({
   )
 
   const estimatedArrivalLabel = useMemo(() => {
+    if (!baseTimestampMs) return `in ${etaMinutes} min`
     const arrive = new Date(baseTimestampMs + etaMinutes * 60_000)
     return arrive.toLocaleTimeString('en-IN', {
       hour: '2-digit',
@@ -713,7 +714,9 @@ export function CheckoutClient({
                 <div className="flex items-center justify-between text-sm">
                   <span className="font-medium text-[var(--text)]">Custom ETA</span>
                   <span className="font-bold text-[var(--primary)]">
-                    {etaMinutes} min · ~{estimatedArrivalLabel}
+                    {baseTimestampMs
+                      ? `${etaMinutes} min · ~${estimatedArrivalLabel}`
+                      : `${etaMinutes} min`}
                   </span>
                 </div>
                 <input

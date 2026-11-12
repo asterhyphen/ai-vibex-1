@@ -17,7 +17,12 @@ function OrderSkeleton() {
   )
 }
 
-async function OrderTrackingContent({ code }: { code: string }) {
+async function OrderTrackingContent({
+  params,
+}: {
+  params: Promise<{ code: string }>
+}) {
+  const { code } = await params
   const normalizedCode = decodeURIComponent(code).trim().toUpperCase()
   const hasSupabaseEnv = Boolean(
     process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -81,15 +86,14 @@ async function OrderTrackingContent({ code }: { code: string }) {
   return <OrderTrackingClient initialOrder={data as OrderWithItems} />
 }
 
-export default async function OrderTrackingPage({
+export default function OrderTrackingPage({
   params,
 }: {
   params: Promise<{ code: string }>
 }) {
-  const { code } = await params
   return (
     <Suspense fallback={<OrderSkeleton />}>
-      <OrderTrackingContent code={code} />
+      <OrderTrackingContent params={params} />
     </Suspense>
   )
 }

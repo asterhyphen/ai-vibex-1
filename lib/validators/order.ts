@@ -23,9 +23,43 @@ export const CheckoutSchema = z.object({
   note: z.string().trim().max(250, 'Note must be under 250 characters').optional(),
 })
 
-export const CreateOrderSchema = CheckoutSchema.extend({
-  items: z.array(CartItemSchema).min(1, 'Cart cannot be empty').max(30, 'Too many distinct items'),
-})
+export const CreateOrderSchema = z
+  .object({
+    source: z.enum(['app', 'guest']).default('app'),
+    guest_name: z.string().trim().min(1).max(80).optional(),
+    slot_id: z.string().uuid('Please select a valid pickup slot').nullable().optional(),
+    eta_minutes: z
+      .number()
+      .int('ETA must be a whole number')
+      .min(1, 'ETA must be at least 1 minute')
+      .max(60, 'ETA cannot exceed 60 minutes')
+      .nullable()
+      .optional(),
+    payment_method: z.enum(['online', 'cash']),
+    note: z.string().trim().max(250, 'Note must be under 250 characters').optional(),
+    items: z
+      .array(CartItemSchema)
+      .min(1, 'Cart cannot be empty')
+      .max(30, 'Too many distinct items'),
+  })
+  .superRefine((data, ctx) => {
+    if (data.source === 'app') {
+      if (!data.slot_id) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['slot_id'],
+          message: 'Please select a valid pickup slot',
+        })
+      }
+      if (typeof data.eta_minutes !== 'number') {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['eta_minutes'],
+          message: 'Please select your arrival ETA',
+        })
+      }
+    }
+  })
 
 export const PlainLanguageOrderSchema = z.object({
   text: z

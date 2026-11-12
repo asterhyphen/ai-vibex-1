@@ -62,7 +62,7 @@ export function PortalLoginForm({
   const [showPassword, setShowPassword] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [lockedUntil, setLockedUntil] = useState<string | null>(null)
-  const [nowMs, setNowMs] = useState<number>(() => Date.now())
+  const [nowMs, setNowMs] = useState<number>(0)
   const [lastLoginAt, setLastLoginAt] = useState<string | null>(initialLastLoginAt)
 
   const formattedLastLogin =
@@ -70,14 +70,21 @@ export function PortalLoginForm({
 
   useEffect(() => {
     if (!lockedUntil) return
+    const init = window.setTimeout(() => {
+      setNowMs(Date.now())
+    }, 0)
     const timer = window.setInterval(() => {
       setNowMs(Date.now())
     }, 10_000)
-    return () => window.clearInterval(timer)
+    return () => {
+      window.clearTimeout(init)
+      window.clearInterval(timer)
+    }
   }, [lockedUntil])
 
   const lockedUntilMs = lockedUntil ? Date.parse(lockedUntil) : Number.NaN
-  const remainingMs = !Number.isNaN(lockedUntilMs) ? lockedUntilMs - nowMs : 0
+  const remainingMs =
+    nowMs > 0 && !Number.isNaN(lockedUntilMs) ? lockedUntilMs - nowMs : 0
   const isLocked = Boolean(lockedUntil) && remainingMs > 0
   const minutesLeft = isLocked ? Math.max(1, Math.ceil(remainingMs / 60_000)) : 0
   const lockMessage = isLocked

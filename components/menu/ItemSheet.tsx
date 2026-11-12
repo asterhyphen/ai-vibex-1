@@ -54,41 +54,43 @@ function ItemSheetBody({
       </div>
 
       {/* Image / Gradient Hero */}
-      <motion.div
-        layoutId={`menu-image-${item.id}`}
-        className="relative mt-2 h-52 w-full overflow-hidden bg-gradient-to-br from-[var(--primary)]/20 via-[var(--accent)]/15 to-[var(--surface-2)] sm:mt-0"
-      >
-        {item.image_url && !imgError ? (
-          <img
-            src={item.image_url}
-            alt={item.name}
-            onError={() => setImgError(true)}
-            className="h-full w-full object-cover"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-3xl border border-[var(--border)] bg-[var(--surface)]/80 text-[var(--primary)] shadow-md backdrop-blur-sm">
-              <Utensils className="h-10 w-10" />
+      <div className="px-4 pt-2 sm:px-0 sm:pt-0">
+        <motion.div
+          layoutId={`menu-image-${item.id}`}
+          className="relative h-52 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-[var(--primary)]/20 via-[var(--accent)]/15 to-[var(--surface-2)] sm:rounded-none"
+        >
+          {item.image_url && !imgError ? (
+            <img
+              src={item.image_url}
+              alt={item.name}
+              onError={() => setImgError(true)}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              <div className="flex h-20 w-20 items-center justify-center rounded-3xl border border-[var(--border)] bg-[var(--surface)]/80 text-[var(--primary)] shadow-md backdrop-blur-sm">
+                <Utensils className="h-10 w-10" />
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        <Dialog.Close asChild>
-          <button
-            type="button"
-            aria-label="Close item details"
-            className="absolute right-3 top-3 inline-flex h-11 w-11 min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)]/90 text-[var(--text)] shadow-sm backdrop-blur-sm transition-colors hover:bg-[var(--surface-2)]"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </Dialog.Close>
+          <Dialog.Close asChild>
+            <button
+              type="button"
+              aria-label="Close item details"
+              className="absolute right-3 top-3 inline-flex h-11 w-11 min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)]/90 text-[var(--text)] shadow-sm backdrop-blur-sm transition-colors hover:bg-[var(--surface-2)]"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </Dialog.Close>
 
-        {categoryName && (
-          <span className="absolute bottom-3 left-4 rounded-full border border-[var(--border)] bg-[var(--surface)]/90 px-3 py-1 text-xs font-semibold text-[var(--text)] backdrop-blur-sm">
-            {categoryName}
-          </span>
-        )}
-      </motion.div>
+          {categoryName && (
+            <span className="absolute bottom-3 left-3 rounded-full border border-[var(--border)] bg-[var(--surface)]/90 px-3 py-1 text-xs font-semibold text-[var(--text)] backdrop-blur-sm">
+              {categoryName}
+            </span>
+          )}
+        </motion.div>
+      </div>
 
       {/* Content */}
       <div className="space-y-4 p-5 sm:p-6">
@@ -97,39 +99,52 @@ function ItemSheetBody({
             <Dialog.Title className="text-xl font-bold text-[var(--text)]">
               {item.name}
             </Dialog.Title>
-            <div className="mt-1.5 flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--surface-2)] px-2.5 py-1 text-xs font-medium text-[var(--text)]">
-                <Clock className="h-3.5 w-3.5 text-[var(--accent)]" />
-                {formatPrepTime(item.prep_seconds)}
+            {backAt && (
+              <span className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-[var(--warning)]/15 px-2.5 py-1 text-xs font-semibold text-[var(--text)]">
+                <Clock className="h-3.5 w-3.5 text-[var(--warning)]" />
+                Back at {backAt}
               </span>
-              <span
-                className={cn(
-                  'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold',
-                  item.in_stock
-                    ? 'bg-[var(--success)]/12 text-[var(--success)]'
-                    : 'bg-[var(--danger)]/12 text-[var(--danger)]'
-                )}
-              >
-                <span
-                  className={cn(
-                    'h-1.5 w-1.5 rounded-full',
-                    item.in_stock ? 'bg-[var(--success)]' : 'bg-[var(--danger)]'
-                  )}
-                />
-                {item.in_stock ? 'In stock' : 'Currently unavailable'}
-              </span>
-              {backAt && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-[var(--warning)]/15 px-2.5 py-1 text-xs font-semibold text-[var(--text)]">
-                  <Clock className="h-3.5 w-3.5 text-[var(--warning)]" />
-                  Back at {backAt}
-                </span>
-              )}
-            </div>
+            )}
           </div>
 
           <p className="text-2xl font-bold text-[var(--primary)]">
             {formatPaise(item.price_paise)}
           </p>
+        </div>
+
+        {/* 3-column info pill strip (Screen 2 inspo) */}
+        <div className="grid grid-cols-3 gap-2">
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface-2)]/70 px-2 py-2.5 text-center">
+            <Clock className="h-4 w-4 text-[var(--accent)]" />
+            <span className="mt-1 text-[11px] font-semibold text-[var(--text)]">
+              {formatPrepTime(item.prep_seconds)}
+            </span>
+            <span className="text-[10px] text-[var(--text-muted)]">Prep time</span>
+          </div>
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface-2)]/70 px-2 py-2.5 text-center">
+            <span
+              className={cn(
+                'h-2.5 w-2.5 rounded-full',
+                item.in_stock ? 'bg-[var(--success)]' : 'bg-[var(--danger)]'
+              )}
+            />
+            <span
+              className={cn(
+                'mt-1.5 text-[11px] font-semibold',
+                item.in_stock ? 'text-[var(--success)]' : 'text-[var(--danger)]'
+              )}
+            >
+              {item.in_stock ? 'In stock' : 'Unavailable'}
+            </span>
+            <span className="text-[10px] text-[var(--text-muted)]">Status</span>
+          </div>
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface-2)]/70 px-2 py-2.5 text-center">
+            <Utensils className="h-4 w-4 text-[var(--primary)]" />
+            <span className="mt-1 line-clamp-1 text-[11px] font-semibold text-[var(--text)]">
+              {categoryName || 'Kitchen'}
+            </span>
+            <span className="text-[10px] text-[var(--text-muted)]">Freshly made</span>
+          </div>
         </div>
 
         <Dialog.Description className="text-sm leading-relaxed text-[var(--text-muted)]">
@@ -151,15 +166,15 @@ function ItemSheetBody({
           </div>
         )}
 
-        {/* Qty Stepper + Add Button */}
+        {/* Pill Qty Stepper + Pill Add Button */}
         <div className="flex items-center gap-3 pt-2">
-          <div className="inline-flex items-center rounded-xl border border-[var(--border)] bg-[var(--surface-2)] p-1">
+          <div className="inline-flex items-center rounded-full border border-[var(--border)] bg-[var(--surface-2)] p-1">
             <button
               type="button"
               onClick={() => setQty((q) => Math.max(1, q - 1))}
               disabled={qty <= 1 || !item.in_stock}
               aria-label="Decrease quantity"
-              className="inline-flex h-10 w-10 min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-lg text-[var(--text)] transition-colors hover:bg-[var(--surface)] disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex h-10 w-10 min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-full text-[var(--text)] transition-colors hover:bg-[var(--surface)] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Minus className="h-4 w-4" />
             </button>
@@ -171,7 +186,7 @@ function ItemSheetBody({
               onClick={() => setQty((q) => Math.min(20, q + 1))}
               disabled={!item.in_stock}
               aria-label="Increase quantity"
-              className="inline-flex h-10 w-10 min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-lg text-[var(--text)] transition-colors hover:bg-[var(--surface)] disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex h-10 w-10 min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-full text-[var(--text)] transition-colors hover:bg-[var(--surface)] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Plus className="h-4 w-4" />
             </button>
@@ -182,7 +197,7 @@ function ItemSheetBody({
             disabled={!item.in_stock}
             onClick={handleConfirm}
             className={cn(
-              'inline-flex h-12 min-h-[44px] flex-1 items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold shadow-sm transition-all',
+              'inline-flex h-12 min-h-[44px] flex-1 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold shadow-sm transition-all',
               item.in_stock
                 ? 'cursor-pointer bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] active:scale-[0.98]'
                 : 'cursor-not-allowed border border-[var(--border)] bg-[var(--surface-2)] text-[var(--text-muted)]'

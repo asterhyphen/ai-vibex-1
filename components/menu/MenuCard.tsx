@@ -152,7 +152,7 @@ export function MenuCard({
           transformStyle: 'preserve-3d',
         }}
         className={cn(
-          'group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-sm transition-shadow hover:border-[var(--primary)]/40 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]',
+          'group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-sm transition-shadow hover:border-[var(--primary)]/40 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]',
           !item.in_stock && 'opacity-80'
         )}
       >
@@ -167,69 +167,69 @@ export function MenuCard({
         />
 
         {/* Image / Fallback gradient header */}
-        <motion.div
-          layoutId={`menu-image-${item.id}`}
-          className={cn(
-            'relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br',
-            visual.gradient,
-            visual.darkGradient
-          )}
-        >
-          {item.image_url && !imgError ? (
-            <img
-              src={item.image_url}
-              alt={item.name}
-              loading="lazy"
-              onError={() => setImgError(true)}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          ) : (
-            <div className="relative flex h-full w-full items-center justify-center">
-              <div
-                aria-hidden="true"
-                className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-[var(--primary)]/10 blur-xl"
+        <div className="p-2 pb-0">
+          <motion.div
+            layoutId={`menu-image-${item.id}`}
+            className={cn(
+              'relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gradient-to-br',
+              visual.gradient,
+              visual.darkGradient
+            )}
+          >
+            {item.image_url && !imgError ? (
+              <img
+                src={item.image_url}
+                alt={item.name}
+                loading="lazy"
+                onError={() => setImgError(true)}
+                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
               />
-              <div
-                aria-hidden="true"
-                className="absolute -bottom-6 -left-6 h-24 w-24 rounded-full bg-[var(--accent)]/15 blur-xl"
-              />
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--border)]/60 bg-[var(--surface)]/75 text-[var(--primary)] shadow-sm backdrop-blur-sm">
-                <CategoryIcon className="h-7 w-7" />
+            ) : (
+              <div className="relative flex h-full w-full items-center justify-center">
+                <div
+                  aria-hidden="true"
+                  className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-[var(--primary)]/10 blur-xl"
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute -bottom-6 -left-6 h-24 w-24 rounded-full bg-[var(--accent)]/15 blur-xl"
+                />
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--border)]/60 bg-[var(--surface)]/75 text-[var(--primary)] shadow-sm backdrop-blur-sm">
+                  <CategoryIcon className="h-7 w-7" />
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Prep time badge */}
-          <span className="absolute left-2.5 top-2.5 inline-flex items-center gap-1 rounded-full border border-[var(--border)]/70 bg-[var(--surface)]/90 px-2.5 py-1 text-[11px] font-medium text-[var(--text)] shadow-xs backdrop-blur-sm">
-            <Clock className="h-3 w-3 text-[var(--accent)]" />
-            {formatPrepTime(item.prep_seconds)}
-          </span>
+            {/* Prep time badge */}
+            <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full border border-[var(--border)]/70 bg-[var(--surface)]/90 px-2 py-0.5 text-[11px] font-medium text-[var(--text)] shadow-xs backdrop-blur-sm">
+              <Clock className="h-3 w-3 text-[var(--accent)]" />
+              {formatPrepTime(item.prep_seconds)}
+            </span>
 
-          {/* Out-of-stock overlay */}
-          {!item.in_stock && (
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-1.5 bg-black/40 p-2 backdrop-blur-[1.5px]">
-              <span className="rounded-full border border-white/25 bg-[var(--danger)] px-3 py-1 text-xs font-semibold tracking-wide text-white shadow-sm">
-                Out of stock
-              </span>
-              {backAt && (
-                <span className="rounded-full bg-black/70 px-2.5 py-0.5 text-[11px] font-medium text-white">
-                  Back at {backAt}
+            {/* Out-of-stock overlay */}
+            {!item.in_stock && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-1.5 bg-black/40 p-2 backdrop-blur-[1.5px]">
+                <span className="rounded-full border border-white/25 bg-[var(--danger)] px-3 py-1 text-xs font-semibold tracking-wide text-white shadow-sm">
+                  Out of stock
                 </span>
-              )}
-            </div>
-          )}
-        </motion.div>
+                {backAt && (
+                  <span className="rounded-full bg-black/70 px-2.5 py-0.5 text-[11px] font-medium text-white">
+                    Back at {backAt}
+                  </span>
+                )}
+              </div>
+            )}
+          </motion.div>
+        </div>
 
         {/* Body */}
-        <div className="flex flex-1 flex-col justify-between gap-3 p-3 sm:p-4">
+        <div className="flex flex-1 flex-col justify-between gap-2.5 p-3 sm:p-4">
           <div className="space-y-1">
-            <div className="flex items-start justify-between gap-2">
-              <h3 className="line-clamp-1 text-sm font-semibold text-[var(--text)] sm:text-base">
-                {item.name}
-              </h3>
-            </div>
+            <h3 className="line-clamp-1 text-sm font-semibold text-[var(--text)] sm:text-base">
+              {item.name}
+            </h3>
             <p className="line-clamp-1 text-xs text-[var(--text-muted)]">{subtitle}</p>
-            <div className="flex flex-wrap items-center gap-1.5 pt-1">
+            <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
               <span
                 className={cn(
                   'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium',
@@ -264,14 +264,19 @@ export function MenuCard({
               onClick={handleAddClick}
               aria-label={`Add ${item.name} to cart`}
               className={cn(
-                'relative z-30 inline-flex h-11 min-h-[44px] items-center justify-center gap-1.5 rounded-xl px-3 text-xs font-semibold shadow-xs transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)] sm:px-3.5 sm:text-sm',
+                'relative z-30 inline-flex h-11 min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-full px-3 text-xs font-semibold shadow-xs transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)] sm:px-4 sm:text-sm',
                 item.in_stock
                   ? 'cursor-pointer bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] active:scale-95'
                   : 'cursor-not-allowed border border-[var(--border)] bg-[var(--surface-2)] text-[var(--text-muted)]'
               )}
             >
               <Plus className="h-4 w-4" />
-              <span>{cartQty > 0 ? `Add (${cartQty})` : 'Add to cart'}</span>
+              <span className="hidden sm:inline">
+                {cartQty > 0 ? `Add (${cartQty})` : 'Add to cart'}
+              </span>
+              {cartQty > 0 && (
+                <span className="sm:hidden text-[11px] font-bold">{cartQty}</span>
+              )}
             </button>
           </div>
         </div>

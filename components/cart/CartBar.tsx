@@ -261,8 +261,8 @@ export function CartBar({ liveMenuItems }: CartBarProps) {
                 )}
               </AnimatePresence>
 
-              {/* Main Bar */}
-              <div className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--primary)]/30 bg-[var(--primary)] p-2.5 pl-3.5 text-white shadow-xl">
+              {/* Main Pill Bar */}
+              <div className="flex items-center justify-between gap-3 rounded-full border border-[var(--primary)]/30 bg-[var(--primary)] p-2 pl-2.5 text-white shadow-xl">
                 <button
                   type="button"
                   onClick={() => setDrawerOpen((o) => !o)}
@@ -271,7 +271,7 @@ export function CartBar({ liveMenuItems }: CartBarProps) {
                   <div
                     ref={cartIconRef}
                     data-cart-icon="true"
-                    className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15"
+                    className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15"
                   >
                     <ShoppingCart className="h-5 w-5" />
                     <motion.span
@@ -279,7 +279,7 @@ export function CartBar({ liveMenuItems }: CartBarProps) {
                       initial={{ scale: 0.7 }}
                       animate={{ scale: [1, 1.35, 0.92, 1] }}
                       transition={{ duration: 0.35 }}
-                      className="absolute -right-1.5 -top-1.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-[var(--accent)] px-1 text-[11px] font-bold text-white shadow-xs"
+                      className="absolute -right-1 -top-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-[var(--accent)] px-1 text-[11px] font-bold text-white shadow-xs"
                     >
                       {total_items}
                     </motion.span>
@@ -287,16 +287,16 @@ export function CartBar({ liveMenuItems }: CartBarProps) {
 
                   <div className="min-w-0">
                     <p className="flex items-center gap-1 text-sm font-semibold sm:text-base">
-                      <span>
+                      <span className="truncate">
                         {total_items} {total_items === 1 ? 'item' : 'items'} · {formatPaise(total_paise)}
                       </span>
                       <ChevronUp
-                        className={`h-4 w-4 opacity-80 transition-transform ${
+                        className={`h-4 w-4 shrink-0 opacity-80 transition-transform ${
                           showDrawer ? 'rotate-180' : ''
                         }`}
                       />
                     </p>
-                    <p className="text-[11px] text-white/85">
+                    <p className="truncate text-[11px] text-white/85">
                       {outOfStockCount > 0
                         ? `⚠ ${outOfStockCount} out of stock — tap to update`
                         : 'Tap to review tray'}
@@ -307,7 +307,7 @@ export function CartBar({ liveMenuItems }: CartBarProps) {
                 <Link
                   href="/checkout"
                   onClick={() => setDrawerOpen(false)}
-                  className="inline-flex h-11 min-h-[44px] shrink-0 items-center gap-1.5 rounded-xl bg-white px-4 text-sm font-bold text-[var(--primary)] shadow-sm transition-transform hover:bg-[var(--bg)] active:scale-95 sm:px-5"
+                  className="inline-flex h-11 min-h-[44px] shrink-0 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-bold text-[var(--primary)] shadow-sm transition-transform hover:bg-[var(--bg)] active:scale-95 sm:px-5"
                 >
                   <span>Checkout</span>
                   <ArrowRight className="h-4 w-4" />

@@ -96,6 +96,13 @@ export async function POST(request: Request) {
     }
 
     const isGuestPos = payload.source === 'guest'
+    if (!isGuestPos && !profile?.phone_verified) {
+      return NextResponse.json(
+        { error: 'Phone verification required before ordering' },
+        { status: 403 }
+      )
+    }
+
     if (isGuestPos && profile?.role !== 'shopkeeper' && profile?.role !== 'admin') {
       return NextResponse.json(
         { error: 'Only canteen staff or admins may place walk-in guest orders.' },

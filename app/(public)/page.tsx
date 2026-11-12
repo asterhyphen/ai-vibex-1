@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { HeroScene } from '@/components/3d/HeroScene'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import { LandingFooter } from '@/components/ui/LandingFooter'
 import {
   fadeUp,
   maskRevealLine,
@@ -398,46 +399,50 @@ export default function LandingPage() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-[var(--border)] bg-[var(--surface)]">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <p className="text-sm font-bold text-[var(--text)]">
-              MITE Canteen Pre-Order System
-            </p>
-            <p className="mt-0.5 text-xs text-[var(--text-muted)]">
-              Mangalore Institute of Technology &amp; Engineering · Moodabidri
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <nav
-              aria-label="Portal links"
-              className="flex flex-wrap items-center gap-2 text-xs font-medium text-[var(--text-muted)]"
+      {/* ── CTA bridge section (white card → dark footer transition) ── */}
+      <section className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          className="relative rounded-3xl border border-[var(--border)] bg-[var(--surface)] px-8 py-12 sm:px-14 sm:py-16 text-center shadow-xl overflow-hidden"
+        >
+          {/* Subtle radial blush */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 70% 60% at 50% 110%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 70%)',
+            }}
+          />
+          <p className="relative text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
+            Exclusively for MITE campus
+          </p>
+          <p className="relative mt-3 text-sm sm:text-base text-[var(--text-muted)] max-w-lg mx-auto leading-relaxed">
+            MITE Canteen started as a simple paper-slip system in 2018. It's
+            still that at heart, just over 2,000 orders smarter.
+          </p>
+          <div className="relative mt-7 flex flex-col sm:flex-row items-center justify-center gap-3.5">
+            <Link
+              href="/login"
+              className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-[var(--text)] px-6 py-3.5 text-sm font-semibold text-[var(--bg)] shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 active:scale-[0.97]"
             >
-              <Link
-                href="/login"
-                className="inline-flex min-h-[44px] items-center rounded-lg px-3 hover:bg-[var(--surface-2)] hover:text-[var(--text)] transition-colors"
-              >
-                Student &amp; Faculty
-              </Link>
-              <Link
-                href="/staff/login"
-                className="inline-flex min-h-[44px] items-center rounded-lg px-3 hover:bg-[var(--surface-2)] hover:text-[var(--text)] transition-colors"
-              >
-                Kitchen &amp; Print Staff
-              </Link>
-              <Link
-                href="/admin/login"
-                className="inline-flex min-h-[44px] items-center rounded-lg px-3 hover:bg-[var(--surface-2)] hover:text-[var(--text)] transition-colors"
-              >
-                Admin
-              </Link>
-            </nav>
-            <ThemeToggle />
+              Order now
+            </Link>
+            <Link
+              href="#features"
+              className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-transparent px-6 py-3.5 text-sm font-semibold text-[var(--text)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--surface-2)]"
+            >
+              See plans →
+            </Link>
           </div>
-        </div>
-      </footer>
+        </motion.div>
+      </section>
+
+      {/* ── Mobbin-style dark footer ─────────────────────────────────── */}
+      <LandingFooter />
     </div>
   )
 }

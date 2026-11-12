@@ -1,81 +1,135 @@
 'use client'
 
+import { useRef, useState } from 'react'
 import Link from 'next/link'
-import { motion, type Variants } from 'framer-motion'
+import { motion, useReducedMotion, type Variants } from 'framer-motion'
 import {
   ArrowRight,
+  ChevronDown,
   Clock,
+  MapPin,
   Printer,
   QrCode,
   ShieldCheck,
+  Sparkles,
   UtensilsCrossed,
   Zap,
 } from 'lucide-react'
-import { ThemeToggle } from '@/components/auth/ThemeToggle'
+import { HeroScene } from '@/components/3d/HeroScene'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
+import {
+  fadeUp,
+  maskRevealLine,
+  springConfig,
+  stagger,
+} from '@/lib/utils/motion'
 
 const heroContainer: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
+  hidden: {},
+  show: {
     transition: {
       staggerChildren: 0.1,
     },
   },
 }
 
-const fadeUpItem: Variants = {
-  hidden: { opacity: 0, y: 18 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
-  },
-}
-
-const featuresContainer: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-}
+const featureContainerVariants: Variants = stagger(0.06)
+const featureItemVariants: Variants = fadeUp
 
 const FEATURES = [
   {
     icon: Zap,
-    title: 'Order in 30 seconds',
+    title: '⚡ Order in 30 seconds',
     description:
-      'Pick from today’s live canteen menu or type in plain words, choose a 10-minute pickup window, and pay online or at the counter.',
-    accent: 'from-[var(--primary)]/12 to-[var(--accent)]/12',
+      'Browse today’s live canteen menu or type in plain words, pick a 10-minute pickup window, and pay online or at the counter.',
+    accent: 'from-[var(--primary)]/14 to-[var(--accent)]/12',
     iconColor: 'text-[var(--primary)]',
   },
   {
     icon: Clock,
-    title: 'Live Kitchen View',
+    title: '🎯 Live Kitchen View',
     description:
       'Follow your order from Placed to Ready in real time. Faculty orders receive automatic priority so meals stay hot between lectures.',
-    accent: 'from-[var(--accent)]/15 to-[var(--primary)]/10',
+    accent: 'from-[var(--accent)]/16 to-[var(--primary)]/10',
     iconColor: 'text-[var(--accent)]',
   },
   {
     icon: Printer,
-    title: 'Print Shop',
+    title: '📄 Print Shop',
     description:
-      'Upload PDFs directly from your phone, get instant page count and cost estimates for A4/A3 B&W or color, and collect with your QR.',
-    accent: 'from-[var(--primary)]/10 to-[var(--success)]/12',
+      'Upload PDFs straight from your phone, get instant page counts and cost estimates for A4/A3 B&W or color, and collect with a QR.',
+    accent: 'from-[var(--primary)]/10 to-[var(--success)]/14',
     iconColor: 'text-[var(--primary)]',
   },
 ] as const
 
+const STATS = [
+  {
+    value: '2000+ orders served',
+    detail: 'Across morning rush & lunch breaks',
+    icon: UtensilsCrossed,
+  },
+  {
+    value: '< 2 min avg wait',
+    detail: 'Walk up, scan QR, pick up hot food',
+    icon: Clock,
+  },
+  {
+    value: '5 campus locations',
+    detail: 'Main Canteen, Espresso Bar, Print Hub & more',
+    icon: MapPin,
+  },
+] as const
+
+function MagneticCta({ href }: { href: string }) {
+  const prefersReducedMotion = useReducedMotion()
+  const buttonRef = useRef<HTMLDivElement>(null)
+  const [offset, setOffset] = useState({ x: 0, y: 0 })
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (prefersReducedMotion || !buttonRef.current) return
+    const rect = buttonRef.current.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+    setOffset({
+      x: (e.clientX - centerX) * 0.3,
+      y: (e.clientY - centerY) * 0.3,
+    })
+  }
+
+  const handleMouseLeave = () => {
+    setOffset({ x: 0, y: 0 })
+  }
+
+  return (
+    <motion.div
+      ref={buttonRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      animate={prefersReducedMotion ? undefined : { x: offset.x, y: offset.y }}
+      transition={springConfig}
+      className="inline-flex w-full sm:w-auto"
+    >
+      <Link
+        href={href}
+        className="inline-flex w-full sm:w-auto min-h-[48px] items-center justify-center gap-2.5 rounded-xl bg-[var(--primary)] px-6 py-3.5 text-base font-semibold text-white shadow-md transition-all duration-200 hover:-translate-y-1 hover:bg-[var(--primary-hover)] hover:shadow-[0_14px_32px_-8px_rgba(122,31,61,0.55)] active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]"
+      >
+        <span>Continue with college email</span>
+        <ArrowRight className="h-4 w-4" />
+      </Link>
+    </motion.div>
+  )
+}
+
 export default function LandingPage() {
+  const prefersReducedMotion = useReducedMotion()
+
   return (
     <div className="relative min-h-screen flex flex-col bg-[var(--bg)] text-[var(--text)] overflow-x-clip">
       {/* Subtle brand hero gradient wash */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[760px]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[780px]"
         style={{
           background:
             'radial-gradient(ellipse 80% 55% at 20% 0%, color-mix(in srgb, var(--primary) 16%, transparent), transparent 70%), radial-gradient(ellipse 65% 50% at 88% 12%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 68%), linear-gradient(180deg, color-mix(in srgb, var(--primary) 5%, var(--bg)) 0%, var(--bg) 100%)',
@@ -114,32 +168,41 @@ export default function LandingPage() {
 
       {/* Main Hero */}
       <main className="relative z-10 flex-1">
-        <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-8 pb-16 sm:pt-14 sm:pb-24 min-h-[calc(100vh-88px)] flex flex-col justify-center">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        <section className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-6 pb-16 sm:pt-10 sm:pb-20 min-h-[calc(100vh-84px)] flex flex-col justify-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-10 items-center">
+            {/* Left Half: Line-by-line mask reveal + Magnetic CTA */}
             <motion.div
               variants={heroContainer}
               initial="hidden"
-              animate="visible"
-              className="lg:col-span-7 flex flex-col items-start text-left"
+              animate="show"
+              className="lg:col-span-6 flex flex-col items-start text-left"
             >
               <motion.div
-                variants={fadeUpItem}
+                variants={fadeUp}
                 className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3.5 py-1.5 text-xs font-semibold text-[var(--primary)] shadow-xs"
               >
                 <ShieldCheck className="h-3.5 w-3.5 text-[var(--accent)]" />
                 <span>Exclusive for @mite.ac.in students &amp; faculty</span>
               </motion.div>
 
-              <motion.h1
-                variants={fadeUpItem}
-                className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08] text-[var(--text)]"
-              >
-                Skip the queue.{' '}
-                <span className="text-[var(--primary)]">Not the meal.</span>
-              </motion.h1>
+              <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08] text-[var(--text)]">
+                <span className="block overflow-hidden pb-1">
+                  <motion.span variants={maskRevealLine} className="block">
+                    Skip the queue.
+                  </motion.span>
+                </span>
+                <span className="block overflow-hidden pb-1">
+                  <motion.span
+                    variants={maskRevealLine}
+                    className="block text-[var(--primary)]"
+                  >
+                    Not the meal.
+                  </motion.span>
+                </span>
+              </h1>
 
               <motion.p
-                variants={fadeUpItem}
+                variants={fadeUp}
                 className="mt-5 max-w-xl text-base sm:text-lg leading-relaxed text-[var(--text-muted)]"
               >
                 Pre-order your canteen meals, pick up with a QR scan. Reserve a
@@ -148,27 +211,21 @@ export default function LandingPage() {
               </motion.p>
 
               <motion.div
-                variants={fadeUpItem}
+                variants={fadeUp}
                 className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto"
               >
-                <Link
-                  href="/login"
-                  className="inline-flex min-h-[48px] items-center justify-center gap-2.5 rounded-xl bg-[var(--primary)] px-6 py-3.5 text-base font-semibold text-white shadow-md transition-all hover:bg-[var(--primary-hover)] hover:shadow-lg active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]"
-                >
-                  <span>Continue with college email</span>
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
+                <MagneticCta href="/login" />
 
                 <a
                   href="#features"
-                  className="inline-flex min-h-[48px] items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] px-5 py-3.5 text-sm font-semibold text-[var(--text)] transition-colors hover:border-[var(--primary)] hover:bg-[var(--surface-2)]"
+                  className="inline-flex min-h-[48px] items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] px-5 py-3.5 text-sm font-semibold text-[var(--text)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--surface-2)]"
                 >
                   See how it works
                 </a>
               </motion.div>
 
               <motion.div
-                variants={fadeUpItem}
+                variants={fadeUp}
                 className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs sm:text-sm text-[var(--text-muted)]"
               >
                 <span className="inline-flex items-center gap-1.5">
@@ -186,73 +243,63 @@ export default function LandingPage() {
               </motion.div>
             </motion.div>
 
-            {/* Right: Authentic pickup pass preview */}
+            {/* Right Half: Lazy-loaded 3D HeroScene */}
             <motion.div
-              initial={{ opacity: 0, y: 22 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="lg:col-span-5"
+              initial={{ opacity: 0, scale: 0.96, y: 18 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="lg:col-span-6"
             >
-              <div className="relative mx-auto max-w-md rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-6 shadow-xl">
-                <div className="flex items-center justify-between border-b border-[var(--border)] pb-4">
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">
-                      Pickup Pass Preview
-                    </p>
-                    <p className="mt-0.5 text-2xl font-extrabold tracking-tight text-[var(--primary)]">
-                      A-0142
-                    </p>
-                  </div>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--success)]/12 px-3 py-1 text-xs font-semibold text-[var(--success)]">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[var(--success)]" />
-                    Ready for Pickup
-                  </span>
-                </div>
+              <div className="relative mx-auto w-full max-w-xl h-[360px] sm:h-[440px] lg:h-[490px] rounded-3xl border border-[var(--border)] shadow-2xl overflow-hidden">
+                <HeroScene className="h-full w-full" />
 
-                <div className="mt-4 space-y-2.5 text-sm">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[var(--text)] font-medium">
-                      2 × Masala Dosa
-                    </span>
-                    <span className="font-semibold text-[var(--text)]">₹80</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[var(--text)] font-medium">
-                      1 × Filter Coffee
-                    </span>
-                    <span className="font-semibold text-[var(--text)]">₹15</span>
-                  </div>
-                  <div className="border-t border-dashed border-[var(--border)] pt-2.5 flex items-center justify-between font-bold">
-                    <span>Paid via UPI</span>
-                    <span className="text-[var(--primary)]">₹95</span>
-                  </div>
-                </div>
-
-                <div className="mt-5 flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface-2)] p-3.5">
-                  <div>
-                    <p className="text-xs font-medium text-[var(--text-muted)]">
-                      Pickup Window
-                    </p>
-                    <p className="text-sm font-bold text-[var(--text)]">
-                      12:30 PM – 12:40 PM
-                    </p>
-                    <p className="mt-0.5 text-[11px] font-medium text-[var(--accent)]">
-                      Counter 1 · Scan QR to collect
-                    </p>
-                  </div>
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--primary)]">
-                    <QrCode className="h-9 w-9" />
+                {/* Floating compact live pass pill */}
+                <div className="pointer-events-none absolute bottom-4 left-4 right-4 sm:right-auto sm:w-72 rounded-2xl border border-white/15 bg-[#14080C]/80 backdrop-blur-md p-3.5 text-white shadow-xl">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-white/65">
+                        Live Pickup Pass
+                      </p>
+                      <p className="text-base font-extrabold tracking-tight text-[#D4A855]">
+                        A-0142 · Ready
+                      </p>
+                      <p className="text-[11px] text-white/75">
+                        2× Masala Dosa, Filter Coffee
+                      </p>
+                    </div>
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-[#D4A855]">
+                      <QrCode className="h-5 w-5" />
+                    </div>
                   </div>
                 </div>
               </div>
             </motion.div>
+          </div>
+
+          {/* Animated Scroll Indicator */}
+          <div className="mt-10 flex justify-center">
+            <motion.a
+              href="#features"
+              aria-label="Scroll to features"
+              animate={
+                prefersReducedMotion ? undefined : { y: [0, 8, 0] }
+              }
+              transition={{
+                repeat: Infinity,
+                duration: 1.6,
+                ease: 'easeInOut',
+              }}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)]/90 text-[var(--text-muted)] shadow-xs hover:border-[var(--primary)] hover:text-[var(--primary)] transition-colors"
+            >
+              <ChevronDown className="h-5 w-5" />
+            </motion.a>
           </div>
         </section>
 
         {/* Features Section */}
         <section
           id="features"
-          className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-20 sm:pb-24"
+          className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20"
         >
           <div className="max-w-2xl">
             <p className="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
@@ -264,9 +311,9 @@ export default function LandingPage() {
           </div>
 
           <motion.div
-            variants={featuresContainer}
+            variants={featureContainerVariants}
             initial="hidden"
-            whileInView="visible"
+            whileInView="show"
             viewport={{ once: true, amount: 0.2 }}
             className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5"
           >
@@ -275,8 +322,8 @@ export default function LandingPage() {
               return (
                 <motion.article
                   key={feature.title}
-                  variants={fadeUpItem}
-                  className="group relative flex flex-col rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-xs transition-all hover:border-[var(--primary)]/50 hover:shadow-md"
+                  variants={featureItemVariants}
+                  className="group relative flex flex-col rounded-[12px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-xs transition-all duration-200 ease-out motion-safe:hover:-translate-y-1 hover:border-[var(--primary)]/50 hover:shadow-[0_16px_36px_-10px_rgba(122,31,61,0.24)]"
                 >
                   <div
                     className={`inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.accent} border border-[var(--border)]`}
@@ -294,6 +341,61 @@ export default function LandingPage() {
             })}
           </motion.div>
         </section>
+
+        {/* Stats & Testimonial Strip */}
+        <section
+          aria-label="Campus stats and feedback"
+          className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-20 sm:pb-24"
+        >
+          <motion.div
+            variants={stagger(0.06)}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+            className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8 shadow-sm"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {STATS.map((stat) => {
+                const Icon = stat.icon
+                return (
+                  <motion.div
+                    key={stat.value}
+                    variants={fadeUp}
+                    className="flex items-start gap-3.5 rounded-xl border border-[var(--border)] bg-[var(--surface-2)]/60 p-4"
+                  >
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--primary-soft)] text-[var(--primary)]">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-lg font-extrabold tracking-tight text-[var(--text)]">
+                        {stat.value}
+                      </p>
+                      <p className="mt-0.5 text-xs text-[var(--text-muted)]">
+                        {stat.detail}
+                      </p>
+                    </div>
+                  </motion.div>
+                )
+              })}
+            </div>
+
+            <motion.div
+              variants={fadeUp}
+              className="mt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-[var(--border)] pt-5"
+            >
+              <p className="flex items-center gap-2 text-sm text-[var(--text)]">
+                <Sparkles className="h-4 w-4 shrink-0 text-[var(--accent)]" />
+                <span>
+                  &ldquo;I order two masala dosas before walking out of the lab and
+                  grab them hot in 45 seconds.&rdquo;
+                </span>
+              </p>
+              <span className="shrink-0 text-xs font-semibold text-[var(--text-muted)]">
+                — 6th Sem CSE, MITE Moodabidri
+              </span>
+            </motion.div>
+          </motion.div>
+        </section>
       </main>
 
       {/* Footer */}
@@ -308,29 +410,32 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <nav
-            aria-label="Portal links"
-            className="flex flex-wrap items-center gap-2 text-xs font-medium text-[var(--text-muted)]"
-          >
-            <Link
-              href="/login"
-              className="inline-flex min-h-[44px] items-center rounded-lg px-3 hover:bg-[var(--surface-2)] hover:text-[var(--text)] transition-colors"
+          <div className="flex flex-wrap items-center gap-3">
+            <nav
+              aria-label="Portal links"
+              className="flex flex-wrap items-center gap-2 text-xs font-medium text-[var(--text-muted)]"
             >
-              Student &amp; Faculty
-            </Link>
-            <Link
-              href="/staff/login"
-              className="inline-flex min-h-[44px] items-center rounded-lg px-3 hover:bg-[var(--surface-2)] hover:text-[var(--text)] transition-colors"
-            >
-              Kitchen &amp; Print Staff
-            </Link>
-            <Link
-              href="/admin/login"
-              className="inline-flex min-h-[44px] items-center rounded-lg px-3 hover:bg-[var(--surface-2)] hover:text-[var(--text)] transition-colors"
-            >
-              Admin
-            </Link>
-          </nav>
+              <Link
+                href="/login"
+                className="inline-flex min-h-[44px] items-center rounded-lg px-3 hover:bg-[var(--surface-2)] hover:text-[var(--text)] transition-colors"
+              >
+                Student &amp; Faculty
+              </Link>
+              <Link
+                href="/staff/login"
+                className="inline-flex min-h-[44px] items-center rounded-lg px-3 hover:bg-[var(--surface-2)] hover:text-[var(--text)] transition-colors"
+              >
+                Kitchen &amp; Print Staff
+              </Link>
+              <Link
+                href="/admin/login"
+                className="inline-flex min-h-[44px] items-center rounded-lg px-3 hover:bg-[var(--surface-2)] hover:text-[var(--text)] transition-colors"
+              >
+                Admin
+              </Link>
+            </nav>
+            <ThemeToggle />
+          </div>
         </div>
       </footer>
     </div>

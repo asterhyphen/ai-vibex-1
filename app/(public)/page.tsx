@@ -40,32 +40,7 @@ const heroContainer: Variants = {
 const featureContainerVariants: Variants = stagger(0.06)
 const featureItemVariants: Variants = fadeUp
 
-const FEATURES = [
-  {
-    icon: Zap,
-    title: 'Order in 30 seconds',
-    description:
-      'Browse today’s live canteen menu or type in plain words, pick a 10-minute pickup window, and pay online or at the counter.',
-    accent: 'from-[var(--primary)]/14 to-[var(--accent)]/12',
-    iconColor: 'text-[var(--primary)]',
-  },
-  {
-    icon: Clock,
-    title: 'Live Kitchen View',
-    description:
-      'Follow your order from Placed to Ready in real time. Faculty orders receive automatic priority so meals stay hot between lectures.',
-    accent: 'from-[var(--accent)]/16 to-[var(--primary)]/10',
-    iconColor: 'text-[var(--accent)]',
-  },
-  {
-    icon: Printer,
-    title: 'Print Shop',
-    description:
-      'Upload PDFs straight from your phone, get instant page counts and cost estimates for A4/A3 B&W or color, and collect with a QR.',
-    accent: 'from-[var(--primary)]/10 to-[var(--success)]/14',
-    iconColor: 'text-[var(--primary)]',
-  },
-] as const
+
 
 const STATS = [
   {
@@ -272,28 +247,8 @@ export default function LandingPage() {
             viewport={{ once: true, amount: 0.2 }}
             className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-5"
           >
-            {FEATURES.map((feature) => {
-              const Icon = feature.icon
-              return (
-                <motion.article
-                  key={feature.title}
-                  variants={featureItemVariants}
-                  className="group relative flex flex-col rounded-[12px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-xs transition-all duration-200 ease-out motion-safe:hover:-translate-y-1 hover:border-[var(--primary)]/50 hover:shadow-[0_16px_36px_-10px_rgba(122,31,61,0.24)]"
-                >
-                  <div
-                    className={`inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.accent} border border-[var(--border)]`}
-                  >
-                    <Icon className={`h-6 w-6 ${feature.iconColor}`} />
-                  </div>
-                  <h3 className="mt-5 text-lg font-bold text-[var(--text)]">
-                    {feature.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)]">
-                    {feature.description}
-                  </p>
-                </motion.article>
-              )
-            })}
+            
+              
           </motion.div>
         </section>
 
@@ -373,7 +328,7 @@ export default function LandingPage() {
           />
           
           <p className="relative mt-3 text-sm sm:text-base text-[var(--text-muted)] max-w-lg mx-auto leading-relaxed">
-            Built for MITE campus breaks — order ahead, pay in seconds, and
+            Built for MITE campus, order ahead, pay in seconds, and
             pick up with a QR scan.
           </p>
           <div className="relative mt-7 flex flex-col sm:flex-row items-center justify-center gap-3.5">

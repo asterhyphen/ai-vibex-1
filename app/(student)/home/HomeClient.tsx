@@ -366,64 +366,86 @@ export function HomeClient({
           </motion.section>
         )}
 
-        {/* Sticky Prominent "Order in plain words" Bar */}
+        {/* Featured Quick-Order Banner (Mobile-first promo card inspo) */}
         <section
-          aria-label="Order in plain words"
-          className="sticky top-[106px] z-20 rounded-2xl border border-[var(--primary)]/25 bg-[var(--surface)]/95 p-3 shadow-md backdrop-blur-md md:top-[76px]"
+          aria-label="Quick order highlight"
+          className="relative overflow-hidden rounded-3xl border border-[var(--primary)]/15 bg-[var(--primary-soft)]/70 p-4 shadow-xs dark:bg-[var(--surface-2)] sm:p-5"
         >
-          <form onSubmit={handlePlainSubmit} className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <div className="relative flex-1">
-              <Sparkles className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-[var(--accent)]" />
-              <textarea
-                rows={1}
-                value={plainInput}
-                onChange={(e) => setPlainInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault()
-                    setPlainAutoParse(Boolean(plainInput.trim()))
-                    setPlainModalOpen(true)
-                  }
+          <div className="flex items-center justify-between gap-4">
+            <div className="min-w-0 flex-1 space-y-2">
+              <h2 className="font-display text-lg font-bold tracking-tight text-[var(--text)] sm:text-xl">
+                Fresh from MITE Kitchen
+              </h2>
+              <p className="max-w-md text-xs leading-relaxed text-[var(--text-muted)] sm:text-sm">
+                Type your order in plain words or pick a 10-min slot to skip the counter rush.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setPlainAutoParse(Boolean(plainInput.trim()))
+                  setPlainModalOpen(true)
                 }}
-                placeholder="Order in plain words — e.g. two masala dosa and one filter coffee"
-                className="min-h-[44px] w-full resize-none rounded-xl border border-[var(--border)] bg-[var(--bg)] py-2.5 pl-10 pr-3 text-sm text-[var(--text)] placeholder:text-[var(--text-muted)] focus:border-[var(--primary)] focus:outline-none"
-              />
+                className="inline-flex min-h-[44px] cursor-pointer items-center gap-2 rounded-full bg-[var(--primary)] pl-4 pr-2 text-xs font-bold text-white shadow-xs transition-all hover:bg-[var(--primary-hover)] active:scale-95 sm:text-sm"
+              >
+                <span>Order in plain words</span>
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/20">
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </span>
+              </button>
             </div>
 
-            <button
-              type="submit"
-              className="inline-flex h-11 min-h-[44px] shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-sm font-semibold text-white shadow-xs transition-colors hover:bg-[var(--primary-hover)]"
+            <div
+              aria-hidden="true"
+              className="hidden h-20 w-20 shrink-0 items-center justify-center rounded-full border border-[var(--primary)]/15 bg-[var(--surface)] text-[var(--primary)] shadow-sm xs:flex sm:flex sm:h-24 sm:w-24"
             >
-              <Sparkles className="h-4 w-4" />
-              <span>{plainInput.trim() ? 'Parse order' : 'Quick NLP order'}</span>
-            </button>
-          </form>
+              <div className="relative flex items-center justify-center">
+                <Utensils className="h-9 w-9 sm:h-10 sm:w-10" />
+                <Sparkles className="absolute -right-2.5 -top-2.5 h-4 w-4 text-[var(--accent)]" />
+              </div>
+            </div>
+          </div>
         </section>
 
-        {/* Category Filter Chips + Search */}
-        <section className="space-y-3">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="min-w-0 flex-1">
-              <CategoryChips
-                categories={categories}
-                selectedCategoryId={selectedCategoryId}
-                onSelect={setSelectedCategoryId}
-                itemCounts={categoryCounts}
-              />
-            </div>
-
-            <div className="relative w-full sm:w-56">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-muted)]" />
+        {/* Sticky Pill Search & Quick NLP Bar */}
+        <section
+          aria-label="Search and quick order"
+          className="sticky top-[106px] z-20 space-y-2.5 rounded-3xl border border-[var(--border)] bg-[var(--surface)]/95 p-2.5 shadow-md backdrop-blur-md md:top-[76px]"
+        >
+          <form onSubmit={handlePlainSubmit} className="flex items-center gap-2">
+            <div className="relative flex flex-1 items-center">
+              <span className="pointer-events-none absolute left-1.5 flex h-9 w-9 items-center justify-center rounded-full bg-[var(--primary)] text-white shadow-xs">
+                <Search className="h-4 w-4" />
+              </span>
               <input
                 type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search menu..."
+                placeholder="Search menu items..."
                 aria-label="Search menu items"
-                className="h-11 min-h-[44px] w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] pl-9 pr-3 text-sm text-[var(--text)] placeholder:text-[var(--text-muted)] focus:border-[var(--primary)] focus:outline-none"
+                className="h-11 min-h-[44px] w-full rounded-full border border-[var(--border)] bg-[var(--bg)] pl-12 pr-4 text-base sm:text-sm text-[var(--text)] placeholder:text-[var(--text-muted)] focus:border-[var(--primary)] focus:outline-none"
               />
             </div>
-          </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setPlainAutoParse(Boolean(plainInput.trim()))
+                setPlainModalOpen(true)
+              }}
+              aria-label="Open plain language NLP order"
+              className="inline-flex h-11 min-h-[44px] shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-[var(--primary)]/25 bg-[var(--primary-soft)] px-3.5 text-xs font-bold text-[var(--primary)] transition-colors hover:bg-[var(--primary)] hover:text-white sm:px-4"
+            >
+              <Sparkles className="h-4 w-4" />
+              <span className="hidden sm:inline">Quick NLP</span>
+            </button>
+          </form>
+
+          <CategoryChips
+            categories={categories}
+            selectedCategoryId={selectedCategoryId}
+            onSelect={setSelectedCategoryId}
+            itemCounts={categoryCounts}
+          />
         </section>
 
         {/* Menu Grid */}

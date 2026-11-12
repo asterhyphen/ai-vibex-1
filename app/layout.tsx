@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
-import { Toaster } from 'sonner'
+import { RealtimeAlertsProvider } from '@/components/ui/RealtimeAlertsProvider'
 import './globals.css'
 
 const inter = Inter({
@@ -33,8 +33,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
-          <Toaster richColors position="top-right" />
+          <RealtimeAlertsProvider>{children}</RealtimeAlertsProvider>
         </ThemeProvider>
       </body>
     </html>

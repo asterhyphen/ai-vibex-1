@@ -1,19 +1,55 @@
 'use client'
 
 import Link from 'next/link'
-import { motion, useReducedMotion, useInView } from 'framer-motion'
+import { motion, useReducedMotion, useInView, type Variants } from 'framer-motion'
 import { useRef } from 'react'
-import { Youtube, Twitter, Linkedin, Instagram } from 'lucide-react'
+
+function YoutubeIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
+      <path d="m10 15 5-3-5-3v6Z" />
+    </svg>
+  )
+}
+
+function TwitterIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+    </svg>
+  )
+}
+
+function LinkedinIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect width="4" height="12" x="2" y="9" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  )
+}
+
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  )
+}
 
 /* ─── Giant marquee-word config ─────────────────────────────────────── */
 const BRAND_WORD = 'MITE'
 
 /* ─── Social links ───────────────────────────────────────────────────── */
 const SOCIALS = [
-  { href: 'https://youtube.com', label: 'YouTube', Icon: Youtube },
-  { href: 'https://twitter.com', label: 'X / Twitter', Icon: Twitter },
-  { href: 'https://linkedin.com', label: 'LinkedIn', Icon: Linkedin },
-  { href: 'https://instagram.com', label: 'Instagram', Icon: Instagram },
+  { href: 'https://youtube.com', label: 'YouTube', Icon: YoutubeIcon },
+  { href: 'https://twitter.com', label: 'X / Twitter', Icon: TwitterIcon },
+  { href: 'https://linkedin.com', label: 'LinkedIn', Icon: LinkedinIcon },
+  { href: 'https://instagram.com', label: 'Instagram', Icon: InstagramIcon },
 ] as const
 
 /* ─── Nav links ──────────────────────────────────────────────────────── */
@@ -64,12 +100,12 @@ export function LandingFooter() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px 0px' })
 
-  const lineVariants = {
+  const lineVariants: Variants = {
     hidden: { opacity: 0, y: 14 },
     show:   { opacity: 1, y: 0,  transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
   }
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: {},
     show:   { transition: { staggerChildren: 0.07 } },
   }

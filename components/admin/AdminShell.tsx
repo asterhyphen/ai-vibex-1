@@ -24,19 +24,34 @@ import {
 } from 'lucide-react'
 import { ThemeToggle } from '@/components/auth/ThemeToggle'
 
-const NAV_ITEMS = [
-  { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/admin/orders', label: 'Orders', icon: ShoppingBag },
-  { href: '/admin/print-jobs', label: 'Print Jobs', icon: Printer },
-  { href: '/admin/menu', label: 'Menu', icon: UtensilsCrossed },
-  { href: '/admin/categories', label: 'Categories', icon: FolderKanban },
-  { href: '/admin/slots', label: 'Slots', icon: Clock },
-  { href: '/admin/users', label: 'Users', icon: Users },
-  { href: '/admin/shopkeepers', label: 'Shopkeepers', icon: UserCog },
-  { href: '/admin/settings', label: 'Settings', icon: Settings },
-  { href: '/admin/sms-log', label: 'SMS Log', icon: MessageSquare },
-  { href: '/admin/audit', label: 'Audit Log', icon: ShieldAlert },
-  { href: '/admin/database', label: 'Database', icon: Database },
+const NAV_SECTIONS = [
+  {
+    label: 'Operations',
+    items: [
+      { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+      { href: '/admin/orders', label: 'Orders', icon: ShoppingBag },
+      { href: '/admin/print-jobs', label: 'Print Jobs', icon: Printer },
+      { href: '/admin/slots', label: 'Slots', icon: Clock },
+    ],
+  },
+  {
+    label: 'Catalog & People',
+    items: [
+      { href: '/admin/menu', label: 'Menu', icon: UtensilsCrossed },
+      { href: '/admin/categories', label: 'Categories', icon: FolderKanban },
+      { href: '/admin/users', label: 'Users', icon: Users },
+      { href: '/admin/shopkeepers', label: 'Shopkeepers', icon: UserCog },
+    ],
+  },
+  {
+    label: 'System',
+    items: [
+      { href: '/admin/settings', label: 'Settings', icon: Settings },
+      { href: '/admin/sms-log', label: 'SMS Log', icon: MessageSquare },
+      { href: '/admin/audit', label: 'Audit Log', icon: ShieldAlert },
+      { href: '/admin/database', label: 'Database', icon: Database },
+    ],
+  },
 ] as const
 
 interface AdminShellProps {
@@ -96,29 +111,36 @@ export function AdminShell({
           </button>
         </div>
 
-        <nav className="space-y-1 p-3" aria-label="Admin navigation">
-          {NAV_ITEMS.map((item) => {
-            const Icon = item.icon
-            const active =
-              item.href === '/admin'
-                ? pathname === '/admin'
-                : pathname.startsWith(item.href)
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className={`flex min-h-[42px] items-center gap-3 rounded-xl px-3.5 text-sm font-bold transition-colors ${
-                  active
-                    ? 'bg-[var(--primary)] text-white shadow-sm'
-                    : 'text-[var(--text-muted)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]'
-                }`}
-              >
-                <Icon className="h-4 w-4 shrink-0" />
-                <span>{item.label}</span>
-              </Link>
-            )
-          })}
+        <nav className="space-y-4 p-3" aria-label="Admin navigation">
+          {NAV_SECTIONS.map((section) => (
+            <div key={section.label} className="space-y-1">
+              <div className="px-3.5 pb-1 text-[11px] font-semibold text-[var(--text-muted)]">
+                {section.label}
+              </div>
+              {section.items.map((item) => {
+                const Icon = item.icon
+                const active =
+                  item.href === '/admin'
+                    ? pathname === '/admin'
+                    : pathname.startsWith(item.href)
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className={`flex min-h-[40px] items-center gap-3 rounded-xl px-3.5 text-sm font-semibold transition-colors ${
+                      active
+                        ? 'bg-[var(--primary)] text-white shadow-sm'
+                        : 'text-[var(--text-muted)] hover:bg-[var(--surface-2)] hover:text-[var(--text)]'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4 shrink-0" />
+                    <span>{item.label}</span>
+                  </Link>
+                )
+              })}
+            </div>
+          ))}
         </nav>
       </div>
 

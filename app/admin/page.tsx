@@ -174,6 +174,7 @@ function OrdersPerHourChart({
 export default function AdminDashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [showAllSlots, setShowAllSlots] = useState(false)
 
   const loadDashboard = useCallback(async () => {
     setLoading(true)
@@ -243,7 +244,7 @@ export default function AdminDashboardPage() {
           <Loader2 className="h-8 w-8 animate-spin text-[var(--primary)]" />
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-7">
           {/* KPI Cards */}
           <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
             <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm">
@@ -394,32 +395,67 @@ export default function AdminDashboardPage() {
                   No slots seeded for today. Visit Slots to generate today&apos;s windows.
                 </div>
               ) : (
-                <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8">
-                  {(data?.slots ?? []).map((slot) => {
-                    const cap = Math.max(1, slot.capacity_units)
-                    const pct = Math.min(100, Math.round((slot.used_units / cap) * 100))
-                    const tileStyle =
-                      pct > 80
-                        ? 'border-[var(--danger)]/40 bg-[var(--danger)]/15 text-[var(--danger)]'
-                        : pct >= 50
-                          ? 'border-[var(--warning)]/40 bg-[var(--warning)]/15 text-[var(--warning)]'
-                          : 'border-[var(--success)]/30 bg-[var(--success)]/12 text-[var(--success)]'
+                <div className="space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] px-4 py-3">
+                    <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-[var(--text-muted)] tabular-nums">
+                      <span>{(data?.slots ?? []).length} slots today</span>
+                      <span>
+                        Peak:{' '}
+                        <strong className="text-[var(--text)]">
+                          {Math.max(
+                            0,
+                            ...(data?.slots ?? []).map((s) =>
+                              Math.min(100, Math.round((s.used_units / Math.max(1, s.capacity_units)) * 100))
+                            )
+                          )}
+                          %
+                        </strong>
+                      </span>
+                      <span>
+                        Busy (&gt;80%):{' '}
+                        <strong className="text-[var(--danger)]">
+                          {(data?.slots ?? []).filter((s) => s.used_units / Math.max(1, s.capacity_units) > 0.8).length}
+                        </strong>
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowAllSlots((prev) => !prev)}
+                      className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-xs font-semibold text-[var(--text)] hover:border-[var(--primary)] cursor-pointer"
+                    >
+                      {showAllSlots ? 'Hide slot grid' : `Show all ${(data?.slots ?? []).length} slots`}
+                    </button>
+                  </div>
 
-                    return (
-                      <div
-                        key={slot.id}
-                        title={`${formatSlotTime(slot.slot_start)}: ${slot.used_units}/${slot.capacity_units} (${pct}%)`}
-                        className={`rounded-xl border p-2 text-center ${tileStyle}`}
-                      >
-                        <div className="text-[11px] font-semibold tabular-nums">
-                          {formatSlotTime(slot.slot_start).replace(/\s?(am|pm)/i, '')}
-                        </div>
-                        <div className="text-[10px] font-bold opacity-85 tabular-nums">
-                          {pct}%
-                        </div>
-                      </div>
-                    )
-                  })}
+                  {showAllSlots && (
+                    <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8">
+                      {(data?.slots ?? []).map((slot) => {
+                        const cap = Math.max(1, slot.capacity_units)
+                        const pct = Math.min(100, Math.round((slot.used_units / cap) * 100))
+                        const tileStyle =
+                          pct > 80
+                            ? 'border-[var(--danger)]/40 bg-[var(--danger)]/15 text-[var(--danger)]'
+                            : pct >= 50
+                              ? 'border-[var(--warning)]/40 bg-[var(--warning)]/15 text-[var(--warning)]'
+                              : 'border-[var(--success)]/30 bg-[var(--success)]/12 text-[var(--success)]'
+
+                        return (
+                          <div
+                            key={slot.id}
+                            title={`${formatSlotTime(slot.slot_start)}: ${slot.used_units}/${slot.capacity_units} (${pct}%)`}
+                            className={`rounded-xl border p-2 text-center ${tileStyle}`}
+                          >
+                            <div className="text-[11px] font-semibold tabular-nums">
+                              {formatSlotTime(slot.slot_start).replace(/\s?(am|pm)/i, '')}
+                            </div>
+                            <div className="text-[10px] font-bold opacity-85 tabular-nums">
+                              {pct}%
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

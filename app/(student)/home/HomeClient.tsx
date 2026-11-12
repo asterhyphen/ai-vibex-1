@@ -289,7 +289,7 @@ export function HomeClient({
         initialNotifications={notifications}
       />
 
-      <main className="mx-auto max-w-6xl space-y-5 px-4 pt-4 sm:px-6 sm:pt-6">
+      <main className="mx-auto max-w-6xl space-y-6 px-4 pt-5 sm:px-6 sm:pt-7">
         {/* Live Active Order Card */}
         {showActiveOrder && activeOrder && (
           <motion.section
@@ -403,7 +403,7 @@ export function HomeClient({
         {/* Sticky Pill Search & Quick NLP Bar */}
         <section
           aria-label="Search and quick order"
-          className="sticky top-[106px] z-20 space-y-2.5 rounded-3xl border border-[var(--border)] bg-[var(--surface)]/95 p-2.5 shadow-md backdrop-blur-md md:top-[76px]"
+          className="sticky top-[106px] z-20 space-y-3 bg-[var(--bg)]/90 py-2 backdrop-blur-md md:top-[76px]"
         >
           <form onSubmit={handlePlainSubmit} className="flex items-center gap-2">
             <div className="relative flex flex-1 items-center">
@@ -472,7 +472,7 @@ export function HomeClient({
             </div>
           ) : (
             <LayoutGroup id="menu-grid">
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+              <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-3">
                 {filteredItems.map((item) => (
                   <MenuCard
                     key={item.id}

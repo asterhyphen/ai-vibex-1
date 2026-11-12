@@ -1,24 +1,32 @@
 @import "tailwindcss";
 
 /* ============================================================
-   MITE Canteen — Brand Tokens
+   MITE Canteen — Brand Tokens & Typography
    Light: Ivory & Burgundy  |  Dark: Burgundy Night
    ============================================================ */
 
 :root {
-  /* Light theme — Ivory & Burgundy */
+  /* Typography stacks (hydrated via Google Fonts <link> in app/layout.tsx) */
+  --font-inter: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-fraunces: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-jetbrains-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Light theme — Ivory & Burgundy (WCAG AA >= 4.5:1 text contrast) */
   --bg:            #FAF7F4;
   --surface:       #FFFFFF;
   --surface-2:     #F3ECE8;
   --border:        #E8DCD6;
   --text:          #2B1117;
-  --text-muted:    #7B6A6D;
+  --text-muted:    #645256;
   --primary:       #7A1F3D;
   --primary-hover: #5E1530;
   --primary-soft:  #F6E4EA;
-  --accent:        #B8893B;
-  --success:       #2E7D5B;
-  --warning:       #C98A1B;
+  --accent:        #835B14;
+  --accent-text:   #835B14;
+  --accent-gold:   #B8893B;
+  --success:       #266B4D;
+  --warning:       #8C5506;
+  --warning-text:  #8C5506;
   --danger:        #B3261E;
   --info:          #3B5B8C;
 
@@ -34,14 +42,17 @@
   --surface-2:     #2A131C;
   --border:        #3D1E29;
   --text:          #F6ECEC;
-  --text-muted:    #9E8085;
+  --text-muted:    #A88C91;
   --primary:       #A83060;
   --primary-hover: #C03870;
   --primary-soft:  #3D1225;
   --accent:        #D4A855;
+  --accent-text:   #D4A855;
+  --accent-gold:   #D4A855;
   --success:       #3DAD7A;
   --warning:       #E0A020;
-  --danger:        #E04040;
+  --warning-text:  #E0A020;
+  --danger:        #EC5B5B;
   --info:          #5B85CC;
 
   --background: var(--bg);
@@ -52,6 +63,9 @@
   --color-background:    var(--background);
   --color-foreground:    var(--foreground);
   --font-sans:           var(--font-inter);
+  --font-serif:          var(--font-fraunces);
+  --font-display:        var(--font-fraunces);
+  --font-mono:           var(--font-jetbrains-mono);
 
   /* Brand colors exposed as Tailwind utilities */
   --color-primary:       var(--primary);
@@ -73,7 +87,15 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-inter, Arial, sans-serif);
+  font-family: var(--font-inter);
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-fraunces);
+}
+
+code, pre, kbd, .font-mono {
+  font-family: var(--font-jetbrains-mono);
 }
 
 * {

@@ -309,6 +309,7 @@ export default function KitchenBoardPage() {
     <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
       <StaffHeader
         staffName={staffName}
+        counterType="kitchen"
         soundEnabled={soundEnabled}
         onToggleSound={() => setSoundEnabled((prev) => !prev)}
         onOpenScanner={() => {

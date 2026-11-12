@@ -203,6 +203,7 @@ export default function PrintQueuePage() {
     <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
       <StaffHeader
         staffName="Print Counter"
+        counterType="print"
         onOpenScanner={() => {
           setScannerCode('')
           setScannerOpen(true)

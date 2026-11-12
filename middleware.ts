@@ -89,11 +89,18 @@ function redirectTo(
   return withSecurityHeaders(NextResponse.redirect(url), request.nextUrl.pathname)
 }
 
+function isPrintStaffEmail(email: string | null | undefined): boolean {
+  return Boolean(email?.trim().toLowerCase().startsWith('print'))
+}
+
 function getAuthenticatedHomePath(
   role: string | null,
-  phoneVerified: boolean
+  phoneVerified: boolean,
+  email?: string | null
 ): string {
-  if (role === 'shopkeeper') return '/staff'
+  if (role === 'shopkeeper') {
+    return isPrintStaffEmail(email) ? '/staff/print' : '/staff'
+  }
   if (role === 'admin') return '/admin'
   if ((role === 'student' || role === 'faculty') && phoneVerified) return '/home'
   return '/onboarding'
@@ -216,9 +223,12 @@ export async function middleware(
     return redirectTo('/403', request, { reason: 'blocked' })
   }
 
-  // Redirect already-authenticated staff/admin visiting /staff/login to /staff
+  // Redirect already-authenticated staff/admin visiting /staff/login to their counter
   if (pathname === '/staff/login') {
-    if (role === 'shopkeeper' || role === 'admin') {
+    if (role === 'shopkeeper') {
+      return redirectTo(isPrintStaffEmail(user.email) ? '/staff/print' : '/staff', request)
+    }
+    if (role === 'admin') {
       return redirectTo('/staff', request)
     }
     return withSecurityHeaders(response, pathname)
@@ -226,16 +236,25 @@ export async function middleware(
 
   // Redirect already-authenticated users visiting / or /login to their home
   if (pathname === '/' || pathname === '/login') {
-    return redirectTo(getAuthenticatedHomePath(role, phoneVerified), request)
+    return redirectTo(getAuthenticatedHomePath(role, phoneVerified, user.email), request)
   }
 
-  // /staff/* (except /staff/login) — allow shopkeeper AND admin
+  // /staff/* (except /staff/login) — allow shopkeeper AND admin, and separate print vs kitchen staff
   if (STAFF_PATHS.test(pathname) && pathname !== '/staff/login') {
     if (role !== 'shopkeeper' && role !== 'admin') {
       if (role === 'student' || role === 'faculty') {
         return redirectTo('/403', request, { reason: 'staff' })
       }
       return redirectTo('/staff/login', request)
+    }
+    if (role === 'shopkeeper') {
+      const printStaff = isPrintStaffEmail(user.email)
+      if (printStaff && !pathname.startsWith('/staff/print')) {
+        return redirectTo('/staff/print', request)
+      }
+      if (!printStaff && pathname.startsWith('/staff/print')) {
+        return redirectTo('/staff', request)
+      }
     }
   }
 

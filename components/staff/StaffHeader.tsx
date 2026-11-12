@@ -17,6 +17,7 @@ import { ThemeToggle } from '@/components/auth/ThemeToggle'
 
 interface StaffHeaderProps {
   staffName: string
+  counterType?: 'kitchen' | 'print'
   soundEnabled?: boolean
   onToggleSound?: () => void
   onOpenScanner?: () => void
@@ -25,6 +26,7 @@ interface StaffHeaderProps {
 
 export function StaffHeader({
   staffName,
+  counterType,
   soundEnabled,
   onToggleSound,
   onOpenScanner,
@@ -63,11 +65,16 @@ export function StaffHeader({
     }
   }
 
-  const navItems = [
-    { href: '/staff', label: 'Kitchen Board', icon: ChefHat },
-    { href: '/staff/stock', label: 'Stock Control', icon: PackageCheck },
-    { href: '/staff/print', label: 'Print Queue', icon: Printer },
-  ]
+  const resolvedCounterType =
+    counterType ?? (pathname.startsWith('/staff/print') ? 'print' : 'kitchen')
+
+  const navItems =
+    resolvedCounterType === 'print'
+      ? [{ href: '/staff/print', label: 'Print Queue', icon: Printer }]
+      : [
+          { href: '/staff', label: 'Kitchen Board', icon: ChefHat },
+          { href: '/staff/stock', label: 'Stock Control', icon: PackageCheck },
+        ]
 
   return (
     <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--surface)]/95 backdrop-blur-md">
@@ -75,18 +82,22 @@ export function StaffHeader({
         {/* Brand & Nav */}
         <div className="flex flex-wrap items-center gap-3 sm:gap-5">
           <Link
-            href="/staff"
+            href={resolvedCounterType === 'print' ? '/staff/print' : '/staff'}
             className="flex items-center gap-2.5 rounded-xl pr-2 focus-visible:outline-2 focus-visible:outline-[var(--primary)]"
           >
             <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--primary)] text-white shadow-sm">
-              <ChefHat className="h-6 w-6" />
+              {resolvedCounterType === 'print' ? (
+                <Printer className="h-6 w-6" />
+              ) : (
+                <ChefHat className="h-6 w-6" />
+              )}
             </span>
             <div>
               <div className="text-base font-semibold tracking-tight text-[var(--text)] sm:text-lg">
-                MITE Kitchen
+                {resolvedCounterType === 'print' ? 'MITE Print Hub' : 'MITE Kitchen'}
               </div>
               <div className="text-xs font-medium text-[var(--text-muted)]">
-                Staff Operations
+                {resolvedCounterType === 'print' ? 'Print Counter' : 'Staff Operations'}
               </div>
             </div>
           </Link>

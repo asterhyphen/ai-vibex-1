@@ -241,10 +241,12 @@ export default function KitchenBoardPage() {
     () =>
       orders
         .filter((o) => o.status === 'placed' || o.status === 'awaiting_cash')
-        .sort(
-          (a, b) =>
-            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-        ),
+        .sort((a, b) => {
+          const scoreA = a.priority_score ?? Number.MAX_SAFE_INTEGER
+          const scoreB = b.priority_score ?? Number.MAX_SAFE_INTEGER
+          if (scoreA !== scoreB) return scoreA - scoreB
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        }),
     [orders]
   )
 

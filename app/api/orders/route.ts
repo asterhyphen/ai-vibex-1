@@ -265,9 +265,24 @@ export async function POST(request: Request) {
     const orderId = crypto.randomUUID()
     const qrToken = generateSignedQrToken(orderId, orderCode)
 
-    const etaMinutes = payload.eta_minutes ?? 5
-    const arriveAt = new Date(Date.now() + etaMinutes * 60_000).toISOString()
+    const slotStartMs = slotData?.slot_start ? new Date(slotData.slot_start).getTime() : null
+    const etaMinutes = slotStartMs
+      ? Math.max(1, Math.round((slotStartMs - Date.now()) / 60_000))
+      : (payload.eta_minutes ?? 5)
+
+    const arriveAt = slotData?.slot_start
+      ? new Date(slotData.slot_start).toISOString()
+      : new Date(Date.now() + etaMinutes * 60_000).toISOString()
+
     const isFaculty = !isGuestPos && profile?.role === 'faculty'
+
+    // Compute total prep time across order items to determine ideal cook start time
+    let totalPrepSeconds = 0
+    for (const line of orderLines) {
+      const dbItem = menuMap.get(line.menu_item_id)
+      totalPrepSeconds += line.qty * (dbItem?.prep_seconds ?? 300)
+    }
+    const totalPrepMinutes = Math.max(1, Math.ceil(totalPrepSeconds / 60))
 
     const orderStatus = isGuestPos
       ? 'placed'
@@ -324,13 +339,14 @@ export async function POST(request: Request) {
       )
     }
 
-    // Recompute priority score
+    // Recompute priority score: (arrive_at - prep_minutes) - (is_faculty ? 5 : 0)
     const { error: prioErr } = await db.rpc('recompute_priority', {
       p_order_id: orderId,
     })
     if (prioErr) {
-      const fallbackScore =
-        new Date(arriveAt).getTime() / 60000 - (isFaculty ? 5 : 0)
+      const arriveMs = new Date(arriveAt).getTime()
+      const startByMinutes = (arriveMs - totalPrepMinutes * 60_000) / 60_000
+      const fallbackScore = startByMinutes - (isFaculty ? 5 : 0)
       await db
         .from('orders')
         .update({ priority_score: fallbackScore })

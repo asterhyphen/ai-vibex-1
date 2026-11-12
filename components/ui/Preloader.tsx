@@ -17,16 +17,16 @@ export function Preloader() {
   const [nonBlocking, setNonBlocking] = useState(false)
   const [scope, animate] = useAnimate()
   const markRef = useRef<HTMLDivElement>(null)
-  const hasRunRef = useRef(false)
 
   useEffect(() => {
     if (prefersReducedMotion) {
       return
     }
-    if (hasRunRef.current) return
-    hasRunRef.current = true
 
     let cancelled = false
+    const safetyTimer = window.setTimeout(() => {
+      if (!cancelled) setVisible(false)
+    }, 2600)
 
     const sleep = (ms: number) =>
       new Promise<void>((resolve) => {
@@ -34,100 +34,104 @@ export function Preloader() {
       })
 
     async function runSequence() {
-      // Wait one animation frame so initial DOM + navbar target rects settle
-      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
-      if (cancelled || !scope.current) return
+      try {
+        // Wait one animation frame so initial DOM + navbar target rects settle
+        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+        if (cancelled || !scope.current) return
 
-      // Stage 1: Circular plate scales & fades in at center
-      await animate(
-        '[data-preloader-plate]',
-        { scale: [0.45, 1], opacity: [0, 1] },
-        { duration: 0.42, ease: [0.22, 1, 0.36, 1] }
-      )
-      if (cancelled) return
+        // Stage 1: Circular plate scales & fades in at center
+        await animate(
+          '[data-preloader-plate]',
+          { scale: [0.45, 1], opacity: [0, 1] },
+          { duration: 0.42, ease: [0.22, 1, 0.36, 1] }
+        )
+        if (cancelled) return
 
-      // Stage 2: Spoon glides into lower-right rim forming "Q" + caption appears
-      await Promise.all([
-        animate(
-          '[data-preloader-spoon]',
-          { x: [64, 0], y: [-46, 0], rotate: [-24, 0], opacity: [0, 1] },
-          { duration: 0.48, ease: [0.22, 1, 0.36, 1] }
-        ),
-        animate(
-          '[data-preloader-caption]',
-          { opacity: [0, 1], y: [8, 0] },
-          { duration: 0.35, delay: 0.12, ease: 'easeOut' }
-        ),
-      ])
-      if (cancelled) return
+        // Stage 2: Spoon glides into lower-right rim forming "Q" + caption appears
+        await Promise.all([
+          animate(
+            '[data-preloader-spoon]',
+            { x: [64, 0], y: [-46, 0], rotate: [-24, 0], opacity: [0, 1] },
+            { duration: 0.48, ease: [0.22, 1, 0.36, 1] }
+          ),
+          animate(
+            '[data-preloader-caption]',
+            { opacity: [0, 1], y: [8, 0] },
+            { duration: 0.35, delay: 0.12, ease: 'easeOut' }
+          ),
+        ])
+        if (cancelled) return
 
-      await sleep(160)
-      if (cancelled) return
+        await sleep(160)
+        if (cancelled) return
 
-      // Stage 3: Fly smoothly into the navbar [data-brand-q-target="true"] slot
-      setNonBlocking(true)
+        // Stage 3: Fly smoothly into the navbar [data-brand-q-target="true"] slot
+        setNonBlocking(true)
 
-      const targetEl = document.querySelector<HTMLElement>(
-        '[data-brand-q-target="true"]'
-      )
-      const markEl = markRef.current
+        const targetEl = document.querySelector<HTMLElement>(
+          '[data-brand-q-target="true"]'
+        )
+        const markEl = markRef.current
 
-      if (targetEl && markEl) {
-        const targetRect = targetEl.getBoundingClientRect()
-        const markRect = markEl.getBoundingClientRect()
+        if (targetEl && markEl) {
+          const targetRect = targetEl.getBoundingClientRect()
+          const markRect = markEl.getBoundingClientRect()
 
-        if (targetRect.width > 0 && markRect.width > 0) {
-          const dx =
-            targetRect.left +
-            targetRect.width / 2 -
-            (markRect.left + markRect.width / 2)
-          const dy =
-            targetRect.top +
-            targetRect.height / 2 -
-            (markRect.top + markRect.height / 2)
-          const targetScale = targetRect.width / markRect.width
+          if (targetRect.width > 0 && markRect.width > 0) {
+            const dx =
+              targetRect.left +
+              targetRect.width / 2 -
+              (markRect.left + markRect.width / 2)
+            const dy =
+              targetRect.top +
+              targetRect.height / 2 -
+              (markRect.top + markRect.height / 2)
+            const targetScale = targetRect.width / markRect.width
 
-          await Promise.all([
-            animate(
-              '[data-preloader-caption]',
-              { opacity: 0, y: -4 },
-              { duration: 0.2, ease: 'easeOut' }
-            ),
-            animate(
-              '[data-preloader-backdrop]',
-              { opacity: 0 },
-              { duration: 0.42, delay: 0.08, ease: 'easeOut' }
-            ),
-            animate(
+            await Promise.all([
+              animate(
+                '[data-preloader-caption]',
+                { opacity: 0, y: -4 },
+                { duration: 0.2, ease: 'easeOut' }
+              ),
+              animate(
+                '[data-preloader-backdrop]',
+                { opacity: 0 },
+                { duration: 0.42, delay: 0.08, ease: 'easeOut' }
+              ),
+              animate(
+                '[data-preloader-mark]',
+                { x: dx, y: dy, scale: targetScale },
+                { duration: 0.56, ease: [0.22, 1, 0.36, 1] }
+              ),
+            ])
+            if (cancelled) return
+
+            await animate(
               '[data-preloader-mark]',
-              { x: dx, y: dy, scale: targetScale },
-              { duration: 0.56, ease: [0.22, 1, 0.36, 1] }
-            ),
-          ])
-          if (cancelled) return
-
-          await animate(
-            '[data-preloader-mark]',
-            { opacity: 0 },
-            { duration: 0.12, ease: 'easeOut' }
-          )
+              { opacity: 0 },
+              { duration: 0.12, ease: 'easeOut' }
+            )
+          } else {
+            await animate(
+              scope.current,
+              { opacity: 0 },
+              { duration: 0.32, ease: 'easeOut' }
+            )
+          }
         } else {
           await animate(
             scope.current,
             { opacity: 0 },
-            { duration: 0.32, ease: 'easeOut' }
+            { duration: 0.35, ease: 'easeOut' }
           )
         }
-      } else {
-        await animate(
-          scope.current,
-          { opacity: 0 },
-          { duration: 0.35, ease: 'easeOut' }
-        )
-      }
-
-      if (!cancelled) {
-        setVisible(false)
+      } catch {
+        // Fallback: ensure preloader never traps the screen
+      } finally {
+        if (!cancelled) {
+          setVisible(false)
+        }
       }
     }
 
@@ -135,6 +139,7 @@ export function Preloader() {
 
     return () => {
       cancelled = true
+      window.clearTimeout(safetyTimer)
     }
   }, [animate, prefersReducedMotion, scope])
 
@@ -236,7 +241,7 @@ export function Preloader() {
           className="mt-4 flex flex-col items-center text-center"
         >
           <span className="font-display text-lg font-bold tracking-tight text-[var(--text)]">
-            MITE Canteen
+            SkipQ
           </span>
           <span className="mt-0.5 text-xs font-medium tracking-wide text-[var(--text-muted)]">
             Skip the queue

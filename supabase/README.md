@@ -1,6 +1,6 @@
 # Supabase Setup Guide — MITE Canteen Pre-Order System
 
-This folder contains the complete PostgreSQL schema, security triggers, priority scoring functions, Realtime setup, Storage buckets, and demo seed data for the MITE Canteen Pre-Order System.
+This folder contains the single, self-contained Supabase database setup script for the MITE Canteen Pre-Order System.
 
 ---
 
@@ -8,36 +8,23 @@ This folder contains the complete PostgreSQL schema, security triggers, priority
 
 | File | Purpose |
 |---|---|
-| [`paste_in_sql_editor.sql`](./paste_in_sql_editor.sql) | **All-in-one setup script** (`001` + `002` + `seed.sql`) — copy, paste, and click **Run** in the Supabase SQL Editor. |
-| [`migrations/001_initial_schema.sql`](./migrations/001_initial_schema.sql) | Initial 13 tables, base functions, triggers, and RLS policies. |
-| [`migrations/002_enhancements_and_storage.sql`](./migrations/002_enhancements_and_storage.sql) | Hardened `@mite.ac.in` email triggers, role/block protection trigger, PRD priority scoring (`recompute_priority`), `flag_overdue_noshows()` RPC, tightened RLS, Realtime publication, and Storage buckets + policies. |
-| [`seed.sql`](./seed.sql) | Idempotent seed: 5 categories, 24 menu items, 72 daily pickup slots, default `settings`, 11 Auth users + profiles, 2 `staff_accounts`, 15 orders + line items, 5 print jobs, notifications, SMS log, and audit log. |
+| [`final_setup.sql`](./final_setup.sql) | **Complete all-in-one setup script** — creates all 13 tables, indexes, security triggers, PRD priority & no-show RPCs, RLS policies, Realtime publication, Storage buckets + policies, and full idempotent demo seed data. |
 
 ---
 
-## 🚀 Step 1 — Run the Setup SQL in Supabase
-
-### Option A: One-Click Paste in Supabase Dashboard (Recommended)
+## 🚀 Step 1 — Run `supabase/final_setup.sql` in Supabase Dashboard
 
 1. Open your project in the [Supabase Dashboard](https://supabase.com/dashboard).
 2. Go to **SQL Editor** → **New query**.
-3. Open [`supabase/paste_in_sql_editor.sql`](./paste_in_sql_editor.sql), copy the **entire contents**, and paste it into the editor.
+3. Open [`supabase/final_setup.sql`](./final_setup.sql), copy the **entire contents**, and paste it into the SQL Editor.
 4. Click **Run** (or press `Cmd + Enter` / `Ctrl + Enter`).
-5. Confirm it completes with `Success. No rows returned` (the script is idempotent and safe to re-run).
-
-### Option B: Run Files Sequentially
-
-If you prefer applying migrations step by step via SQL Editor or Supabase CLI:
-
-1. `supabase/migrations/001_initial_schema.sql`
-2. `supabase/migrations/002_enhancements_and_storage.sql`
-3. `supabase/seed.sql`
+5. Confirm it completes cleanly (safe & idempotent — you can re-run it at any time without duplicate errors).
 
 ---
 
-## ✅ Step 2 — Verify Database, Buckets, Realtime & Users
+## ✅ Step 2 — Verify Tables, Buckets, Realtime & Seed Data
 
-Run this quick verification snippet in the Supabase **SQL Editor**:
+Run this verification query in the Supabase **SQL Editor**:
 
 ```sql
 -- 1. Check tables & row counts
@@ -78,18 +65,19 @@ Expected counts on a fresh setup:
 
 ## 🔑 Step 3 — Configure `.env.local`
 
-In the repository root, copy `.env.example` to `.env.local`:
+Copy `.env.example` to `.env.local` in the repository root:
 
 ```bash
 cp .env.example .env.local
 ```
 
-Open **Supabase Dashboard → Project Settings → API** and fill in:
+Open **Supabase Dashboard → Project Settings → API** and fill in your project values (never commit `.env.local`):
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://<your-project-ref>.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-anon-public-key>
-SUPABASE_SERVICE_ROLE_KEY=<your-service-role-secret-key>
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<your-publishable-or-anon-key>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<optional-legacy-anon-key>
+SUPABASE_SERVICE_ROLE_KEY=<optional-service-role-key>
 QR_SIGNING_SECRET=<generate-with-openssl-rand-hex-32>
 ALLOWED_EMAIL_DOMAIN=mite.ac.in
 ```
@@ -101,41 +89,32 @@ ALLOWED_EMAIL_DOMAIN=mite.ac.in
 
 ---
 
-## 📧 Step 4 — Supabase Auth & Email OTP Settings
+## 📧 Step 4 — Supabase Auth Settings
 
 1. **URL Configuration** (**Authentication → URL Configuration**):
-   - **Site URL:** `http://localhost:3000` (update to your production URL when deployed)
-   - **Redirect URLs:** add:
-     - `http://localhost:3000/**`
-     - `https://<your-production-domain>/**`
+   - **Site URL:** `http://localhost:3000` (or your production domain)
+   - **Redirect URLs:** add `http://localhost:3000/**`
 2. **Email Provider** (**Authentication → Providers → Email**):
-   - Ensure **Enable Email provider** is ON.
-   - Ensure **Enable Email Signup** is ON (the PostgreSQL `BEFORE INSERT` trigger `enforce_mite_email_before_insert` automatically blocks any non-`@mite.ac.in` address, lookalike domains, and malformed emails).
-3. **6-Digit OTP Template** (**Authentication → Email Templates → Magic Link**):
-   - Because `/login` verifies a 6-digit OTP via `verifyOtp({ type: 'email' })`, make sure your **Magic Link** template body displays `{{ .Token }}`:
-     ```html
-     <h2>Your MITE Canteen Login Code</h2>
-     <p>Enter this 6-digit verification code:</p>
-     <p style="font-size: 28px; font-weight: bold; letter-spacing: 6px;">{{ .Token }}</p>
-     ```
+   - Keep **Enable Email provider** ON.
+   - New `@mite.ac.in` accounts created during demo OTP `1234` login are automatically domain-validated and email-confirmed by `enforce_mite_email_before_insert` in `final_setup.sql` (non-`@mite.ac.in` emails and lookalikes like `@mite.ac.in.evil.com` are rejected at the database layer).
 
 ---
 
 ## 🎭 Seeded Demo Accounts
 
-| Role | Email | Password / Login Method | Portal |
+| Role | Email | Login / OTP | Portal |
 |---|---|---|---|
 | **Admin** | `admin@mite.ac.in` | `Admin@789` | `/admin/login` |
 | **Canteen Staff** | `canteen@mite.ac.in` | `Canteen@123` | `/staff/login` |
 | **Print Staff** | `print@mite.ac.in` | `Print@456` | `/staff/login` |
-| **Student** | `4mt21cs001@mite.ac.in` | Email OTP | `/login` |
-| **Student** | `4mt22ec042@mite.ac.in` | Email OTP | `/login` |
-| **Student** | `4mt21is018@mite.ac.in` | Email OTP | `/login` |
-| **Student** | `4mt22me033@mite.ac.in` | Email OTP | `/login` |
-| **Student** | `4mt23ai012@mite.ac.in` | Email OTP | `/login` |
-| **Student** | `4mt23cs055@mite.ac.in` | Email OTP | `/login` |
-| **Faculty** | `john.doe@mite.ac.in` | Email OTP | `/login` |
-| **Faculty** | `priya.sharma@mite.ac.in` | Email OTP | `/login` |
+| **Student** | `4mt21cs001@mite.ac.in` | Demo OTP `1234` | `/login` |
+| **Student** | `4mt22ec042@mite.ac.in` | Demo OTP `1234` | `/login` |
+| **Student** | `4mt21is018@mite.ac.in` | Demo OTP `1234` | `/login` |
+| **Student** | `4mt22me033@mite.ac.in` | Demo OTP `1234` | `/login` |
+| **Student** | `4mt23ai012@mite.ac.in` | Demo OTP `1234` | `/login` |
+| **Student** | `4mt23cs055@mite.ac.in` | Demo OTP `1234` | `/login` |
+| **Faculty** | `john.doe@mite.ac.in` | Demo OTP `1234` | `/login` |
+| **Faculty** | `priya.sharma@mite.ac.in` | Demo OTP `1234` | `/login` |
 
 ---
 
@@ -149,4 +128,4 @@ ALLOWED_EMAIL_DOMAIN=mite.ac.in
   ```sql
   SELECT public.recompute_priority('<order-uuid>');
   ```
-- **Regenerate today's pickup slots** via the Admin UI (**Admin → Slots → Generate Today's Slots**) or by re-running `supabase/seed.sql`.
+- **Regenerate today's pickup slots** via the Admin UI (**Admin → Slots → Generate Today's Slots**) or by re-running `supabase/final_setup.sql`.

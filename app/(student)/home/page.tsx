@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import { isSupabaseConfigured } from '@/lib/supabase/config'
 import { createClient } from '@/lib/supabase/server'
 import type { Category, MenuItem, Notification, OrderWithItems, Profile } from '@/lib/types'
 import { HomeClient } from './HomeClient'
@@ -31,11 +32,7 @@ function HomeSkeleton() {
 }
 
 async function HomeContent() {
-  const hasSupabaseEnv = Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  )
-
-  if (!hasSupabaseEnv) {
+  if (!isSupabaseConfigured()) {
     return (
       <HomeClient
         user={null}

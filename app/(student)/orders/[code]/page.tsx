@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
+import { isSupabaseConfigured } from '@/lib/supabase/config'
 import { createClient } from '@/lib/supabase/server'
 import type { OrderWithItems } from '@/lib/types'
 import { OrderTrackingClient } from './OrderTrackingClient'
@@ -24,11 +25,8 @@ async function OrderTrackingContent({
 }) {
   const { code } = await params
   const normalizedCode = decodeURIComponent(code).trim().toUpperCase()
-  const hasSupabaseEnv = Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  )
 
-  if (!hasSupabaseEnv) {
+  if (!isSupabaseConfigured()) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--bg)] px-4 text-center">
         <div className="max-w-md rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8">

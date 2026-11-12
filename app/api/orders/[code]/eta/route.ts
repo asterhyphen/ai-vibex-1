@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient as createSupabaseAdmin } from '@supabase/supabase-js'
 import { z } from 'zod'
+import { createServiceRoleClient, isSupabaseConfigured } from '@/lib/supabase/config'
 import { createClient } from '@/lib/supabase/server'
 import type { Order } from '@/lib/types'
 
@@ -11,15 +11,7 @@ const UpdateEtaSchema = z.object({
 type ServerSupabaseClient = Awaited<ReturnType<typeof createClient>>
 
 function getDbAdminClient(): ServerSupabaseClient | null {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-  if (!url || !serviceKey) return null
-  return createSupabaseAdmin(url, serviceKey, {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  }) as unknown as ServerSupabaseClient
+  return createServiceRoleClient() as unknown as ServerSupabaseClient | null
 }
 
 export async function PATCH(
@@ -27,10 +19,7 @@ export async function PATCH(
   context: { params: Promise<{ code: string }> }
 ) {
   try {
-    if (
-      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    ) {
+    if (!isSupabaseConfigured()) {
       return NextResponse.json(
         { error: 'Supabase environment variables are not configured.' },
         { status: 503 }

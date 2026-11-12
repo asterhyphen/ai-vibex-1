@@ -23,6 +23,7 @@ import {
 import { toast } from 'sonner'
 import type { OrderStatus, OrderWithItems } from '@/lib/types'
 import { createClient } from '@/lib/supabase/client'
+import { isSupabaseConfigured } from '@/lib/supabase/config'
 import { cn, deriveOrderOtp, formatPaise, formatSlotTime } from '@/lib/utils/format'
 import styles from './orders.module.css'
 
@@ -140,10 +141,7 @@ export function OrderTrackingClient({ initialOrder }: OrderTrackingClientProps) 
 
   // Live Supabase Realtime subscription on orders.code = [code]
   useEffect(() => {
-    if (
-      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    ) {
+    if (!isSupabaseConfigured()) {
       return
     }
 

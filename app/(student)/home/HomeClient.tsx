@@ -18,6 +18,7 @@ import type { Category, MenuItem, Notification, OrderWithItems, OrderStatus, Pro
 import { useCartStore } from '@/lib/stores/cart'
 import { useSessionStore } from '@/lib/stores/session'
 import { createClient } from '@/lib/supabase/client'
+import { isSupabaseConfigured } from '@/lib/supabase/config'
 import { cn, formatPaise, formatSlotTime } from '@/lib/utils/format'
 import { TopBar } from '@/components/menu/TopBar'
 import { CategoryChips } from '@/components/menu/CategoryChips'
@@ -102,10 +103,7 @@ export function HomeClient({
 
   // Subscribe to live menu_items stock/price updates
   useEffect(() => {
-    if (
-      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    ) {
+    if (!isSupabaseConfigured()) {
       return
     }
 
@@ -173,11 +171,7 @@ export function HomeClient({
 
   // Subscribe to live status updates for active order
   useEffect(() => {
-    if (
-      !activeOrder?.id ||
-      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    ) {
+    if (!activeOrder?.id || !isSupabaseConfigured()) {
       return
     }
 

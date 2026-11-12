@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import { isSupabaseConfigured } from '@/lib/supabase/config'
 import { createClient } from '@/lib/supabase/server'
 import type { MenuItem, PickupSlot } from '@/lib/types'
 import { CheckoutClient } from './CheckoutClient'
@@ -16,11 +17,7 @@ function CheckoutSkeleton() {
 }
 
 async function CheckoutContent() {
-  const hasSupabaseEnv = Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  )
-
-  if (!hasSupabaseEnv) {
+  if (!isSupabaseConfigured()) {
     return (
       <CheckoutClient
         initialSlots={[]}

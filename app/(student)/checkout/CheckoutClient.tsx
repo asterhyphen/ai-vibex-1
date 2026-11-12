@@ -26,6 +26,7 @@ import { toast } from 'sonner'
 import type { MenuItem, PickupSlot } from '@/lib/types'
 import { useCartStore } from '@/lib/stores/cart'
 import { createClient } from '@/lib/supabase/client'
+import { isSupabaseConfigured } from '@/lib/supabase/config'
 import { CheckoutSchema } from '@/lib/validators/order'
 import {
   cn,
@@ -118,10 +119,7 @@ export function CheckoutClient({
 
   // Live stock subscription so out-of-stock changes flag cart items immediately
   useEffect(() => {
-    if (
-      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    ) {
+    if (!isSupabaseConfigured()) {
       return
     }
 

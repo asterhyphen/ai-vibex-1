@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { History, Printer, Sparkles, UtensilsCrossed } from 'lucide-react'
+import { History, Printer, Sparkles } from 'lucide-react'
 import { ThemeToggle } from '@/components/auth/ThemeToggle'
+import { BrandQMark } from '@/components/ui/BrandQMark'
 import { NotificationBell } from '@/components/ui/NotificationBell'
 import type { Notification, Profile } from '@/lib/types'
 import { getTimeGreeting } from '@/lib/utils/format'
@@ -43,15 +44,20 @@ export function TopBar({ profile, email }: TopBarProps) {
   return (
     <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
-        {/* Left: Greeting & Role */}
+        {/* Left: Brand Mark, Greeting & Role */}
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <Link
               href="/home"
-              className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--primary)] text-white shadow-xs sm:inline-flex"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-transform hover:scale-105"
               aria-label="MITE Canteen Home"
             >
-              <UtensilsCrossed className="h-4 w-4" />
+              <span
+                data-brand-q-target="true"
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center"
+              >
+                <BrandQMark size={38} />
+              </span>
             </Link>
             <div className="min-w-0">
               <h1 className="truncate text-base font-bold text-[var(--text)] sm:text-xl">

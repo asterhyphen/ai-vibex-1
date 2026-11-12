@@ -17,6 +17,7 @@ import { toast } from 'sonner'
 import type { MenuItem, OrderStatus, OrderWithItems } from '@/lib/types'
 import { useCartStore } from '@/lib/stores/cart'
 import { createClient } from '@/lib/supabase/client'
+import { isSupabaseConfigured } from '@/lib/supabase/config'
 import { cn, formatPaise } from '@/lib/utils/format'
 
 interface HistoryClientProps {
@@ -98,10 +99,7 @@ export function HistoryClient({ orders, menuItems }: HistoryClientProps) {
       )
 
       // Re-validate live stock from Supabase directly
-      if (
-        process.env.NEXT_PUBLIC_SUPABASE_URL &&
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-      ) {
+      if (isSupabaseConfigured()) {
         const supabase = createClient()
         const { data } = await supabase
           .from('menu_items')

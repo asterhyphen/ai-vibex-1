@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/server'
-import type { PickupSlot } from '@/lib/types'
+import type { MenuItem, PickupSlot } from '@/lib/types'
 import { CheckoutClient } from './CheckoutClient'
 
 function CheckoutSkeleton() {
@@ -21,25 +21,36 @@ async function CheckoutContent() {
   )
 
   if (!hasSupabaseEnv) {
-    return <CheckoutClient initialSlots={[]} showingAfterHoursFallback={false} />
+    return (
+      <CheckoutClient
+        initialSlots={[]}
+        initialMenuItems={[]}
+        showingAfterHoursFallback={false}
+      />
+    )
   }
 
   const supabase = await createClient()
   const nowIso = new Date().toISOString()
 
-  // Fetch upcoming slots first
-  const { data: upcomingData } = await supabase
-    .from('pickup_slots')
-    .select('*')
-    .gte('slot_end', nowIso)
-    .order('slot_start', { ascending: true })
-    .limit(36)
+  const [upcomingRes, menuRes] = await Promise.all([
+    supabase
+      .from('pickup_slots')
+      .select('*')
+      .gte('slot_end', nowIso)
+      .order('slot_start', { ascending: true })
+      .limit(36),
+    supabase.from('menu_items').select('*'),
+  ])
 
-  const upcomingSlots = (upcomingData as PickupSlot[] | null) ?? []
+  const initialMenuItems = (menuRes.data as MenuItem[] | null) ?? []
+  const upcomingSlots = (upcomingRes.data as PickupSlot[] | null) ?? []
+
   if (upcomingSlots.length > 0) {
     return (
       <CheckoutClient
         initialSlots={upcomingSlots}
+        initialMenuItems={initialMenuItems}
         showingAfterHoursFallback={false}
       />
     )
@@ -56,6 +67,7 @@ async function CheckoutContent() {
   return (
     <CheckoutClient
       initialSlots={allSlots}
+      initialMenuItems={initialMenuItems}
       showingAfterHoursFallback={allSlots.length > 0}
     />
   )

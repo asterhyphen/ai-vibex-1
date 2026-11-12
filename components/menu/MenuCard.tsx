@@ -4,7 +4,13 @@ import { useRef, useState, useSyncExternalStore } from 'react'
 import { motion } from 'framer-motion'
 import { Clock, Coffee, Cookie, Flame, Plus, Soup, Utensils } from 'lucide-react'
 import type { MenuItem } from '@/lib/types'
-import { cn, formatPaise, formatPrepTime } from '@/lib/utils/format'
+import {
+  cn,
+  extractBackAtTag,
+  filterDisplayTags,
+  formatPaise,
+  formatPrepTime,
+} from '@/lib/utils/format'
 
 interface MenuCardProps {
   item: MenuItem
@@ -115,9 +121,13 @@ export function MenuCard({
 
   const visual = getCategoryVisual(categoryName)
   const CategoryIcon = visual.Icon
+  const backAt = !item.in_stock ? extractBackAtTag(item.tags) : null
+  const displayTags = filterDisplayTags(item.tags)
   const subtitle =
     item.description?.trim() ||
-    (item.tags?.length > 0 ? item.tags.slice(0, 2).join(' · ') : categoryName || 'Freshly prepared')
+    (displayTags.length > 0
+      ? displayTags.slice(0, 2).join(' · ')
+      : categoryName || 'Freshly prepared')
 
   return (
     <div style={{ perspective: '1000px' }} className="h-full">
@@ -197,10 +207,15 @@ export function MenuCard({
 
           {/* Out-of-stock overlay */}
           {!item.in_stock && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/35 backdrop-blur-[1.5px]">
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-1.5 bg-black/40 p-2 backdrop-blur-[1.5px]">
               <span className="rounded-full border border-white/25 bg-[var(--danger)] px-3 py-1 text-xs font-semibold tracking-wide text-white shadow-sm">
                 Out of stock
               </span>
+              {backAt && (
+                <span className="rounded-full bg-black/70 px-2.5 py-0.5 text-[11px] font-medium text-white">
+                  Back at {backAt}
+                </span>
+              )}
             </div>
           )}
         </motion.div>
@@ -214,7 +229,7 @@ export function MenuCard({
               </h3>
             </div>
             <p className="line-clamp-1 text-xs text-[var(--text-muted)]">{subtitle}</p>
-            <div className="pt-1">
+            <div className="flex flex-wrap items-center gap-1.5 pt-1">
               <span
                 className={cn(
                   'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium',
@@ -229,7 +244,11 @@ export function MenuCard({
                     item.in_stock ? 'bg-[var(--success)]' : 'bg-[var(--danger)]'
                   )}
                 />
-                {item.in_stock ? 'In stock' : 'Out of stock'}
+                {item.in_stock
+                  ? 'In stock'
+                  : backAt
+                    ? `Back at ${backAt}`
+                    : 'Out of stock'}
               </span>
             </div>
           </div>

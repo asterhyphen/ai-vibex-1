@@ -1,11 +1,12 @@
 'use client'
 
-import { useMemo, useState, useSyncExternalStore } from 'react'
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import * as Tabs from '@radix-ui/react-tabs'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
+  AlertTriangle,
   ArrowLeft,
   ArrowRight,
   Banknote,
@@ -18,16 +19,25 @@ import {
   ShoppingBag,
   Smartphone,
   Sparkles,
+  Trash2,
   Wallet,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import type { PickupSlot } from '@/lib/types'
+import type { MenuItem, PickupSlot } from '@/lib/types'
 import { useCartStore } from '@/lib/stores/cart'
+import { createClient } from '@/lib/supabase/client'
 import { CheckoutSchema } from '@/lib/validators/order'
-import { cn, formatPaise, formatSlotRange, formatSlotTime } from '@/lib/utils/format'
+import {
+  cn,
+  extractBackAtTag,
+  formatPaise,
+  formatSlotRange,
+  formatSlotTime,
+} from '@/lib/utils/format'
 
 interface CheckoutClientProps {
   initialSlots: PickupSlot[]
+  initialMenuItems?: MenuItem[]
   showingAfterHoursFallback: boolean
 }
 
@@ -84,6 +94,7 @@ function getLeastLoadedSlotId(slots: PickupSlot[]): string {
 
 export function CheckoutClient({
   initialSlots,
+  initialMenuItems = [],
   showingAfterHoursFallback,
 }: CheckoutClientProps) {
   const router = useRouter()
@@ -91,6 +102,7 @@ export function CheckoutClient({
   const total_paise = useCartStore((s) => s.total_paise)
   const total_items = useCartStore((s) => s.total_items)
   const hasHydrated = useCartStore((s) => s.hasHydrated)
+  const removeItem = useCartStore((s) => s.removeItem)
   const clearCart = useCartStore((s) => s.clearCart)
 
   const mounted = useSyncExternalStore(
@@ -100,6 +112,71 @@ export function CheckoutClient({
   )
   const [step, setStep] = useState<CheckoutStep>(1)
   const [baseTimestampMs, setBaseTimestampMs] = useState<number>(() => Date.now())
+  const [liveMenuMap, setLiveMenuMap] = useState<Map<string, MenuItem>>(
+    () => new Map(initialMenuItems.map((m) => [m.id, m]))
+  )
+
+  // Live stock subscription so out-of-stock changes flag cart items immediately
+  useEffect(() => {
+    if (
+      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    ) {
+      return
+    }
+
+    const supabase = createClient()
+    const channel = supabase
+      .channel('checkout-menu-stock')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'menu_items',
+        },
+        (payload) => {
+          const updated = payload.new as MenuItem
+          setLiveMenuMap((prev) => {
+            const next = new Map(prev)
+            next.set(updated.id, updated)
+            return next
+          })
+          if (!updated.in_stock || updated.is_active === false) {
+            const inCart = useCartStore
+              .getState()
+              .items.some((ci) => ci.menuItemId === updated.id)
+            if (inCart) {
+              toast.warning(`${updated.name} is now out of stock.`)
+            }
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [])
+
+  const unavailableCartItems = useMemo(() => {
+    return items
+      .map((cartItem) => {
+        const live = liveMenuMap.get(cartItem.menuItemId)
+        if (!live) return null
+        if (live.in_stock && live.is_active !== false) return null
+        return {
+          menuItemId: cartItem.menuItemId,
+          name: cartItem.name,
+          backAt: extractBackAtTag(live.tags),
+        }
+      })
+      .filter((entry): entry is { menuItemId: string; name: string; backAt: string | null } =>
+        Boolean(entry)
+      )
+  }, [items, liveMenuMap])
+
+  const hasUnavailableItems = unavailableCartItems.length > 0
 
   const recommendedSlotId = useMemo(
     () => getLeastLoadedSlotId(initialSlots),
@@ -163,6 +240,11 @@ export function CheckoutClient({
 
     if (items.length === 0) {
       toast.error('Your cart is empty')
+      return
+    }
+
+    if (hasUnavailableItems) {
+      toast.error('Remove out-of-stock items from your tray before paying')
       return
     }
 
@@ -397,16 +479,83 @@ export function CheckoutClient({
             </span>
           </div>
           <div className="mt-2 flex flex-wrap gap-1.5">
-            {items.map((item) => (
-              <span
-                key={item.menuItemId}
-                className="rounded-full bg-[var(--surface-2)] px-2.5 py-1 text-xs font-medium text-[var(--text)]"
-              >
-                {item.qty}× {item.name}
-              </span>
-            ))}
+            {items.map((item) => {
+              const isOut = unavailableCartItems.some(
+                (u) => u.menuItemId === item.menuItemId
+              )
+              return (
+                <span
+                  key={item.menuItemId}
+                  className={cn(
+                    'rounded-full px-2.5 py-1 text-xs font-medium',
+                    isOut
+                      ? 'border border-[var(--danger)]/40 bg-[var(--danger)]/10 text-[var(--danger)] line-through'
+                      : 'bg-[var(--surface-2)] text-[var(--text)]'
+                  )}
+                >
+                  {item.qty}× {item.name}
+                </span>
+              )
+            })}
           </div>
         </section>
+
+        {/* Out-of-stock Cart Alert */}
+        {hasUnavailableItems && (
+          <section
+            role="alert"
+            className="space-y-3 rounded-2xl border border-[var(--danger)]/40 bg-[var(--danger)]/10 p-4"
+          >
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2 text-sm font-bold text-[var(--danger)]">
+                <AlertTriangle className="h-4 w-4 shrink-0" />
+                <span>
+                  {unavailableCartItems.length} item{unavailableCartItems.length === 1 ? ' is' : 's are'} no longer available
+                </span>
+              </div>
+              {unavailableCartItems.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    unavailableCartItems.forEach((u) => removeItem(u.menuItemId))
+                    toast.success('Removed unavailable items from tray')
+                  }}
+                  className="cursor-pointer rounded-lg bg-[var(--danger)] px-3 py-1 text-xs font-semibold text-white hover:opacity-90"
+                >
+                  Remove all unavailable
+                </button>
+              )}
+            </div>
+            <div className="space-y-1.5">
+              {unavailableCartItems.map((u) => (
+                <div
+                  key={u.menuItemId}
+                  className="flex items-center justify-between gap-2 rounded-xl bg-[var(--surface)]/80 px-3 py-2 text-xs"
+                >
+                  <div>
+                    <span className="font-semibold text-[var(--text)]">{u.name}</span>
+                    {u.backAt && (
+                      <span className="ml-2 text-[var(--text-muted)]">
+                        (Back at {u.backAt})
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      removeItem(u.menuItemId)
+                      toast.success(`Removed ${u.name}`)
+                    }}
+                    className="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-[var(--danger)]/35 px-2.5 py-1 font-semibold text-[var(--danger)] hover:bg-[var(--danger)]/10"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Step Content */}
         <AnimatePresence mode="wait">
@@ -811,9 +960,9 @@ export function CheckoutClient({
                     </button>
                     <button
                       type="button"
-                      disabled={isProcessing}
+                      disabled={isProcessing || hasUnavailableItems}
                       onClick={() => submitOrder('online')}
-                      className="inline-flex h-12 min-h-[44px] flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-5 text-sm font-semibold text-white shadow-sm hover:bg-[var(--primary-hover)] disabled:cursor-wait disabled:opacity-70"
+                      className="inline-flex h-12 min-h-[44px] flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-5 text-sm font-semibold text-white shadow-sm hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {isProcessing ? (
                         <>
@@ -854,9 +1003,9 @@ export function CheckoutClient({
                     </button>
                     <button
                       type="button"
-                      disabled={isProcessing}
+                      disabled={isProcessing || hasUnavailableItems}
                       onClick={() => submitOrder('cash')}
-                      className="inline-flex h-12 min-h-[44px] flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-5 text-sm font-semibold text-white shadow-sm hover:bg-[var(--primary-hover)] disabled:cursor-wait disabled:opacity-70"
+                      className="inline-flex h-12 min-h-[44px] flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-5 text-sm font-semibold text-white shadow-sm hover:bg-[var(--primary-hover)] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {isProcessing ? (
                         <>

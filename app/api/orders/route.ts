@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { CreateOrderSchema } from '@/lib/validators/order'
 import type { MenuItem, PickupSlot, Profile } from '@/lib/types'
 import { formatSlotTime } from '@/lib/utils/format'
+import { generateSignedQrToken } from '@/lib/utils/qr'
 
 const CODE_LETTERS = 'ABCDEFGHJKLMNPQRSTUVWXYZ'
 
@@ -273,15 +274,7 @@ export async function POST(request: Request) {
     }
 
     const orderId = crypto.randomUUID()
-    const qrSecret =
-      process.env.QR_SIGNING_SECRET?.trim() ||
-      process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ||
-      'mite-canteen-qr-secret'
-
-    const qrToken = crypto
-      .createHmac('sha256', qrSecret)
-      .update(`${orderId}${orderCode}`)
-      .digest('base64url')
+    const qrToken = generateSignedQrToken(orderId, orderCode)
 
     const etaMinutes = payload.eta_minutes ?? 5
     const arriveAt = new Date(Date.now() + etaMinutes * 60_000).toISOString()

@@ -1,26 +1,19 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
-import { Bell, CheckCheck, History, Printer, Sparkles, UtensilsCrossed } from 'lucide-react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { History, Printer, Sparkles, UtensilsCrossed } from 'lucide-react'
 import { ThemeToggle } from '@/components/auth/ThemeToggle'
-import { createClient } from '@/lib/supabase/client'
+import { NotificationBell } from '@/components/ui/NotificationBell'
 import type { Notification, Profile } from '@/lib/types'
-import { cn, getTimeGreeting } from '@/lib/utils/format'
+import { getTimeGreeting } from '@/lib/utils/format'
 
 interface TopBarProps {
   profile: Profile | null
   email?: string | null
-  initialNotifications: Notification[]
+  initialNotifications?: Notification[]
 }
 
-export function TopBar({ profile, email, initialNotifications }: TopBarProps) {
-  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications)
-  const [notifOpen, setNotifOpen] = useState(false)
-
-  const unreadCount = notifications.filter((n) => !n.read).length
-
+export function TopBar({ profile, email }: TopBarProps) {
   const displayFirstName = (() => {
     const full = profile?.full_name?.trim()
     if (full) return full.split(/\s+/)[0]
@@ -38,25 +31,6 @@ export function TopBar({ profile, email, initialNotifications }: TopBarProps) {
   })()
 
   const greeting = getTimeGreeting()
-
-  const markAllRead = async () => {
-    const unreadIds = notifications.filter((n) => !n.read).map((n) => n.id)
-    if (unreadIds.length === 0) return
-
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
-
-    if (
-      process.env.NEXT_PUBLIC_SUPABASE_URL &&
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    ) {
-      try {
-        const supabase = createClient()
-        await supabase.from('notifications').update({ read: true }).in('id', unreadIds)
-      } catch {
-        // Ignore network errors on optimistic mark read
-      }
-    }
-  }
 
   return (
     <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-md">
@@ -114,86 +88,7 @@ export function TopBar({ profile, email, initialNotifications }: TopBarProps) {
 
         {/* Right actions */}
         <div className="relative flex items-center gap-2">
-          {/* Notification Bell */}
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setNotifOpen((o) => !o)}
-              aria-label={`Notifications (${unreadCount} unread)`}
-              className="relative inline-flex h-11 w-11 min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] shadow-xs transition-colors hover:border-[var(--primary)] hover:bg-[var(--surface-2)]"
-            >
-              <Bell className="h-5 w-5" />
-              {unreadCount > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-[var(--primary)] px-1 text-[10px] font-bold text-white shadow-xs">
-                  {unreadCount > 9 ? '9+' : unreadCount}
-                </span>
-              )}
-            </button>
-
-            <AnimatePresence>
-              {notifOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                  transition={{ duration: 0.16 }}
-                  className="absolute right-0 top-13 z-50 w-80 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-xl"
-                >
-                  <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
-                    <span className="text-sm font-bold text-[var(--text)]">Notifications</span>
-                    {unreadCount > 0 && (
-                      <button
-                        type="button"
-                        onClick={markAllRead}
-                        className="inline-flex cursor-pointer items-center gap-1 text-xs font-semibold text-[var(--primary)] hover:underline"
-                      >
-                        <CheckCheck className="h-3.5 w-3.5" />
-                        Mark read
-                      </button>
-                    )}
-                  </div>
-                  <div className="max-h-72 divide-y divide-[var(--border)] overflow-y-auto">
-                    {notifications.length === 0 ? (
-                      <p className="p-6 text-center text-xs text-[var(--text-muted)]">
-                        You&apos;re all caught up! Order updates appear here.
-                      </p>
-                    ) : (
-                      notifications.map((n) => (
-                        <div
-                          key={n.id}
-                          className={cn(
-                            'px-4 py-3 text-xs transition-colors',
-                            !n.read && 'bg-[var(--primary-soft)]/45'
-                          )}
-                        >
-                          <div className="flex items-center justify-between gap-2">
-                            <p className="font-semibold text-[var(--text)]">{n.title}</p>
-                            {!n.read && (
-                              <span className="h-2 w-2 shrink-0 rounded-full bg-[var(--primary)]" />
-                            )}
-                          </div>
-                          {n.body && (
-                            <p className="mt-0.5 text-[var(--text-muted)]">{n.body}</p>
-                          )}
-                        </div>
-                      ))
-                    )}
-                  </div>
-                  <div className="border-t border-[var(--border)] bg-[var(--surface-2)]/50 px-4 py-2 text-center">
-                    <Link
-                      href="/history"
-                      onClick={() => setNotifOpen(false)}
-                      className="text-xs font-semibold text-[var(--primary)] hover:underline"
-                    >
-                      View order history →
-                    </Link>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Theme Toggle */}
+          <NotificationBell />
           <ThemeToggle />
 
           {/* Profile Avatar */}

@@ -5,7 +5,13 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Clock, Minus, Plus, ShoppingBag, Tag, Utensils, X } from 'lucide-react'
 import type { MenuItem } from '@/lib/types'
-import { cn, formatPaise, formatPrepTime } from '@/lib/utils/format'
+import {
+  cn,
+  extractBackAtTag,
+  filterDisplayTags,
+  formatPaise,
+  formatPrepTime,
+} from '@/lib/utils/format'
 
 interface ItemSheetProps {
   item: MenuItem | null
@@ -27,6 +33,8 @@ function ItemSheetBody({
 }) {
   const [qty, setQty] = useState(1)
   const [imgError, setImgError] = useState(false)
+  const backAt = !item.in_stock ? extractBackAtTag(item.tags) : null
+  const displayTags = filterDisplayTags(item.tags)
 
   const handleConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!item.in_stock) return
@@ -110,6 +118,12 @@ function ItemSheetBody({
                 />
                 {item.in_stock ? 'In stock' : 'Currently unavailable'}
               </span>
+              {backAt && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-[var(--warning)]/15 px-2.5 py-1 text-xs font-semibold text-[var(--text)]">
+                  <Clock className="h-3.5 w-3.5 text-[var(--warning)]" />
+                  Back at {backAt}
+                </span>
+              )}
             </div>
           </div>
 
@@ -123,9 +137,9 @@ function ItemSheetBody({
             `Freshly prepared ${item.name.toLowerCase()} from the MITE canteen kitchen. Ready for pickup at your chosen slot.`}
         </Dialog.Description>
 
-        {item.tags && item.tags.length > 0 && (
+        {displayTags.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
-            {item.tags.map((tag) => (
+            {displayTags.map((tag) => (
               <span
                 key={tag}
                 className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--surface-2)] px-2.5 py-1 text-xs font-medium text-[var(--text-muted)]"

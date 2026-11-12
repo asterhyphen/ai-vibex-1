@@ -1,11 +1,20 @@
 'use client'
 
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, ChevronUp, Minus, Plus, ShoppingCart, Trash2 } from 'lucide-react'
+import {
+  AlertTriangle,
+  ArrowRight,
+  ChevronUp,
+  Minus,
+  Plus,
+  ShoppingCart,
+  Trash2,
+} from 'lucide-react'
+import type { MenuItem } from '@/lib/types'
 import { useCartStore } from '@/lib/stores/cart'
-import { formatPaise } from '@/lib/utils/format'
+import { cn, extractBackAtTag, formatPaise } from '@/lib/utils/format'
 
 interface ActiveFlyout {
   id: number
@@ -15,9 +24,13 @@ interface ActiveFlyout {
   targetY: number
 }
 
+interface CartBarProps {
+  liveMenuItems?: MenuItem[]
+}
+
 const emptySubscribe = () => () => {}
 
-export function CartBar() {
+export function CartBar({ liveMenuItems }: CartBarProps) {
   const items = useCartStore((s) => s.items)
   const total_paise = useCartStore((s) => s.total_paise)
   const total_items = useCartStore((s) => s.total_items)
@@ -25,6 +38,7 @@ export function CartBar() {
   const lastAddedAt = useCartStore((s) => s.lastAddedAt)
   const flyoutEvent = useCartStore((s) => s.flyoutEvent)
   const updateQty = useCartStore((s) => s.updateQty)
+  const removeItem = useCartStore((s) => s.removeItem)
   const clearCart = useCartStore((s) => s.clearCart)
   const clearFlyout = useCartStore((s) => s.clearFlyout)
 
@@ -36,6 +50,23 @@ export function CartBar() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [flyout, setFlyout] = useState<ActiveFlyout | null>(null)
   const cartIconRef = useRef<HTMLDivElement>(null)
+
+  const menuMap = useMemo(() => {
+    if (!liveMenuItems) return null
+    return new Map(liveMenuItems.map((m) => [m.id, m]))
+  }, [liveMenuItems])
+
+  const unavailableItems = useMemo(() => {
+    if (!menuMap) return new Map<string, { backAt: string | null }>()
+    const flagged = new Map<string, { backAt: string | null }>()
+    for (const cartItem of items) {
+      const live = menuMap.get(cartItem.menuItemId)
+      if (live && (!live.in_stock || live.is_active === false)) {
+        flagged.set(cartItem.menuItemId, { backAt: extractBackAtTag(live.tags) })
+      }
+    }
+    return flagged
+  }, [items, menuMap])
 
   useEffect(() => {
     if (!flyoutEvent || typeof window === 'undefined') return
@@ -71,6 +102,7 @@ export function CartBar() {
 
   const ready = mounted && (hasHydrated || items.length > 0)
   const showDrawer = drawerOpen && total_items > 0
+  const outOfStockCount = unavailableItems.size
 
   return (
     <>
@@ -148,43 +180,82 @@ export function CartBar() {
                         Clear
                       </button>
                     </div>
+
+                    {outOfStockCount > 0 && (
+                      <div className="mb-3 flex items-center gap-2 rounded-xl border border-[var(--danger)]/35 bg-[var(--danger)]/10 px-3 py-2 text-xs text-[var(--danger)]">
+                        <AlertTriangle className="h-4 w-4 shrink-0" />
+                        <span>
+                          {outOfStockCount} item{outOfStockCount === 1 ? '' : 's'} in your tray went out of stock. Remove before checkout.
+                        </span>
+                      </div>
+                    )}
+
                     <div className="max-h-52 space-y-2 overflow-y-auto pr-1">
-                      {items.map((item) => (
-                        <div
-                          key={item.menuItemId}
-                          className="flex items-center justify-between gap-3 rounded-xl bg-[var(--surface-2)]/70 px-3 py-2"
-                        >
-                          <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-medium text-[var(--text)]">
-                              {item.name}
-                            </p>
-                            <p className="text-xs text-[var(--text-muted)]">
-                              {formatPaise(item.price_paise * item.qty)}
-                            </p>
+                      {items.map((item) => {
+                        const unavailable = unavailableItems.get(item.menuItemId)
+                        return (
+                          <div
+                            key={item.menuItemId}
+                            className={cn(
+                              'flex items-center justify-between gap-3 rounded-xl px-3 py-2',
+                              unavailable
+                                ? 'border border-[var(--danger)]/35 bg-[var(--danger)]/8'
+                                : 'bg-[var(--surface-2)]/70'
+                            )}
+                          >
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2">
+                                <p className="truncate text-sm font-medium text-[var(--text)]">
+                                  {item.name}
+                                </p>
+                                {unavailable && (
+                                  <span className="shrink-0 rounded-full bg-[var(--danger)] px-2 py-0.5 text-[10px] font-bold text-white">
+                                    Out of stock
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-xs text-[var(--text-muted)]">
+                                {unavailable?.backAt
+                                  ? `Back at ${unavailable.backAt}`
+                                  : formatPaise(item.price_paise * item.qty)}
+                              </p>
+                            </div>
+
+                            {unavailable ? (
+                              <button
+                                type="button"
+                                onClick={() => removeItem(item.menuItemId)}
+                                className="inline-flex h-8 cursor-pointer items-center gap-1 rounded-lg border border-[var(--danger)]/40 bg-[var(--surface)] px-2.5 text-xs font-semibold text-[var(--danger)] hover:bg-[var(--danger)]/10"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                                Remove
+                              </button>
+                            ) : (
+                              <div className="flex items-center gap-1 rounded-lg border border-[var(--border)] bg-[var(--surface)] p-0.5">
+                                <button
+                                  type="button"
+                                  onClick={() => updateQty(item.menuItemId, item.qty - 1)}
+                                  aria-label={`Decrease ${item.name}`}
+                                  className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-[var(--text)] hover:bg-[var(--surface-2)]"
+                                >
+                                  <Minus className="h-3.5 w-3.5" />
+                                </button>
+                                <span className="min-w-[1.5rem] text-center text-xs font-bold text-[var(--text)]">
+                                  {item.qty}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => updateQty(item.menuItemId, item.qty + 1)}
+                                  aria-label={`Increase ${item.name}`}
+                                  className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-[var(--text)] hover:bg-[var(--surface-2)]"
+                                >
+                                  <Plus className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            )}
                           </div>
-                          <div className="flex items-center gap-1 rounded-lg border border-[var(--border)] bg-[var(--surface)] p-0.5">
-                            <button
-                              type="button"
-                              onClick={() => updateQty(item.menuItemId, item.qty - 1)}
-                              aria-label={`Decrease ${item.name}`}
-                              className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-[var(--text)] hover:bg-[var(--surface-2)]"
-                            >
-                              <Minus className="h-3.5 w-3.5" />
-                            </button>
-                            <span className="min-w-[1.5rem] text-center text-xs font-bold text-[var(--text)]">
-                              {item.qty}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => updateQty(item.menuItemId, item.qty + 1)}
-                              aria-label={`Increase ${item.name}`}
-                              className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-[var(--text)] hover:bg-[var(--surface-2)]"
-                            >
-                              <Plus className="h-3.5 w-3.5" />
-                            </button>
-                          </div>
-                        </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   </motion.div>
                 )}
@@ -225,7 +296,11 @@ export function CartBar() {
                         }`}
                       />
                     </p>
-                    <p className="text-[11px] text-white/80">Tap to review tray</p>
+                    <p className="text-[11px] text-white/85">
+                      {outOfStockCount > 0
+                        ? `⚠ ${outOfStockCount} out of stock — tap to update`
+                        : 'Tap to review tray'}
+                    </p>
                   </div>
                 </button>
 

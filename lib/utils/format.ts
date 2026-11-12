@@ -79,3 +79,22 @@ export function getTimeGreeting(date: Date = new Date()): string {
   if (hour < 17) return 'Good afternoon'
   return 'Good evening'
 }
+
+/**
+ * Extracts "back_at:<time>" from menu_items.tags if staff set a restock ETA.
+ */
+export function extractBackAtTag(tags: string[] | null | undefined): string | null {
+  if (!Array.isArray(tags)) return null
+  const found = tags.find((t) => typeof t === 'string' && t.startsWith('back_at:'))
+  if (!found) return null
+  const value = found.slice('back_at:'.length).trim()
+  return value || null
+}
+
+/**
+ * Returns human-readable tags excluding internal metadata tags like "back_at:*".
+ */
+export function filterDisplayTags(tags: string[] | null | undefined): string[] {
+  if (!Array.isArray(tags)) return []
+  return tags.filter((t) => typeof t === 'string' && !t.startsWith('back_at:'))
+}

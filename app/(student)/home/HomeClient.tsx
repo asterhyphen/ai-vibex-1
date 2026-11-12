@@ -77,7 +77,7 @@ export function HomeClient({
   user,
   profile,
   categories,
-  menuItems,
+  menuItems: initialMenuItems,
   activeOrder: initialActiveOrder,
   notifications,
 }: HomeClientProps) {
@@ -86,6 +86,7 @@ export function HomeClient({
   const addItem = useCartStore((s) => s.addItem)
   const cartItems = useCartStore((s) => s.items)
 
+  const [menuItems, setMenuItems] = useState<MenuItem[]>(initialMenuItems)
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null)
@@ -98,6 +99,77 @@ export function HomeClient({
     setUser(user)
     setProfile(profile)
   }, [user, profile, setUser, setProfile])
+
+  // Subscribe to live menu_items stock/price updates
+  useEffect(() => {
+    if (
+      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    ) {
+      return
+    }
+
+    const supabase = createClient()
+    const channel = supabase
+      .channel('home-menu-items-live')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'menu_items',
+        },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            const inserted = payload.new as MenuItem
+            if (inserted.is_active === false) return
+            setMenuItems((prev) => {
+              if (prev.some((m) => m.id === inserted.id)) return prev
+              return [...prev, inserted].sort((a, b) => a.name.localeCompare(b.name))
+            })
+            return
+          }
+
+          if (payload.eventType === 'DELETE') {
+            const oldItem = payload.old as Partial<MenuItem>
+            if (!oldItem.id) return
+            setMenuItems((prev) => prev.filter((m) => m.id !== oldItem.id))
+            setSelectedItem((curr) => (curr?.id === oldItem.id ? null : curr))
+            return
+          }
+
+          if (payload.eventType === 'UPDATE') {
+            const updated = payload.new as MenuItem
+            setMenuItems((prev) => {
+              if (updated.is_active === false) {
+                return prev.filter((m) => m.id !== updated.id)
+              }
+              const exists = prev.some((m) => m.id === updated.id)
+              if (!exists) {
+                return [...prev, updated].sort((a, b) => a.name.localeCompare(b.name))
+              }
+              return prev.map((m) => (m.id === updated.id ? updated : m))
+            })
+
+            setSelectedItem((curr) => (curr?.id === updated.id ? updated : curr))
+
+            if (!updated.in_stock || updated.is_active === false) {
+              const inCart = useCartStore
+                .getState()
+                .items.some((ci) => ci.menuItemId === updated.id)
+              if (inCart) {
+                toast.warning(`${updated.name} just went out of stock — check your tray.`)
+              }
+            }
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [])
 
   // Subscribe to live status updates for active order
   useEffect(() => {
@@ -417,7 +489,7 @@ export function HomeClient({
         autoParse={plainAutoParse}
       />
 
-      <CartBar />
+      <CartBar liveMenuItems={menuItems} />
     </div>
   )
 }

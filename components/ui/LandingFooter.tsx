@@ -42,9 +42,9 @@ function GiantBrandWord({ reduced }: { reduced: boolean }) {
         className={[
           'font-extrabold leading-none tracking-tighter',
           'text-[22vw]',               // Giant: fills full width at ~22vw
-          // Light: dark burgundy at 9% | Dark: ivory at 7%
-          'text-[var(--text)]',
-          'opacity-[0.07] dark:opacity-[0.06]',
+          // Footer bg is always near-black (#0D0608) → white watermark at ~12% opacity
+          'text-white',
+          'opacity-[0.11]',
           // Keep it vertically tight — allow slight bleed below
           '-mb-[4vw]',
         ].join(' ')}
@@ -152,7 +152,7 @@ export function LandingFooter() {
         {reduced ? (
           <p
             aria-hidden
-            className="font-extrabold leading-none tracking-tighter text-[22vw] text-[var(--text)] opacity-[0.07] -mb-[4vw] select-none pointer-events-none"
+            className="font-extrabold leading-none tracking-tighter text-[22vw] text-white opacity-[0.11] -mb-[4vw] select-none pointer-events-none"
             style={{ fontFamily: 'var(--font-fraunces)' }}
           >
             {BRAND_WORD}

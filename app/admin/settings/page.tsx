@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import type { Setting } from '@/lib/types'
 import { AdminShell } from '@/components/admin/AdminShell'
 import { DataGrid, type TableConfig } from '@/components/admin/DataGrid'
+import { DangerZonePanel } from '@/components/admin/DangerZonePanel'
 
 const SETTINGS_CONFIG: TableConfig = {
   tableName: 'settings',
@@ -210,6 +211,8 @@ export default function AdminSettingsPage() {
         </form>
 
         <DataGrid config={SETTINGS_CONFIG} refreshSignal={refreshSignal} />
+
+        <DangerZonePanel onComplete={() => setRefreshSignal((s) => s + 1)} />
       </div>
     </AdminShell>
   )

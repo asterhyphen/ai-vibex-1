@@ -22,6 +22,7 @@ export async function GET() {
     topItemsRes,
     loginAttemptsRes,
     blockedProfilesRes,
+    rateLimitAuditRes,
   ] = await Promise.all([
     db
       .from('orders')
@@ -52,6 +53,10 @@ export async function GET() {
       .from('profiles')
       .select('id', { count: 'exact', head: true })
       .eq('is_blocked', true),
+    db
+      .from('audit_log')
+      .select('id', { count: 'exact', head: true })
+      .eq('action', 'rate_limit_blocked'),
   ])
 
   const orders24h = orders24hRes.data ?? []
@@ -139,6 +144,9 @@ export async function GET() {
     (r) => r.locked_until && new Date(r.locked_until).getTime() > Date.now()
   ).length
 
+  const rateLimitBlocked =
+    (rateLimitAuditRes.count ?? 0) + getBlockedRequestsCount()
+
   return NextResponse.json({
     kpis: {
       ordersToday: ordersToday.length,
@@ -151,8 +159,8 @@ export async function GET() {
     slots: slotsTodayRes.data ?? [],
     top5Items,
     security: {
-      blockedRequests: failedAttemptHits + getBlockedRequestsCount(),
-      rateLimitHits: getBlockedRequestsCount(),
+      blockedRequests: failedAttemptHits + rateLimitBlocked,
+      rateLimitHits: rateLimitBlocked,
       activeLockouts: activeLocks,
       blockedUsers: blockedProfilesRes.count ?? 0,
     },

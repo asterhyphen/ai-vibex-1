@@ -9,6 +9,7 @@ import {
 
 const ORDER_BY_DEFAULTS: Record<AdminTableName, { col: string; ascending: boolean }> = {
   orders: { col: 'created_at', ascending: false },
+  order_items: { col: 'created_at', ascending: false },
   print_jobs: { col: 'created_at', ascending: false },
   menu_items: { col: 'name', ascending: true },
   categories: { col: 'sort_order', ascending: true },
@@ -16,6 +17,7 @@ const ORDER_BY_DEFAULTS: Record<AdminTableName, { col: string; ascending: boolea
   profiles: { col: 'created_at', ascending: false },
   staff_accounts: { col: 'created_at', ascending: false },
   settings: { col: 'key', ascending: true },
+  notifications: { col: 'created_at', ascending: false },
   sms_log: { col: 'created_at', ascending: false },
   audit_log: { col: 'created_at', ascending: false },
   login_attempts: { col: 'updated_at', ascending: false },

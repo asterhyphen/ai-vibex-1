@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 export const ADMIN_TABLE_WHITELIST = [
   'orders',
+  'order_items',
   'print_jobs',
   'menu_items',
   'categories',
@@ -9,6 +10,7 @@ export const ADMIN_TABLE_WHITELIST = [
   'profiles',
   'staff_accounts',
   'settings',
+  'notifications',
   'sms_log',
   'audit_log',
   'login_attempts',

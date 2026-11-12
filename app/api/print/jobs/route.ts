@@ -36,6 +36,16 @@ export async function POST(request: NextRequest) {
   const auth = await requireAuthenticatedProfile()
   if (!auth.ok) return auth.response
 
+  if (
+    (auth.profile.role === 'student' || auth.profile.role === 'faculty') &&
+    !auth.profile.phone_verified
+  ) {
+    return NextResponse.json(
+      { error: 'Phone verification required before submitting print jobs' },
+      { status: 403 }
+    )
+  }
+
   let body: unknown
   try {
     body = await request.json()

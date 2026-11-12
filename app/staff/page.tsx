@@ -25,6 +25,7 @@ import { RejectModal } from '@/components/staff/RejectModal'
 
 function playNewOrderChime() {
   if (typeof window === 'undefined') return
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
   const AudioCtx =
     window.AudioContext ||
     (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
@@ -247,6 +248,16 @@ export default function KitchenBoardPage() {
       orders
         .filter((o) => o.status === 'accepted' || o.status === 'preparing')
         .sort((a, b) => {
+          // Never reorder orders already preparing — keep them pinned in stable start order
+          if (a.status === 'preparing' && b.status !== 'preparing') return -1
+          if (b.status === 'preparing' && a.status !== 'preparing') return 1
+          if (a.status === 'preparing' && b.status === 'preparing') {
+            return (
+              new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+            )
+          }
+
+          // Accepted orders are sorted by priority_score ASC
           const scoreA = a.priority_score ?? Number.MAX_SAFE_INTEGER
           const scoreB = b.priority_score ?? Number.MAX_SAFE_INTEGER
           if (scoreA !== scoreB) return scoreA - scoreB

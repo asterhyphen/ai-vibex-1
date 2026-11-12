@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import {
   ChefHat,
   Clock,
+  Database,
   FileText,
   FolderKanban,
   LayoutDashboard,
@@ -35,6 +36,7 @@ const NAV_ITEMS = [
   { href: '/admin/settings', label: 'Settings', icon: Settings },
   { href: '/admin/sms-log', label: 'SMS Log', icon: MessageSquare },
   { href: '/admin/audit', label: 'Audit Log', icon: ShieldAlert },
+  { href: '/admin/database', label: 'Database', icon: Database },
 ] as const
 
 interface AdminShellProps {

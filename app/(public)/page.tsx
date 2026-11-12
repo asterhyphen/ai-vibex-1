@@ -13,10 +13,7 @@ import {
   ArrowRight,
   ChevronDown,
   Clock,
-  MapPin,
   Printer,
-  QrCode,
-  ShieldCheck,
   Sparkles,
   UtensilsCrossed,
   Zap,
@@ -46,7 +43,7 @@ const featureItemVariants: Variants = fadeUp
 const FEATURES = [
   {
     icon: Zap,
-    title: '⚡ Order in 30 seconds',
+    title: 'Order in 30 seconds',
     description:
       'Browse today’s live canteen menu or type in plain words, pick a 10-minute pickup window, and pay online or at the counter.',
     accent: 'from-[var(--primary)]/14 to-[var(--accent)]/12',
@@ -54,7 +51,7 @@ const FEATURES = [
   },
   {
     icon: Clock,
-    title: '🎯 Live Kitchen View',
+    title: 'Live Kitchen View',
     description:
       'Follow your order from Placed to Ready in real time. Faculty orders receive automatic priority so meals stay hot between lectures.',
     accent: 'from-[var(--accent)]/16 to-[var(--primary)]/10',
@@ -62,7 +59,7 @@ const FEATURES = [
   },
   {
     icon: Printer,
-    title: '📄 Print Shop',
+    title: 'Print Shop',
     description:
       'Upload PDFs straight from your phone, get instant page counts and cost estimates for A4/A3 B&W or color, and collect with a QR.',
     accent: 'from-[var(--primary)]/10 to-[var(--success)]/14',
@@ -72,19 +69,19 @@ const FEATURES = [
 
 const STATS = [
   {
-    value: '2000+ orders served',
-    detail: 'Across morning rush & lunch breaks',
-    icon: UtensilsCrossed,
-  },
-  {
-    value: '< 2 min avg wait',
-    detail: 'Walk up, scan QR, pick up hot food',
+    value: '10-min pickup windows',
+    detail: 'Scheduled slots across morning & lunch breaks',
     icon: Clock,
   },
   {
-    value: '5 campus locations',
-    detail: 'Main Canteen, Espresso Bar, Print Hub & more',
-    icon: MapPin,
+    value: 'Live kitchen priority queue',
+    detail: 'Walk up, scan QR, pick up hot food',
+    icon: UtensilsCrossed,
+  },
+  {
+    value: 'A4 & A3 PDF print counter',
+    detail: 'Instant page count, sanitization & cost estimate',
+    icon: Printer,
   },
 ] as const
 
@@ -170,7 +167,7 @@ export default function LandingPage() {
             >
             
 
-              <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08] text-[var(--text)]">
+              <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.08] text-[var(--text)]">
                 <span className="block overflow-hidden pb-1">
                   <motion.span variants={maskRevealLine} className="block">
                     Skip the queue.
@@ -245,24 +242,7 @@ export default function LandingPage() {
                 <HeroScene className="h-full w-full" />
 
                 {/* Floating compact live pass pill */}
-                <div className="pointer-events-none absolute bottom-4 left-4 right-4 sm:right-auto sm:w-72 rounded-2xl border border-white/15 bg-[#14080C]/80 backdrop-blur-md p-3.5 text-white shadow-xl">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-white/65">
-                        Live Pickup Pass
-                      </p>
-                      <p className="text-base font-extrabold tracking-tight text-[#D4A855]">
-                        A-0142 · Ready
-                      </p>
-                      <p className="text-[11px] text-white/75">
-                        2× Masala Dosa, Filter Coffee
-                      </p>
-                    </div>
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-[#D4A855]">
-                      <QrCode className="h-5 w-5" />
-                    </div>
-                  </div>
-                </div>
+                
               </div>
             </motion.div>
           </div>
@@ -293,10 +273,10 @@ export default function LandingPage() {
           className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20"
         >
           <div className="max-w-2xl">
-            <p className="text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
+            <p className="text-xs font-semibold text-[var(--accent)]">
               Built for campus breaks
             </p>
-            <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-[var(--text)]">
+            <h2 className="mt-2 text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text)]">
               Everything you need between lectures
             </h2>
           </div>
@@ -358,7 +338,7 @@ export default function LandingPage() {
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="text-lg font-extrabold tracking-tight text-[var(--text)]">
+                      <p className="text-lg font-bold tracking-tight text-[var(--text)] tabular-nums">
                         {stat.value}
                       </p>
                       <p className="mt-0.5 text-xs text-[var(--text-muted)]">
@@ -407,12 +387,12 @@ export default function LandingPage() {
                 'radial-gradient(ellipse 70% 60% at 50% 110%, color-mix(in srgb, var(--primary) 10%, transparent), transparent 70%)',
             }}
           />
-          <p className="relative text-xs font-bold uppercase tracking-widest text-[var(--accent)]">
+          <p className="relative text-xs font-semibold text-[var(--accent)]">
             Exclusively for MITE campus
           </p>
           <p className="relative mt-3 text-sm sm:text-base text-[var(--text-muted)] max-w-lg mx-auto leading-relaxed">
-            SkipQ started as a simple paper-slip system in 2018. It&apos;s
-            still that at heart, just over 2,000 orders smarter.
+            Built for MITE campus breaks — order ahead, pay in seconds, and
+            pick up with a QR scan.
           </p>
           <div className="relative mt-7 flex flex-col sm:flex-row items-center justify-center gap-3.5">
             <Link
@@ -425,7 +405,7 @@ export default function LandingPage() {
               href="#features"
               className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-transparent px-6 py-3.5 text-sm font-semibold text-[var(--text)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--surface-2)]"
             >
-              See plans →
+              Explore features
             </Link>
           </div>
         </motion.div>

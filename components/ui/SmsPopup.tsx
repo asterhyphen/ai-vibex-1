@@ -89,7 +89,7 @@ function SmsBubble({ message, queuedCount = 0, onDismiss }: SmsBubbleProps) {
           <div className="min-w-0 flex-1">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-white/90">
-                <span aria-hidden="true">📱</span>
+                <MessageSquare className="h-3.5 w-3.5 text-white/75" aria-hidden="true" />
                 <span>{message.sender ?? 'SkipQ'}</span>
                 {queuedCount > 0 && (
                   <span className="rounded-full bg-white/15 px-1.5 py-0.5 text-[10px] font-medium text-white/80">

@@ -1,5 +1,6 @@
 'use client'
 
+import { UtensilsCrossed } from 'lucide-react'
 import { cn } from '@/lib/utils/format'
 
 interface HeroFallbackProps {
@@ -39,9 +40,10 @@ export function HeroFallback({
         className="pointer-events-none absolute -bottom-14 -left-10 h-56 w-56 rounded-full opacity-25 blur-3xl"
         style={{ background: '#7A1F3D' }}
       />
-      <div className="text-6xl opacity-30" aria-hidden="true">
-        🍽️
-      </div>
+      <UtensilsCrossed
+        className="h-14 w-14 text-white/30"
+        aria-hidden="true"
+      />
     </div>
   )
 }

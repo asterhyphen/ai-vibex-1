@@ -29,7 +29,7 @@ interface OrderCardProps {
 }
 
 function getArrivalMeta(order: OrderWithItems, nowMs: number) {
-  if (!order.arrive_at) {
+  if (!order.arrive_at || nowMs <= 0) {
     return {
       label: order.eta_minutes ? `in ${order.eta_minutes} min` : 'Walk-in',
       isOverdue: false,
@@ -64,7 +64,10 @@ function getPriorityReason(
   diffMin: number,
   nowMs: number
 ): string | null {
-  const waitMin = Math.floor((nowMs - new Date(order.created_at).getTime()) / 60_000)
+  const waitMin =
+    nowMs > 0
+      ? Math.floor((nowMs - new Date(order.created_at).getTime()) / 60_000)
+      : 0
   if (waitMin >= 15 && order.status !== 'ready') {
     return 'Waiting >15m · Boosted'
   }

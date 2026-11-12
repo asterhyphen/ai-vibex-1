@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { motion } from 'framer-motion'
@@ -27,7 +27,7 @@ const PRINT_STEPS = [
   { key: 'collected', label: 'Collected', desc: 'Handover completed' },
 ] as const
 
-export default function PrintJobTrackingPage() {
+function PrintJobTrackingContent() {
   const params = useParams<{ id: string }>()
   const jobId = params?.id
 
@@ -324,5 +324,19 @@ export default function PrintJobTrackingPage() {
         )}
       </main>
     </div>
+  )
+}
+
+export default function PrintJobTrackingPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-[var(--bg)]">
+          <Loader2 className="h-8 w-8 animate-spin text-[var(--primary)]" />
+        </div>
+      }
+    >
+      <PrintJobTrackingContent />
+    </Suspense>
   )
 }

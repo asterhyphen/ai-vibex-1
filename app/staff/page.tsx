@@ -65,7 +65,7 @@ export default function KitchenBoardPage() {
   const [loading, setLoading] = useState(true)
   const [busyOrderId, setBusyOrderId] = useState<string | null>(null)
   const [soundEnabled, setSoundEnabled] = useState(true)
-  const [nowMs, setNowMs] = useState<number>(() => Date.now())
+  const [nowMs, setNowMs] = useState<number>(0)
 
   // Modals
   const [cashOrder, setCashOrder] = useState<OrderWithItems | null>(null)
@@ -128,10 +128,14 @@ export default function KitchenBoardPage() {
     }
   }, [])
 
-  // Refresh countdowns every 15s
+  // Refresh countdowns on mount + every 15s
   useEffect(() => {
+    const initTimer = setTimeout(() => setNowMs(Date.now()), 0)
     const timer = setInterval(() => setNowMs(Date.now()), 15_000)
-    return () => clearInterval(timer)
+    return () => {
+      clearTimeout(initTimer)
+      clearInterval(timer)
+    }
   }, [])
 
   // Realtime Supabase subscription
@@ -281,12 +285,15 @@ export default function KitchenBoardPage() {
 
   // Operational alerts
   const alerts = useMemo(() => {
-    const overdueCount = orders.filter(
-      (o) =>
-        o.status !== 'ready' &&
-        o.arrive_at &&
-        new Date(o.arrive_at).getTime() < nowMs
-    ).length
+    const overdueCount =
+      nowMs > 0
+        ? orders.filter(
+            (o) =>
+              o.status !== 'ready' &&
+              o.arrive_at &&
+              new Date(o.arrive_at).getTime() < nowMs
+          ).length
+        : 0
 
     const overloadedSlots = slots.filter(
       (s) => s.capacity_units > 0 && s.used_units / s.capacity_units >= 0.8

@@ -13,6 +13,7 @@ interface SlotHeatmapProps {
 export function SlotHeatmap({ slots, nowMs }: SlotHeatmapProps) {
   const windowSlots = useMemo(() => {
     if (slots.length === 0) return []
+    if (nowMs <= 0) return slots.slice(0, 12)
     const twoHoursLater = nowMs + 2 * 60 * 60 * 1000
     const upcomingWindow = slots.filter((slot) => {
       const endMs = new Date(slot.slot_end).getTime()

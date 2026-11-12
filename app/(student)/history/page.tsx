@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import { connection } from 'next/server'
 import { isSupabaseConfigured } from '@/lib/supabase/config'
 import { createClient } from '@/lib/supabase/server'
 import type { MenuItem, OrderWithItems } from '@/lib/types'
@@ -21,6 +22,7 @@ function HistorySkeleton() {
 }
 
 async function HistoryContent() {
+  await connection()
   if (!isSupabaseConfigured()) {
     return <HistoryClient orders={[]} menuItems={[]} />
   }

@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import { connection } from 'next/server'
 import { isSupabaseConfigured } from '@/lib/supabase/config'
 import { createClient } from '@/lib/supabase/server'
 import type { Category, MenuItem, Notification, OrderWithItems, Profile } from '@/lib/types'
@@ -32,6 +33,7 @@ function HomeSkeleton() {
 }
 
 async function HomeContent() {
+  await connection()
   if (!isSupabaseConfigured()) {
     return (
       <HomeClient

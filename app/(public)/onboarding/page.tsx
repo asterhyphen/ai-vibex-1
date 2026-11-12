@@ -1,11 +1,13 @@
 import { Suspense } from 'react'
 import { redirect } from 'next/navigation'
+import { connection } from 'next/server'
 import { Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { isSupabaseConfigured } from '@/lib/supabase/config'
 import { OnboardingClient } from './OnboardingClient'
 
 async function OnboardingLoader() {
+  await connection()
   const configured = isSupabaseConfigured()
 
   if (!configured) {

@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import { connection } from 'next/server'
 import { isSupabaseConfigured } from '@/lib/supabase/config'
 import { createClient } from '@/lib/supabase/server'
 import type { MenuItem, PickupSlot } from '@/lib/types'
@@ -17,6 +18,7 @@ function CheckoutSkeleton() {
 }
 
 async function CheckoutContent() {
+  await connection()
   if (!isSupabaseConfigured()) {
     return (
       <CheckoutClient

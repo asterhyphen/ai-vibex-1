@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
+import { connection } from 'next/server'
 import { isSupabaseConfigured } from '@/lib/supabase/config'
 import { createClient } from '@/lib/supabase/server'
 import type { OrderWithItems } from '@/lib/types'
@@ -23,6 +24,7 @@ async function OrderTrackingContent({
 }: {
   params: Promise<{ code: string }>
 }) {
+  await connection()
   const { code } = await params
   const normalizedCode = decodeURIComponent(code).trim().toUpperCase()
 

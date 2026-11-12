@@ -1,6 +1,6 @@
-# Supabase Setup Guide — MITE Canteen Pre-Order System
+# Supabase Setup Guide — SkipQ Pre-Order System
 
-This folder contains the single, self-contained Supabase database setup script for the MITE Canteen Pre-Order System.
+This folder contains the single, self-contained Supabase database setup script for the SkipQ Pre-Order System.
 
 ---
 

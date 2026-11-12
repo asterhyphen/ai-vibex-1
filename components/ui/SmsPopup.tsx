@@ -90,7 +90,7 @@ function SmsBubble({ message, queuedCount = 0, onDismiss }: SmsBubbleProps) {
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-white/90">
                 <span aria-hidden="true">📱</span>
-                <span>{message.sender ?? 'MITE Canteen'}</span>
+                <span>{message.sender ?? 'SkipQ'}</span>
                 {queuedCount > 0 && (
                   <span className="rounded-full bg-white/15 px-1.5 py-0.5 text-[10px] font-medium text-white/80">
                     +{queuedCount} queued
@@ -196,7 +196,7 @@ export function SmsPopup({
   open,
   body,
   code,
-  sender = 'MITE Canteen',
+  sender = 'SkipQ',
   kind = 'info',
   durationMs = 8000,
   onClose,

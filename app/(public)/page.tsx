@@ -109,7 +109,7 @@ export default function LandingPage() {
           </span>
           <span className="flex flex-col leading-tight">
             <span className="text-base font-bold tracking-tight text-[var(--text)]">
-              MITE Canteen
+              SkipQ
             </span>
             <span className="text-[11px] font-medium text-[var(--text-muted)]">
               Pre-Order &amp; Print
@@ -371,7 +371,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <p className="text-sm font-bold text-[var(--text)]">
-              MITE Canteen Pre-Order System
+              SkipQ Pre-Order System
             </p>
             <p className="mt-0.5 text-xs text-[var(--text-muted)]">
               Mangalore Institute of Technology &amp; Engineering · Moodabidri

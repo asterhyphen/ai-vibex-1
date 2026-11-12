@@ -140,7 +140,7 @@ export async function PATCH(
       title: `Order ${order.code} is Ready!`,
       body: `Your order ${order.code} is ready! 🎉 Please show your QR at the counter.`,
       kind: 'success',
-      smsBody: `Your order ${order.code} is ready! 🎉 Collect at MITE Canteen counter.`,
+      smsBody: `Your order ${order.code} is ready! 🎉 Collect at SkipQ counter.`,
       smsKind: 'order_ready',
     })
   } else if (action === 'reject') {
@@ -150,7 +150,7 @@ export async function PATCH(
       title: `Order ${order.code} Rejected`,
       body: `Reason: ${cleanReason}`,
       kind: 'error',
-      smsBody: `Your MITE Canteen order ${order.code} was rejected: ${cleanReason}`,
+      smsBody: `Your SkipQ order ${order.code} was rejected: ${cleanReason}`,
       smsKind: 'order_rejected',
     })
   } else if (action === 'accept') {

@@ -50,7 +50,7 @@ export function TopBar({ profile, email }: TopBarProps) {
             <Link
               href="/home"
               className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-transform hover:scale-105"
-              aria-label="MITE Canteen Home"
+              aria-label="SkipQ Home"
             >
               <span
                 data-brand-q-target="true"

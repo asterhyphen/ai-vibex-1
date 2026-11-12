@@ -1,5 +1,5 @@
 -- ============================================================================
--- MITE Canteen Pre-Order System — FINAL COMPLETE SUPABASE SETUP
+-- SkipQ Pre-Order System — FINAL COMPLETE SUPABASE SETUP
 -- ============================================================================
 -- HOW TO USE:
 --   1. Open your Supabase Dashboard -> SQL Editor -> New Query
@@ -1528,15 +1528,15 @@ BEGIN
   INSERT INTO public.notifications (id, user_id, title, body, kind, read, created_at) VALUES
     ('f1000000-0000-0000-0000-000000000001', u_student1, 'Order F-1006 is Ready!', 'Your order F-1006 is ready! 🎉 Please show your QR at the counter.', 'success', FALSE, NOW() - INTERVAL '3 minutes'),
     ('f1000000-0000-0000-0000-000000000002', u_student1, 'Print Job P-E10001 Submitted', '"DS_Module3_Notes.pdf" (₹18) sent to the print counter.', 'info', TRUE, NOW() - INTERVAL '12 minutes'),
-    ('f1000000-0000-0000-0000-000000000003', u_student4, 'Order G-1007 is Ready!', 'Your order G-1007 is ready! Collect at MITE Canteen counter.', 'success', FALSE, NOW() - INTERVAL '2 minutes'),
+    ('f1000000-0000-0000-0000-000000000003', u_student4, 'Order G-1007 is Ready!', 'Your order G-1007 is ready! Collect at SkipQ counter.', 'success', FALSE, NOW() - INTERVAL '2 minutes'),
     ('f1000000-0000-0000-0000-000000000004', u_faculty1, 'Print Job P-E10003 Ready!', '"IEEE_Workshop_Poster.pdf" is printed and ready for pickup.', 'success', FALSE, NOW() - INTERVAL '15 minutes'),
     ('f1000000-0000-0000-0000-000000000005', u_student6, 'Order K-1010 Accepted', 'The kitchen has accepted your order K-1010.', 'info', FALSE, NOW() - INTERVAL '14 minutes')
   ON CONFLICT (id) DO NOTHING;
 
   -- SMS Log
   INSERT INTO public.sms_log (id, phone, body, kind, created_at) VALUES
-    ('f2000000-0000-0000-0000-000000000001', '9845100001', 'Your order F-1006 is ready! 🎉 Collect at MITE Canteen counter.', 'order_ready', NOW() - INTERVAL '3 minutes'),
-    ('f2000000-0000-0000-0000-000000000002', '9845100004', 'Your order G-1007 is ready! 🎉 Collect at MITE Canteen counter.', 'order_ready', NOW() - INTERVAL '2 minutes'),
+    ('f2000000-0000-0000-0000-000000000001', '9845100001', 'Your order F-1006 is ready! 🎉 Collect at SkipQ counter.', 'order_ready', NOW() - INTERVAL '3 minutes'),
+    ('f2000000-0000-0000-0000-000000000002', '9845100004', 'Your order G-1007 is ready! 🎉 Collect at SkipQ counter.', 'order_ready', NOW() - INTERVAL '2 minutes'),
     ('f2000000-0000-0000-0000-000000000003', '9845200001', 'Your print job P-E10003 (IEEE_Workshop_Poster.pdf) is ready! Collect at MITE Print Counter.', 'print_ready', NOW() - INTERVAL '15 minutes'),
     ('f2000000-0000-0000-0000-000000000004', '9845100002', 'Your order M-1012 is confirmed. Collect at your scheduled slot.', 'order_confirmed', NOW() - INTERVAL '3 minutes'),
     ('f2000000-0000-0000-0000-000000000005', '9845100001', 'Your verification code: 1234. Valid for 10 minutes.', 'phone_otp', NOW() - INTERVAL '4 hours')

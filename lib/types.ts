@@ -1,5 +1,5 @@
 // ============================================================
-// MITE Canteen — TypeScript Types (mirrors DB schema exactly)
+// SkipQ — TypeScript Types (mirrors DB schema exactly)
 // ============================================================
 
 export type UserRole = 'student' | 'faculty' | 'shopkeeper' | 'admin'

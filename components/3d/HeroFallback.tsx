@@ -13,7 +13,7 @@ interface HeroFallbackProps {
  */
 export function HeroFallback({
   className,
-  label = 'MITE Canteen — Pre-order meals and campus prints',
+  label = 'SkipQ — Pre-order meals and campus prints',
 }: HeroFallbackProps) {
   return (
     <div

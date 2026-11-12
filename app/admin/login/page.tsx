@@ -10,7 +10,7 @@ async function AdminLoginLoader() {
   return (
     <PortalLoginForm
       portal="admin"
-      heading="MITE Canteen Administration"
+      heading="SkipQ Administration"
       subtitle="Authorized administrators only. All dashboard edits are audited."
       placeholderEmail="admin@mite.ac.in"
       initialLastLoginAt={lastLoginAt}

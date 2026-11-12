@@ -6,7 +6,7 @@ export interface BrandQMarkProps extends React.SVGProps<SVGSVGElement> {
 }
 
 /**
- * MITE Canteen logo mark: a circular ivory & burgundy plate with a
+ * SkipQ logo mark: a circular ivory & burgundy plate with a
  * burnished gold spoon angled across the lower-right rim to form "Q".
  */
 export function BrandQMark({

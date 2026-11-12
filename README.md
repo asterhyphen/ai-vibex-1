@@ -1,4 +1,4 @@
-# MITE Canteen Pre-Order System
+# SkipQ Pre-Order System
 
 > Hackathon project — Next.js App Router + Supabase · Premium Ivory & Burgundy themes
 

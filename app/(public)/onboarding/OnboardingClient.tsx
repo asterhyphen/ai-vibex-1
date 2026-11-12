@@ -370,7 +370,7 @@ export function OnboardingClient({
                         : 'Student 🎓'}
                     </span>
                     <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-[var(--text)]">
-                      Welcome to MITE Canteen! You&apos;re all set.
+                      Welcome to SkipQ! You&apos;re all set.
                     </h1>
                     <p className="mt-1.5 text-sm text-[var(--text-muted)]">
                       Taking you to today&apos;s menu…

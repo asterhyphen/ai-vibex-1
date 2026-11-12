@@ -5,7 +5,7 @@ import { RealtimeAlertsProvider } from '@/components/ui/RealtimeAlertsProvider'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'MITE Canteen',
+  title: 'SkipQ',
   description: 'Pre-order food and print services at MITE',
 }
 

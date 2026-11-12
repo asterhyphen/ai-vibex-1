@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
         await notifyUserAndSms(db, {
           userId: order.user_id,
           title: `Order ${order.code} Collected`,
-          body: 'Enjoy your meal! Thanks for using MITE Canteen.',
+          body: 'Enjoy your meal! Thanks for using SkipQ.',
           kind: 'success',
         })
 

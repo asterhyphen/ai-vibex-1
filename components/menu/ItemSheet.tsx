@@ -134,7 +134,7 @@ function ItemSheetBody({
 
         <Dialog.Description className="text-sm leading-relaxed text-[var(--text-muted)]">
           {item.description?.trim() ||
-            `Freshly prepared ${item.name.toLowerCase()} from the MITE canteen kitchen. Ready for pickup at your chosen slot.`}
+            `Freshly prepared ${item.name.toLowerCase()} from the SkipQ kitchen. Ready for pickup at your chosen slot.`}
         </Dialog.Description>
 
         {displayTags.length > 0 && (

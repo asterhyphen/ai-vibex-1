@@ -194,7 +194,7 @@ function LoginContent() {
             </div>
             <div>
               <h1 className="text-xl font-extrabold tracking-tight text-[var(--text)]">
-                MITE Canteen Login
+                SkipQ Login
               </h1>
               <p className="text-xs text-[var(--text-muted)]">
                 Passwordless sign-in with your college email

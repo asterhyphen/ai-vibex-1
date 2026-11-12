@@ -51,7 +51,7 @@ export function SmsPopup({
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-white/90">
                     <span aria-hidden="true">📱</span>
-                    <span>MITE Canteen</span>
+                    <span>SkipQ</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="text-[11px] text-white/50">now</span>

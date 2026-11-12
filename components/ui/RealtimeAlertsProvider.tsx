@@ -219,7 +219,7 @@ export function RealtimeAlertsProvider({ children }: { children: ReactNode }) {
                 description: 'The kitchen has confirmed your order.',
               })
               pushSms({
-                sender: 'MITE Canteen',
+                sender: 'SkipQ',
                 kind: 'success',
                 body: `Order ${updated.code} has been accepted by the kitchen.`,
               })
@@ -234,7 +234,7 @@ export function RealtimeAlertsProvider({ children }: { children: ReactNode }) {
                 description: 'Head to the canteen counter and scan your QR pass.',
               })
               pushSms({
-                sender: 'MITE Canteen',
+                sender: 'SkipQ',
                 kind: 'success',
                 body: `Order ${updated.code} is READY! Collect at the counter with your QR.`,
               })
@@ -245,7 +245,7 @@ export function RealtimeAlertsProvider({ children }: { children: ReactNode }) {
                   updated.rejected_reason || 'Please check with the canteen counter.',
               })
               pushSms({
-                sender: 'MITE Canteen',
+                sender: 'SkipQ',
                 kind: 'error',
                 body: `Order ${updated.code} could not be fulfilled${
                   updated.rejected_reason ? `: ${updated.rejected_reason}` : '.'

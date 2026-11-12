@@ -1,4 +1,4 @@
-# MITE Canteen Pre-Order System — Project Map
+# SkipQ Pre-Order System — Project Map
 
 ## Project Overview
 

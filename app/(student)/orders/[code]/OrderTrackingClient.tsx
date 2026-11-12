@@ -186,8 +186,8 @@ export function OrderTrackingClient({ initialOrder }: OrderTrackingClientProps) 
     const shareUrl =
       typeof window !== 'undefined' ? window.location.href : `/orders/${order.code}`
     const shareData = {
-      title: `MITE Canteen Order #${order.code}`,
-      text: `Track my MITE Canteen order #${order.code}`,
+      title: `SkipQ Order #${order.code}`,
+      text: `Track my SkipQ order #${order.code}`,
       url: shareUrl,
     }
 
@@ -280,7 +280,7 @@ export function OrderTrackingClient({ initialOrder }: OrderTrackingClientProps) 
                   Order #{order.code} is READY!
                 </h2>
                 <p className="text-sm text-white/85">
-                  Head to the MITE canteen pickup counter and show your QR code.
+                  Head to the SkipQ pickup counter and show your QR code.
                 </p>
               </div>
 

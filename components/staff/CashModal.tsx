@@ -111,7 +111,7 @@ export function CashModal({ order, onClose, onCollected }: CashModalProps) {
                 <Banknote className="h-5 w-5" />
               </span>
               <div>
-                <h2 className="text-lg font-extrabold text-[var(--text)]">
+                <h2 className="text-lg font-semibold text-[var(--text)]">
                   Collect Cash · {order.code}
                 </h2>
                 <p className="text-xs text-[var(--text-muted)]">
@@ -136,7 +136,7 @@ export function CashModal({ order, onClose, onCollected }: CashModalProps) {
                 <div className="text-xs font-semibold text-[var(--text-muted)]">
                   Order Total
                 </div>
-                <div className="mt-1 text-2xl font-black text-[var(--primary)] tabular-nums">
+                <div className="mt-1 text-2xl font-bold text-[var(--primary)] tabular-nums">
                   {formatMoney2(totalPaise)}
                 </div>
               </div>
@@ -146,7 +146,7 @@ export function CashModal({ order, onClose, onCollected }: CashModalProps) {
                   Change to Return
                 </div>
                 <div
-                  className={`mt-1 text-2xl font-black tabular-nums ${
+                  className={`mt-1 text-2xl font-bold tabular-nums ${
                     changePaise >= 0 ? 'text-[var(--accent)]' : 'text-[var(--danger)]'
                   }`}
                 >
@@ -176,7 +176,7 @@ export function CashModal({ order, onClose, onCollected }: CashModalProps) {
               </div>
 
               <div className="flex min-h-[56px] items-center justify-between rounded-2xl border-2 border-[var(--primary)]/50 bg-[var(--bg)] px-4">
-                <span className="text-2xl font-black text-[var(--text-muted)]">₹</span>
+                <span className="text-2xl font-bold text-[var(--text-muted)]">₹</span>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -187,7 +187,7 @@ export function CashModal({ order, onClose, onCollected }: CashModalProps) {
                   }}
                   placeholder="0"
                   aria-label="Cash received in rupees"
-                  className="w-full bg-transparent text-right text-3xl font-black text-[var(--text)] outline-none tabular-nums"
+                  className="w-full bg-transparent text-right text-3xl font-bold text-[var(--text)] outline-none tabular-nums"
                 />
               </div>
 
@@ -226,7 +226,7 @@ export function CashModal({ order, onClose, onCollected }: CashModalProps) {
                       type="button"
                       disabled={submitting}
                       onClick={handleConfirm}
-                      className="flex min-h-[56px] items-center justify-center gap-1.5 rounded-2xl bg-[var(--success)] text-sm font-extrabold text-white shadow-sm transition-transform active:scale-95 hover:opacity-90 disabled:opacity-50 cursor-pointer"
+                      className="flex min-h-[56px] items-center justify-center gap-1.5 rounded-2xl bg-[var(--success)] text-sm font-semibold text-white shadow-sm transition-transform active:scale-95 hover:opacity-90 disabled:opacity-50 cursor-pointer"
                     >
                       {submitting ? (
                         <Loader2 className="h-5 w-5 animate-spin" />
@@ -259,7 +259,7 @@ export function CashModal({ order, onClose, onCollected }: CashModalProps) {
                     key={btn.value}
                     type="button"
                     onClick={() => handleDigit(btn.value!)}
-                    className="flex min-h-[56px] items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] text-xl font-extrabold text-[var(--text)] transition-transform active:scale-95 hover:border-[var(--primary)] cursor-pointer tabular-nums"
+                    className="flex min-h-[56px] items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] text-xl font-semibold text-[var(--text)] transition-transform active:scale-95 hover:border-[var(--primary)] cursor-pointer tabular-nums"
                   >
                     {btn.label}
                   </button>

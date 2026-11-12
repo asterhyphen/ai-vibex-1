@@ -138,7 +138,7 @@ export default function StockControlPage() {
       <main className="mx-auto max-w-6xl space-y-5 px-4 py-6 sm:px-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-black tracking-tight text-[var(--text)]">
+            <h1 className="text-2xl font-bold tracking-tight text-[var(--text)]">
               Stock Control
             </h1>
             <p className="text-sm text-[var(--text-muted)]">
@@ -249,7 +249,7 @@ export default function StockControlPage() {
                   <div className="flex items-center justify-between gap-4">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
-                        <h2 className="truncate text-base font-extrabold text-[var(--text)]">
+                        <h2 className="truncate text-base font-semibold text-[var(--text)]">
                           {item.name}
                         </h2>
                         {item.category && (
@@ -280,7 +280,7 @@ export default function StockControlPage() {
                       }`}
                     >
                       <span
-                        className={`inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-xs font-black shadow-md transition-transform ${
+                        className={`inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-xs font-bold shadow-md transition-transform ${
                           item.in_stock ? 'translate-x-16' : 'translate-x-0'
                         }`}
                       >
@@ -293,7 +293,7 @@ export default function StockControlPage() {
                         )}
                       </span>
                       <span
-                        className={`absolute text-xs font-extrabold text-white ${
+                        className={`absolute text-xs font-semibold text-white ${
                           item.in_stock ? 'left-3.5' : 'right-3.5'
                         }`}
                       >

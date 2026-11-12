@@ -137,10 +137,10 @@ export async function PATCH(
   if (action === 'ready') {
     await notifyUserAndSms(db, {
       userId: order.user_id,
-      title: `Order ${order.code} is Ready!`,
-      body: `Your order ${order.code} is ready! 🎉 Please show your QR at the counter.`,
+      title: `Order ${order.code} is Ready`,
+      body: `Your order ${order.code} is ready. Please show your QR at the counter.`,
       kind: 'success',
-      smsBody: `Your order ${order.code} is ready! 🎉 Collect at SkipQ counter.`,
+      smsBody: `Your order ${order.code} is ready. Collect at SkipQ counter.`,
       smsKind: 'order_ready',
     })
   } else if (action === 'reject') {

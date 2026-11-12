@@ -156,7 +156,7 @@ function GuestPosModalInner({
         })),
       })
 
-      toast.success(`Walk-in order ${data.code} placed!`)
+      toast.success(`Walk-in order ${data.code} placed`)
       onOrderCreated()
     } catch {
       toast.error('Network error submitting walk-in order')
@@ -181,7 +181,7 @@ function GuestPosModalInner({
                 <ShoppingBag className="h-5 w-5" />
               </span>
               <div>
-                <h2 className="text-lg font-extrabold text-[var(--text)]">
+                <h2 className="text-lg font-semibold text-[var(--text)]">
                   {slip ? 'Walk-in Token Slip' : 'New Walk-in Order (POS)'}
                 </h2>
                 <p className="text-xs text-[var(--text-muted)]">
@@ -208,10 +208,10 @@ function GuestPosModalInner({
                 Order Confirmed ({slip.payment_method.toUpperCase()})
               </span>
 
-              <div className="mt-3 text-5xl font-black tracking-tight text-[var(--primary)]">
+              <div className="mt-3 text-5xl font-bold tracking-tight text-[var(--primary)]">
                 {slip.code}
               </div>
-              <div className="mt-1 text-sm font-semibold text-[var(--text-muted)]">
+              <div className="mt-1 text-sm font-semibold text-[var(--text-muted)] tabular-nums">
                 {slip.guest_name} · Total {formatPaise(slip.total_paise)}
               </div>
 
@@ -333,10 +333,10 @@ function GuestPosModalInner({
                           onClick={() => adjustQty(item.id, 1)}
                           className="min-h-[52px] text-left cursor-pointer"
                         >
-                          <div className="text-sm font-extrabold text-[var(--text)] line-clamp-2">
+                          <div className="text-sm font-semibold text-[var(--text)] line-clamp-2">
                             {item.name}
                           </div>
-                          <div className="mt-1 text-base font-black text-[var(--primary)] tabular-nums">
+                          <div className="mt-1 text-base font-bold text-[var(--primary)] tabular-nums">
                             {formatPaise(item.price_paise)}
                           </div>
                         </button>
@@ -351,7 +351,7 @@ function GuestPosModalInner({
                           >
                             <Minus className="h-4 w-4" />
                           </button>
-                          <span className="min-w-[24px] text-center text-sm font-black tabular-nums">
+                          <span className="min-w-[24px] text-center text-sm font-bold tabular-nums">
                             {qty}
                           </span>
                           <button
@@ -404,7 +404,7 @@ function GuestPosModalInner({
                       <div className="text-xs font-semibold text-[var(--text-muted)]">
                         {selectedLines.reduce((s, l) => s + l.qty, 0)} items
                       </div>
-                      <div className="text-2xl font-black text-[var(--primary)] tabular-nums">
+                      <div className="text-2xl font-bold text-[var(--primary)] tabular-nums">
                         {formatPaise(totalPaise)}
                       </div>
                     </div>
@@ -413,7 +413,7 @@ function GuestPosModalInner({
                       type="button"
                       disabled={submitting || selectedLines.length === 0}
                       onClick={handleSubmit}
-                      className="flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-6 text-sm font-extrabold text-white shadow-sm hover:bg-[var(--primary-hover)] disabled:opacity-50 cursor-pointer"
+                      className="flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-6 text-sm font-semibold text-white shadow-sm hover:bg-[var(--primary-hover)] disabled:opacity-50 cursor-pointer"
                     >
                       {submitting ? (
                         <Loader2 className="h-5 w-5 animate-spin" />

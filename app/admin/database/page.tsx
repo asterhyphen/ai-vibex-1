@@ -192,7 +192,7 @@ export default function AdminDatabasePage() {
                 key={tbl}
                 type="button"
                 onClick={() => setActiveTable(tbl)}
-                className={`min-h-[40px] rounded-xl px-3.5 text-xs font-extrabold transition-colors cursor-pointer ${
+                className={`min-h-[40px] rounded-xl px-3.5 text-xs font-semibold transition-colors cursor-pointer ${
                   active
                     ? 'bg-[var(--primary)] text-white shadow-xs'
                     : 'border border-[var(--border)] bg-[var(--surface-2)] text-[var(--text)] hover:border-[var(--primary)]'

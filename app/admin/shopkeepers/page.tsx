@@ -65,7 +65,7 @@ export default function AdminShopkeepersPage() {
         toast.error(data.error || 'Could not create shopkeeper')
         return
       }
-      toast.success(`Shopkeeper "${displayName}" created!`)
+      toast.success(`Shopkeeper "${displayName}" created`)
       setCreateOpen(false)
       setEmail('')
       setPassword('')
@@ -114,7 +114,7 @@ export default function AdminShopkeepersPage() {
         <button
           type="button"
           onClick={() => setCreateOpen(true)}
-          className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-xs font-extrabold text-white hover:bg-[var(--primary-hover)] cursor-pointer"
+          className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-xs font-semibold text-white hover:bg-[var(--primary-hover)] cursor-pointer"
         >
           <UserPlus className="h-4 w-4" />
           <span>Create Shopkeeper</span>
@@ -147,7 +147,7 @@ export default function AdminShopkeepersPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
           <div className="w-full max-w-md rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-2xl">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-extrabold text-[var(--text)]">
+              <h2 className="text-lg font-semibold text-[var(--text)]">
                 Create Shopkeeper Account
               </h2>
               <button
@@ -227,7 +227,7 @@ export default function AdminShopkeepersPage() {
                 <button
                   type="submit"
                   disabled={creating}
-                  className="flex min-h-[46px] flex-1 items-center justify-center rounded-xl bg-[var(--primary)] text-sm font-extrabold text-white cursor-pointer"
+                  className="flex min-h-[46px] flex-1 items-center justify-center rounded-xl bg-[var(--primary)] text-sm font-semibold text-white cursor-pointer"
                 >
                   {creating ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -246,7 +246,7 @@ export default function AdminShopkeepersPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
           <div className="w-full max-w-sm rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-2xl">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-extrabold text-[var(--text)]">
+              <h2 className="text-lg font-semibold text-[var(--text)]">
                 Reset Password · {resetTarget.name}
               </h2>
               <button
@@ -284,7 +284,7 @@ export default function AdminShopkeepersPage() {
                 <button
                   type="submit"
                   disabled={resetting}
-                  className="flex min-h-[44px] flex-1 items-center justify-center rounded-xl bg-[var(--primary)] text-sm font-extrabold text-white cursor-pointer"
+                  className="flex min-h-[44px] flex-1 items-center justify-center rounded-xl bg-[var(--primary)] text-sm font-semibold text-white cursor-pointer"
                 >
                   {resetting ? (
                     <Loader2 className="h-4 w-4 animate-spin" />

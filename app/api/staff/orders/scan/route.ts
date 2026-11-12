@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
         await notifyUserAndSms(db, {
           userId: order.user_id,
           title: `Order ${order.code} Collected`,
-          body: 'Enjoy your meal! Thanks for using SkipQ.',
+          body: 'Enjoy your meal. Thanks for using SkipQ.',
           kind: 'success',
         })
 
@@ -282,7 +282,7 @@ export async function POST(request: NextRequest) {
       await notifyUserAndSms(db, {
         userId: order.user_id,
         title: `Order ${order.code} Collected`,
-        body: 'Your meal has been picked up. Enjoy!',
+        body: 'Your meal has been picked up.',
         kind: 'success',
       })
 

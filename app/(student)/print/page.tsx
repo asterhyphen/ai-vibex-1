@@ -104,7 +104,7 @@ export default function PrintUploadPage() {
         return
       }
       setUploaded(data as UploadedPdfInfo)
-      toast.success('PDF scanned, cleaned, and verified!')
+      toast.success('PDF scanned, cleaned, and verified')
     } catch {
       setUploadError('Network error uploading PDF')
       toast.error('Network error uploading PDF')
@@ -151,7 +151,7 @@ export default function PrintUploadPage() {
       }
 
       setPayStage('success')
-      toast.success('Print job paid & queued!')
+      toast.success('Print job paid and queued')
       setTimeout(() => {
         router.push(`/print/${data.job.id}`)
       }, 900)
@@ -175,7 +175,7 @@ export default function PrintUploadPage() {
               <ArrowLeft className="h-5 w-5" />
             </Link>
             <div>
-              <h1 className="text-lg font-black tracking-tight text-[var(--text)]">
+              <h1 className="text-lg font-bold tracking-tight text-[var(--text)]">
                 MITE Print Shop
               </h1>
               <p className="text-xs text-[var(--text-muted)]">
@@ -196,7 +196,7 @@ export default function PrintUploadPage() {
                 <Printer className="h-5 w-5" />
               </span>
               <div>
-                <h2 className="text-base font-extrabold text-[var(--text)]">
+                <h2 className="text-base font-semibold text-[var(--text)]">
                   1. Upload PDF Document
                 </h2>
                 <p className="text-xs text-[var(--text-muted)]">
@@ -270,7 +270,7 @@ export default function PrintUploadPage() {
               {uploading ? (
                 <div className="flex flex-col items-center gap-3">
                   <Loader2 className="h-12 w-12 animate-spin text-[var(--primary)]" />
-                  <p className="text-base font-extrabold text-[var(--text)]">
+                  <p className="text-base font-semibold text-[var(--text)]">
                     Scanning &amp; sanitising PDF...
                   </p>
                   <p className="text-xs text-[var(--text-muted)]">
@@ -286,7 +286,7 @@ export default function PrintUploadPage() {
                   >
                     <FileUp className="h-8 w-8" />
                   </motion.div>
-                  <p className="text-base font-extrabold text-[var(--text)]">
+                  <p className="text-base font-semibold text-[var(--text)]">
                     Drag &amp; drop your PDF here, or tap to browse
                   </p>
                   <p className="mt-1 text-xs font-medium text-[var(--text-muted)]">
@@ -307,7 +307,7 @@ export default function PrintUploadPage() {
                     <FileCheck2 className="h-6 w-6" />
                   </div>
                   <div className="min-w-0">
-                    <div className="truncate text-base font-extrabold text-[var(--text)]">
+                    <div className="truncate text-base font-semibold text-[var(--text)]">
                       {uploaded.original_name}
                     </div>
                     <div className="mt-0.5 flex flex-wrap items-center gap-2 text-xs font-bold text-[var(--text-muted)]">
@@ -318,15 +318,15 @@ export default function PrintUploadPage() {
                   </div>
                 </div>
 
-                {/* Scanned and cleaned ✓ Shield Badge with check animation */}
+                {/* Scanned and cleaned Shield Badge with check animation */}
                 <motion.div
                   initial={{ scale: 0.85, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  className="inline-flex items-center gap-2 rounded-full bg-[var(--success)] px-4 py-2 text-xs font-extrabold text-white shadow-sm"
+                  className="inline-flex items-center gap-2 rounded-full bg-[var(--success)] px-4 py-2 text-xs font-bold text-white shadow-sm"
                 >
                   <ShieldCheck className="h-4 w-4" />
-                  <span>Scanned and cleaned ✓</span>
+                  <span>Scanned and cleaned</span>
                 </motion.div>
               </div>
 
@@ -362,7 +362,7 @@ export default function PrintUploadPage() {
                     <Layers className="h-5 w-5" />
                   </span>
                   <div>
-                    <h2 className="text-base font-extrabold text-[var(--text)]">
+                    <h2 className="text-base font-semibold text-[var(--text)]">
                       2. Print Preferences
                     </h2>
                     <p className="text-xs text-[var(--text-muted)]">
@@ -386,7 +386,7 @@ export default function PrintUploadPage() {
                           : 'border-[var(--border)] bg-[var(--surface-2)]'
                       }`}
                     >
-                      <div className="text-sm font-extrabold text-[var(--text)]">
+                      <div className="text-sm font-semibold text-[var(--text)]">
                         Black &amp; White
                       </div>
                       <div className="text-xs font-semibold text-[var(--text-muted)]">
@@ -403,7 +403,7 @@ export default function PrintUploadPage() {
                           : 'border-[var(--border)] bg-[var(--surface-2)]'
                       }`}
                     >
-                      <div className="flex items-center gap-1.5 text-sm font-extrabold text-[var(--text)]">
+                      <div className="flex items-center gap-1.5 text-sm font-semibold text-[var(--text)]">
                         <span>Colour</span>
                         <Sparkles className="h-3.5 w-3.5 text-[var(--accent)]" />
                       </div>
@@ -429,7 +429,7 @@ export default function PrintUploadPage() {
                           : 'border-[var(--border)] bg-[var(--surface-2)]'
                       }`}
                     >
-                      <div className="text-sm font-extrabold text-[var(--text)]">
+                      <div className="text-sm font-semibold text-[var(--text)]">
                         Single-sided
                       </div>
                       <div className="text-xs text-[var(--text-muted)]">
@@ -446,7 +446,7 @@ export default function PrintUploadPage() {
                           : 'border-[var(--border)] bg-[var(--surface-2)]'
                       }`}
                     >
-                      <div className="text-sm font-extrabold text-[var(--text)]">
+                      <div className="text-sm font-semibold text-[var(--text)]">
                         Double-sided
                       </div>
                       <div className="text-xs text-[var(--text-muted)]">
@@ -482,7 +482,7 @@ export default function PrintUploadPage() {
                             setCopies(Math.max(1, Math.min(50, n)))
                           }
                         }}
-                        className="h-12 w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] text-center text-lg font-black text-[var(--text)] outline-none focus:border-[var(--primary)] tabular-nums"
+                        className="h-12 w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] text-center text-lg font-bold text-[var(--text)] outline-none focus:border-[var(--primary)] tabular-nums"
                       />
                       <button
                         type="button"
@@ -505,7 +505,7 @@ export default function PrintUploadPage() {
                           key={sz}
                           type="button"
                           onClick={() => setPaper(sz)}
-                          className={`min-h-[48px] rounded-xl border-2 text-sm font-extrabold transition-all cursor-pointer ${
+                          className={`min-h-[48px] rounded-xl border-2 text-sm font-semibold transition-all cursor-pointer ${
                             paper === sz
                               ? 'border-[var(--primary)] bg-[var(--primary-soft)] text-[var(--primary)]'
                               : 'border-[var(--border)] bg-[var(--surface-2)] text-[var(--text)]'
@@ -526,7 +526,7 @@ export default function PrintUploadPage() {
                     </span>
                     <AnimatedPrice
                       paise={costBreakdown.totalPaise}
-                      className="text-3xl font-black text-[var(--primary)]"
+                      className="text-3xl font-bold text-[var(--primary)]"
                     />
                   </div>
                   <div className="mt-2 space-y-1 border-t border-[var(--border)] pt-2 text-xs text-[var(--text-muted)]">
@@ -534,7 +534,7 @@ export default function PrintUploadPage() {
                       <span>
                         Effective sheets ({doubleSided ? `ceil(${uploaded.pages}/2)` : uploaded.pages})
                       </span>
-                      <span className="font-bold text-[var(--text)]">
+                      <span className="font-bold text-[var(--text)] tabular-nums">
                         {costBreakdown.effectivePages} sheets
                       </span>
                     </div>
@@ -542,13 +542,13 @@ export default function PrintUploadPage() {
                       <span>
                         Rate ({color ? 'Colour' : 'B&W'} × {paper})
                       </span>
-                      <span className="font-bold text-[var(--text)]">
+                      <span className="font-bold text-[var(--text)] tabular-nums">
                         {formatPaise(costBreakdown.unitRatePaise)} / sheet
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span>Formula</span>
-                      <span className="font-bold text-[var(--text)]">
+                      <span className="font-bold text-[var(--text)] tabular-nums">
                         {costBreakdown.effectivePages} × {formatPaise(costBreakdown.unitRatePaise)} × {copies}{' '}
                         {copies === 1 ? 'copy' : 'copies'}
                       </span>
@@ -561,7 +561,7 @@ export default function PrintUploadPage() {
               <section className="flex flex-col justify-between rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm sm:p-6 lg:col-span-5">
                 <div>
                   <div className="mb-4 flex items-center justify-between">
-                    <h2 className="text-base font-extrabold text-[var(--text)]">
+                    <h2 className="text-base font-semibold text-[var(--text)]">
                       3. Pay &amp; Queue Job
                     </h2>
                     <span className="rounded-full bg-[var(--surface-2)] px-2.5 py-0.5 text-[11px] font-bold text-[var(--text-muted)]">
@@ -593,8 +593,8 @@ export default function PrintUploadPage() {
                           transition={{ duration: 0.6, ease: 'easeOut' }}
                         />
                       </svg>
-                      <h3 className="mt-3 text-xl font-black text-[var(--success)]">
-                        Payment Confirmed!
+                      <h3 className="mt-3 text-xl font-bold text-[var(--success)]">
+                        Payment Confirmed
                       </h3>
                       <p className="mt-1 text-xs text-[var(--text-muted)]">
                         Generating your collection QR &amp; redirecting...
@@ -688,7 +688,7 @@ export default function PrintUploadPage() {
                               key={app}
                               type="button"
                               onClick={() => setWalletApp(app)}
-                              className={`min-h-[56px] rounded-xl border-2 text-xs font-extrabold transition-colors cursor-pointer ${
+                              className={`min-h-[56px] rounded-xl border-2 text-xs font-semibold transition-colors cursor-pointer ${
                                 walletApp === app
                                   ? 'border-[var(--primary)] bg-[var(--primary-soft)] text-[var(--primary)]'
                                   : 'border-[var(--border)] bg-[var(--surface-2)] text-[var(--text)]'
@@ -708,7 +708,7 @@ export default function PrintUploadPage() {
                     type="button"
                     disabled={payStage === 'processing'}
                     onClick={handlePayAndSubmit}
-                    className="mt-6 flex min-h-[52px] w-full items-center justify-center gap-2 rounded-2xl bg-[var(--primary)] px-6 text-base font-extrabold text-white shadow-md transition-transform active:scale-[0.98] hover:bg-[var(--primary-hover)] disabled:opacity-60 cursor-pointer"
+                    className="mt-6 flex min-h-[52px] w-full items-center justify-center gap-2 rounded-2xl bg-[var(--primary)] px-6 text-base font-semibold text-white shadow-md transition-transform active:scale-[0.98] hover:bg-[var(--primary-hover)] disabled:opacity-60 cursor-pointer"
                   >
                     {payStage === 'processing' ? (
                       <>

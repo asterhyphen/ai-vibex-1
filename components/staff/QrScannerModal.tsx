@@ -93,7 +93,7 @@ function QrScannerModalInner({
           const itemId = data.kind === 'print' ? data.printJob?.id : data.order?.id
           setOutcome({
             state: 'collected',
-            title: '✅ Collected!',
+            title: 'Collected',
             subtitle: `${itemLabel} verified and marked as collected.`,
             kind: data.kind ?? kind,
             id: itemId,
@@ -105,7 +105,7 @@ function QrScannerModalInner({
         if (data.status === 'already_collected') {
           setOutcome({
             state: 'already_collected',
-            title: '❌ Already Collected',
+            title: 'Already Collected',
             subtitle: data.error || 'This QR token has already been used.',
           })
           return
@@ -114,7 +114,7 @@ function QrScannerModalInner({
         if (data.status === 'not_ready') {
           setOutcome({
             state: 'not_ready',
-            title: '⏳ Not Ready Yet',
+            title: 'Not Ready Yet',
             subtitle: data.error || 'Order is still in progress.',
           })
           return
@@ -122,13 +122,13 @@ function QrScannerModalInner({
 
         setOutcome({
           state: 'invalid',
-          title: '❌ Invalid QR',
+          title: 'Invalid QR',
           subtitle: data.error || 'QR token or OTP did not match any ready item.',
         })
       } catch {
         setOutcome({
           state: 'invalid',
-          title: '❌ Verification Error',
+          title: 'Verification Error',
           subtitle: 'Could not reach verification server.',
         })
       } finally {
@@ -230,7 +230,7 @@ function QrScannerModalInner({
                 <QrCode className="h-5 w-5" />
               </span>
               <div>
-                <h2 className="text-lg font-extrabold text-[var(--text)]">
+                <h2 className="text-lg font-semibold text-[var(--text)]">
                   {kind === 'print' ? 'Collect Print Job' : 'Verify Collection QR'}
                 </h2>
                 <p className="text-xs text-[var(--text-muted)]">
@@ -312,7 +312,7 @@ function QrScannerModalInner({
                 )}
 
                 <h3
-                  className={`mt-4 text-2xl font-black ${
+                  className={`mt-4 text-2xl font-bold ${
                     outcome.state === 'collected'
                       ? 'text-[var(--success)]'
                       : 'text-[var(--danger)]'
@@ -431,14 +431,14 @@ function QrScannerModalInner({
                     onChange={(e) => setManualOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                     placeholder="123456"
                     required
-                    className="min-h-[48px] w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 text-center text-2xl font-black tracking-[0.4em] text-[var(--text)] outline-none focus:border-[var(--primary)] tabular-nums"
+                    className="min-h-[48px] w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 text-center text-2xl font-bold tracking-[0.4em] text-[var(--text)] outline-none focus:border-[var(--primary)] tabular-nums"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={submitting || !manualCode.trim() || manualOtp.length !== 6}
-                  className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-sm font-extrabold text-white shadow-sm hover:bg-[var(--primary-hover)] disabled:opacity-50 cursor-pointer"
+                  className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-sm font-semibold text-white shadow-sm hover:bg-[var(--primary-hover)] disabled:opacity-50 cursor-pointer"
                 >
                   {submitting ? (
                     <Loader2 className="h-5 w-5 animate-spin" />

@@ -72,7 +72,7 @@ export default function AdminSlotsPage() {
           type="button"
           disabled={generating}
           onClick={handleGenerateSlots}
-          className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-xs font-extrabold text-white hover:bg-[var(--primary-hover)] disabled:opacity-50 cursor-pointer"
+          className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-xs font-semibold text-white hover:bg-[var(--primary-hover)] disabled:opacity-50 cursor-pointer"
         >
           {generating ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -87,7 +87,7 @@ export default function AdminSlotsPage() {
         {/* Visual Heatmap */}
         <section className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-            <h2 className="text-base font-extrabold text-[var(--text)]">
+            <h2 className="text-base font-semibold text-[var(--text)]">
               Slot Fill Heatmap ({slots.length} windows)
             </h2>
             <div className="flex items-center gap-3 text-xs font-bold text-[var(--text-muted)]">
@@ -123,7 +123,7 @@ export default function AdminSlotsPage() {
                   title={`${formatSlotTime(slot.slot_start)}: ${slot.used_units}/${slot.capacity_units}`}
                   className={`rounded-xl border p-2 text-center ${style}`}
                 >
-                  <div className="text-[11px] font-extrabold tabular-nums">
+                  <div className="text-[11px] font-semibold tabular-nums">
                     {formatSlotTime(slot.slot_start).replace(/\s?(am|pm)/i, '')}
                   </div>
                   <div className="text-[10px] font-bold tabular-nums">

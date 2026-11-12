@@ -202,7 +202,7 @@ export default function KitchenBoardPage() {
       const labels: Record<typeof action, string> = {
         accept: `${order.code} accepted`,
         start_preparing: `${order.code} moved to cooking`,
-        ready: `${order.code} marked Ready · customer notified 🎉`,
+        ready: `${order.code} marked Ready · customer notified`,
       }
       toast.success(labels[action])
     } catch {
@@ -395,7 +395,7 @@ export default function KitchenBoardPage() {
                       <Inbox className="h-4 w-4" />
                     </span>
                     <div>
-                      <h2 className="text-base font-extrabold text-[var(--text)]">
+                      <h2 className="text-base font-semibold text-[var(--text)]">
                         Incoming
                       </h2>
                       <p className="text-[11px] font-medium text-[var(--text-muted)]">
@@ -403,7 +403,7 @@ export default function KitchenBoardPage() {
                       </p>
                     </div>
                   </div>
-                  <span className="inline-flex h-8 min-w-[32px] items-center justify-center rounded-full bg-[var(--primary)] px-2.5 text-sm font-black text-white tabular-nums">
+                  <span className="inline-flex h-8 min-w-[32px] items-center justify-center rounded-full bg-[var(--primary)] px-2.5 text-sm font-bold text-white tabular-nums">
                     {incomingOrders.length}
                   </span>
                 </header>
@@ -443,7 +443,7 @@ export default function KitchenBoardPage() {
                       <Flame className="h-4 w-4" />
                     </span>
                     <div>
-                      <h2 className="text-base font-extrabold text-[var(--text)]">
+                      <h2 className="text-base font-semibold text-[var(--text)]">
                         Cooking
                       </h2>
                       <p className="text-[11px] font-medium text-[var(--text-muted)]">
@@ -451,7 +451,7 @@ export default function KitchenBoardPage() {
                       </p>
                     </div>
                   </div>
-                  <span className="inline-flex h-8 min-w-[32px] items-center justify-center rounded-full bg-[var(--accent)] px-2.5 text-sm font-black text-white tabular-nums">
+                  <span className="inline-flex h-8 min-w-[32px] items-center justify-center rounded-full bg-[var(--accent)] px-2.5 text-sm font-bold text-white tabular-nums">
                     {cookingOrders.length}
                   </span>
                 </header>
@@ -491,7 +491,7 @@ export default function KitchenBoardPage() {
                       <CheckCircle2 className="h-4 w-4" />
                     </span>
                     <div>
-                      <h2 className="text-base font-extrabold text-[var(--text)]">
+                      <h2 className="text-base font-semibold text-[var(--text)]">
                         Ready
                       </h2>
                       <p className="text-[11px] font-medium text-[var(--text-muted)]">
@@ -499,7 +499,7 @@ export default function KitchenBoardPage() {
                       </p>
                     </div>
                   </div>
-                  <span className="inline-flex h-8 min-w-[32px] items-center justify-center rounded-full bg-[var(--success)] px-2.5 text-sm font-black text-white tabular-nums">
+                  <span className="inline-flex h-8 min-w-[32px] items-center justify-center rounded-full bg-[var(--success)] px-2.5 text-sm font-bold text-white tabular-nums">
                     {readyOrders.length}
                   </span>
                 </header>

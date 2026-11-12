@@ -114,7 +114,7 @@ export default function AdminSettingsPage() {
         >
           <div className="mb-4 flex items-center justify-between gap-2">
             <div>
-              <h2 className="text-base font-extrabold text-[var(--text)]">
+              <h2 className="text-base font-semibold text-[var(--text)]">
                 General Configuration
               </h2>
               <p className="text-xs text-[var(--text-muted)]">
@@ -124,7 +124,7 @@ export default function AdminSettingsPage() {
             <button
               type="submit"
               disabled={saving}
-              className="inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-xs font-extrabold text-white hover:bg-[var(--primary-hover)] disabled:opacity-50 cursor-pointer"
+              className="inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-xs font-semibold text-white hover:bg-[var(--primary-hover)] disabled:opacity-50 cursor-pointer"
             >
               {saving ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

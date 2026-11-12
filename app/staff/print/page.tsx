@@ -212,7 +212,7 @@ export default function PrintQueuePage() {
       <main className="mx-auto max-w-6xl space-y-5 px-4 py-6 sm:px-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-black tracking-tight text-[var(--text)]">
+            <h1 className="text-2xl font-bold tracking-tight text-[var(--text)]">
               Print Shop Queue
             </h1>
             <p className="text-sm text-[var(--text-muted)]">
@@ -281,7 +281,7 @@ export default function PrintQueuePage() {
                         </span>
                         <div className="min-w-0">
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className="text-xs font-black tracking-wider text-[var(--primary)] tabular-nums">
+                            <span className="text-xs font-bold tracking-wider text-[var(--primary)] tabular-nums">
                               {shortRef}
                             </span>
                             {job.sanitised && (
@@ -291,7 +291,7 @@ export default function PrintQueuePage() {
                               </span>
                             )}
                           </div>
-                          <h2 className="mt-0.5 truncate text-base font-extrabold text-[var(--text)]">
+                          <h2 className="mt-0.5 truncate text-base font-semibold text-[var(--text)]">
                             {job.original_name || 'document.pdf'}
                           </h2>
                           <p className="text-xs font-medium text-[var(--text-muted)]">
@@ -305,7 +305,7 @@ export default function PrintQueuePage() {
                       </div>
 
                       <span
-                        className={`shrink-0 rounded-full px-3 py-1 text-xs font-extrabold capitalize ${
+                        className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold capitalize ${
                           STATUS_STYLE[job.status] || 'bg-[var(--surface-2)]'
                         }`}
                       >
@@ -332,7 +332,7 @@ export default function PrintQueuePage() {
                           {job.paper}
                         </span>
                       </div>
-                      <span className="text-base font-black text-[var(--primary)] tabular-nums">
+                      <span className="text-base font-bold text-[var(--primary)] tabular-nums">
                         {formatPaise(job.cost_paise)}
                       </span>
                     </div>
@@ -355,7 +355,7 @@ export default function PrintQueuePage() {
                         type="button"
                         disabled={busy}
                         onClick={() => handleStatusAction(job, 'start_printing')}
-                        className="inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-4 text-sm font-extrabold text-white hover:opacity-90 disabled:opacity-50 cursor-pointer"
+                        className="inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-4 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50 cursor-pointer"
                       >
                         <Printer className="h-4 w-4" />
                         <span>Start Printing</span>
@@ -367,7 +367,7 @@ export default function PrintQueuePage() {
                         type="button"
                         disabled={busy}
                         onClick={() => handleStatusAction(job, 'ready')}
-                        className="inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--success)] px-4 text-sm font-extrabold text-white hover:opacity-90 disabled:opacity-50 cursor-pointer"
+                        className="inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--success)] px-4 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50 cursor-pointer"
                       >
                         <CheckCircle2 className="h-4 w-4" />
                         <span>Mark Ready</span>
@@ -381,7 +381,7 @@ export default function PrintQueuePage() {
                           setScannerCode(shortRef)
                           setScannerOpen(true)
                         }}
-                        className="inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-sm font-extrabold text-white hover:bg-[var(--primary-hover)] cursor-pointer"
+                        className="inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-sm font-semibold text-white hover:bg-[var(--primary-hover)] cursor-pointer"
                       >
                         <QrCode className="h-4 w-4" />
                         <span>Collected (Scan QR)</span>

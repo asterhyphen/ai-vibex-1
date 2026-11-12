@@ -78,7 +78,7 @@ export function AdminShell({
               <FileText className="h-5 w-5" />
             </span>
             <div>
-              <div className="text-sm font-black tracking-tight text-[var(--text)]">
+              <div className="text-sm font-bold tracking-tight text-[var(--text)]">
                 MITE Admin
               </div>
               <div className="text-[11px] font-semibold text-[var(--text-muted)]">
@@ -177,7 +177,7 @@ export function AdminShell({
                 <Menu className="h-5 w-5" />
               </button>
               <div>
-                <h1 className="text-xl font-black tracking-tight text-[var(--text)] sm:text-2xl">
+                <h1 className="text-xl font-bold tracking-tight text-[var(--text)] sm:text-2xl">
                   {title}
                 </h1>
                 {subtitle && (

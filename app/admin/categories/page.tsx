@@ -10,7 +10,7 @@ const CATEGORIES_CONFIG: TableConfig = {
   creatable: true,
   deletable: true,
   columns: [
-    { key: 'icon', label: 'Icon', editable: true, defaultValue: '🍽️' },
+    { key: 'icon', label: 'Icon', editable: true, defaultValue: '' },
     { key: 'name', label: 'Category Name', editable: true, required: true },
     {
       key: 'sort_order',

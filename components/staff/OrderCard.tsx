@@ -131,7 +131,7 @@ export function OrderCard({
       <div className="flex items-start justify-between gap-2">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-2xl font-black tracking-tight text-[var(--text)] tabular-nums">
+            <span className="text-2xl font-bold tracking-tight text-[var(--text)] tabular-nums">
               {order.code}
             </span>
             {order.source === 'guest' && (
@@ -143,7 +143,7 @@ export function OrderCard({
         </div>
 
         <span
-          className={`inline-flex items-center gap-1 rounded-xl px-2.5 py-1 text-xs font-extrabold tabular-nums ${
+          className={`inline-flex items-center gap-1 rounded-xl px-2.5 py-1 text-xs font-semibold tabular-nums ${
             isOverdue
               ? 'bg-[var(--danger)] text-white'
               : diffMin <= 5
@@ -177,15 +177,15 @@ export function OrderCard({
 
         {order.payment_status === 'paid' && order.payment_method === 'online' ? (
           <span className="inline-flex items-center gap-1 rounded-full bg-[var(--success)]/15 px-2.5 py-0.5 text-xs font-bold text-[var(--success)]">
-            Online ✓ Paid
+            Online · Paid
           </span>
         ) : order.payment_status === 'paid' ? (
           <span className="inline-flex items-center gap-1 rounded-full bg-[var(--success)]/15 px-2.5 py-0.5 text-xs font-bold text-[var(--success)]">
-            💵 Cash ✓ Paid
+            Cash · Paid
           </span>
         ) : (
           <span className="inline-flex items-center gap-1 rounded-full bg-[var(--warning)]/20 px-2.5 py-0.5 text-xs font-bold text-[var(--warning)]">
-            💵 Cash
+            Cash
           </span>
         )}
       </div>
@@ -198,7 +198,7 @@ export function OrderCard({
             className="flex items-center justify-between gap-2 text-sm font-semibold text-[var(--text)]"
           >
             <span className="flex items-center gap-2">
-              <span className="inline-flex h-6 min-w-[24px] items-center justify-center rounded-md bg-[var(--primary-soft)] px-1.5 text-xs font-extrabold text-[var(--primary)] tabular-nums">
+              <span className="inline-flex h-6 min-w-[24px] items-center justify-center rounded-md bg-[var(--primary-soft)] px-1.5 text-xs font-semibold text-[var(--primary)] tabular-nums">
                 {item.qty}×
               </span>
               <span>{item.name_snapshot}</span>
@@ -210,7 +210,7 @@ export function OrderCard({
         ))}
         <li className="flex items-center justify-between border-t border-[var(--border)] pt-1.5 text-xs font-bold text-[var(--text-muted)]">
           <span>Order Total</span>
-          <span className="text-sm font-extrabold text-[var(--text)] tabular-nums">
+          <span className="text-sm font-semibold text-[var(--text)] tabular-nums">
             {formatPaise(order.total_paise)}
           </span>
         </li>
@@ -231,7 +231,7 @@ export function OrderCard({
             type="button"
             disabled={busy}
             onClick={() => onCollectCash(order)}
-            className="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--warning)] px-4 text-sm font-extrabold text-white shadow-sm transition-transform active:scale-[0.98] hover:opacity-90 disabled:opacity-50 cursor-pointer"
+            className="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--warning)] px-4 text-sm font-semibold text-white shadow-sm transition-transform active:scale-[0.98] hover:opacity-90 disabled:opacity-50 cursor-pointer"
           >
             <Banknote className="h-4 w-4" />
             <span>Collect Cash →</span>
@@ -243,7 +243,7 @@ export function OrderCard({
             type="button"
             disabled={busy}
             onClick={() => onStatusAction(order, 'accept')}
-            className="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-sm font-extrabold text-white shadow-sm transition-transform active:scale-[0.98] hover:bg-[var(--primary-hover)] disabled:opacity-50 cursor-pointer"
+            className="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-sm font-semibold text-white shadow-sm transition-transform active:scale-[0.98] hover:bg-[var(--primary-hover)] disabled:opacity-50 cursor-pointer"
           >
             <CheckCircle2 className="h-4 w-4" />
             <span>Accept</span>
@@ -255,7 +255,7 @@ export function OrderCard({
             type="button"
             disabled={busy}
             onClick={() => onStatusAction(order, 'start_preparing')}
-            className="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-4 text-sm font-extrabold text-white shadow-sm transition-transform active:scale-[0.98] hover:opacity-90 disabled:opacity-50 cursor-pointer"
+            className="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-4 text-sm font-semibold text-white shadow-sm transition-transform active:scale-[0.98] hover:opacity-90 disabled:opacity-50 cursor-pointer"
           >
             <Flame className="h-4 w-4" />
             <span>Start Cooking</span>
@@ -267,7 +267,7 @@ export function OrderCard({
             type="button"
             disabled={busy}
             onClick={() => onStatusAction(order, 'ready')}
-            className="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--success)] px-4 text-sm font-extrabold text-white shadow-sm transition-transform active:scale-[0.98] hover:opacity-90 disabled:opacity-50 cursor-pointer"
+            className="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--success)] px-4 text-sm font-semibold text-white shadow-sm transition-transform active:scale-[0.98] hover:opacity-90 disabled:opacity-50 cursor-pointer"
           >
             <CheckCircle2 className="h-4 w-4" />
             <span>Mark Ready</span>
@@ -279,7 +279,7 @@ export function OrderCard({
             type="button"
             disabled={busy}
             onClick={() => onOpenScanner(order)}
-            className="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl border-2 border-[var(--success)] bg-[var(--success)]/15 px-4 text-sm font-extrabold text-[var(--success)] transition-transform active:scale-[0.98] hover:bg-[var(--success)] hover:text-white disabled:opacity-50 cursor-pointer"
+            className="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl border-2 border-[var(--success)] bg-[var(--success)]/15 px-4 text-sm font-semibold text-[var(--success)] transition-transform active:scale-[0.98] hover:bg-[var(--success)] hover:text-white disabled:opacity-50 cursor-pointer"
           >
             <QrCode className="h-4 w-4" />
             <span>Scan QR / Handover</span>

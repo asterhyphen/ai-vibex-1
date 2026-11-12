@@ -91,10 +91,10 @@ export async function PATCH(
   if (action === 'ready') {
     await notifyUserAndSms(db, {
       userId: job.user_id,
-      title: `Print Job ${shortRef} Ready!`,
+      title: `Print Job ${shortRef} Ready`,
       body: `"${job.original_name || 'Your document'}" is printed and ready for pickup.`,
       kind: 'success',
-      smsBody: `Your print job ${shortRef} (${job.original_name || 'document'}) is ready! Collect at MITE Print Counter.`,
+      smsBody: `Your print job ${shortRef} (${job.original_name || 'document'}) is ready. Collect at MITE Print Counter.`,
       smsKind: 'print_ready',
     })
   } else if (action === 'reject') {

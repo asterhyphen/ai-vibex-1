@@ -82,7 +82,7 @@ export function StaffHeader({
               <ChefHat className="h-6 w-6" />
             </span>
             <div>
-              <div className="text-base font-extrabold tracking-tight text-[var(--text)] sm:text-lg">
+              <div className="text-base font-semibold tracking-tight text-[var(--text)] sm:text-lg">
                 MITE Kitchen
               </div>
               <div className="text-xs font-medium text-[var(--text-muted)]">

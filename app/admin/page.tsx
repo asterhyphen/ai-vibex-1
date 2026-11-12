@@ -251,7 +251,7 @@ export default function AdminDashboardPage() {
                 <span>Orders Today</span>
                 <ShoppingBag className="h-4 w-4 text-[var(--primary)]" />
               </div>
-              <div className="mt-2 text-3xl font-black text-[var(--text)] tabular-nums">
+              <div className="mt-2 text-3xl font-bold text-[var(--text)] tabular-nums">
                 {kpis.ordersToday}
               </div>
             </div>
@@ -261,7 +261,7 @@ export default function AdminDashboardPage() {
                 <span>Revenue Today</span>
                 <IndianRupee className="h-4 w-4 text-[var(--success)]" />
               </div>
-              <div className="mt-2 text-3xl font-black text-[var(--primary)] tabular-nums">
+              <div className="mt-2 text-3xl font-bold text-[var(--primary)] tabular-nums">
                 {formatPaise(kpis.revenueTodayPaise)}
               </div>
             </div>
@@ -271,7 +271,7 @@ export default function AdminDashboardPage() {
                 <span>Avg Wait</span>
                 <Clock className="h-4 w-4 text-[var(--accent)]" />
               </div>
-              <div className="mt-2 text-3xl font-black text-[var(--text)] tabular-nums">
+              <div className="mt-2 text-3xl font-bold text-[var(--text)] tabular-nums">
                 {kpis.avgWaitMinutes} <span className="text-base font-bold text-[var(--text-muted)]">min</span>
               </div>
             </div>
@@ -281,7 +281,7 @@ export default function AdminDashboardPage() {
                 <span>Queue Length</span>
                 <Activity className="h-4 w-4 text-[var(--warning)]" />
               </div>
-              <div className="mt-2 text-3xl font-black text-[var(--text)] tabular-nums">
+              <div className="mt-2 text-3xl font-bold text-[var(--text)] tabular-nums">
                 {kpis.queueLength}
               </div>
             </div>
@@ -291,7 +291,7 @@ export default function AdminDashboardPage() {
                 <span>Print Jobs</span>
                 <Printer className="h-4 w-4 text-[var(--info)]" />
               </div>
-              <div className="mt-2 text-3xl font-black text-[var(--text)] tabular-nums">
+              <div className="mt-2 text-3xl font-bold text-[var(--text)] tabular-nums">
                 {kpis.printJobsToday}
               </div>
             </div>
@@ -302,7 +302,7 @@ export default function AdminDashboardPage() {
             <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm lg:col-span-8">
               <div className="mb-3 flex items-center justify-between">
                 <div>
-                  <h2 className="text-base font-extrabold text-[var(--text)]">
+                  <h2 className="text-base font-semibold text-[var(--text)]">
                     Orders per Hour (Last 24h)
                   </h2>
                   <p className="text-xs text-[var(--text-muted)]">
@@ -321,7 +321,7 @@ export default function AdminDashboardPage() {
                     <ShieldBan className="h-5 w-5" />
                   </span>
                   <div>
-                    <h2 className="text-base font-extrabold text-[var(--text)]">
+                    <h2 className="text-base font-semibold text-[var(--text)]">
                       Security &amp; Rate Limits
                     </h2>
                     <p className="text-xs text-[var(--text-muted)]">
@@ -335,7 +335,7 @@ export default function AdminDashboardPage() {
                     <span className="text-xs font-bold text-[var(--text-muted)]">
                       Blocked / Failed Auth Hits
                     </span>
-                    <span className="text-2xl font-black text-[var(--danger)] tabular-nums">
+                    <span className="text-2xl font-bold text-[var(--danger)] tabular-nums">
                       {data?.security.blockedRequests ?? 0}
                     </span>
                   </div>
@@ -343,7 +343,7 @@ export default function AdminDashboardPage() {
                     <span className="text-xs font-bold text-[var(--text-muted)]">
                       Active Portal Lockouts
                     </span>
-                    <span className="text-xl font-black text-[var(--warning)] tabular-nums">
+                    <span className="text-xl font-bold text-[var(--warning)] tabular-nums">
                       {data?.security.activeLockouts ?? 0}
                     </span>
                   </div>
@@ -351,7 +351,7 @@ export default function AdminDashboardPage() {
                     <span className="text-xs font-bold text-[var(--text-muted)]">
                       Blocked Accounts
                     </span>
-                    <span className="text-xl font-black text-[var(--text)] tabular-nums">
+                    <span className="text-xl font-bold text-[var(--text)] tabular-nums">
                       {data?.security.blockedUsers ?? 0}
                     </span>
                   </div>
@@ -366,7 +366,7 @@ export default function AdminDashboardPage() {
             <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm lg:col-span-7">
               <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <h2 className="text-base font-extrabold text-[var(--text)]">
+                  <h2 className="text-base font-semibold text-[var(--text)]">
                     Today&apos;s Pickup Slot Heatmap
                   </h2>
                   <p className="text-xs text-[var(--text-muted)]">
@@ -411,7 +411,7 @@ export default function AdminDashboardPage() {
                         title={`${formatSlotTime(slot.slot_start)}: ${slot.used_units}/${slot.capacity_units} (${pct}%)`}
                         className={`rounded-xl border p-2 text-center ${tileStyle}`}
                       >
-                        <div className="text-[11px] font-extrabold tabular-nums">
+                        <div className="text-[11px] font-semibold tabular-nums">
                           {formatSlotTime(slot.slot_start).replace(/\s?(am|pm)/i, '')}
                         </div>
                         <div className="text-[10px] font-bold opacity-85 tabular-nums">
@@ -426,7 +426,7 @@ export default function AdminDashboardPage() {
 
             {/* Top 5 Items Table */}
             <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm lg:col-span-5">
-              <h2 className="text-base font-extrabold text-[var(--text)]">
+              <h2 className="text-base font-semibold text-[var(--text)]">
                 Top 5 Items Today
               </h2>
               <p className="mb-4 text-xs text-[var(--text-muted)]">
@@ -440,7 +440,7 @@ export default function AdminDashboardPage() {
               ) : (
                 <div className="overflow-hidden rounded-2xl border border-[var(--border)]">
                   <table className="w-full text-left text-sm">
-                    <thead className="bg-[var(--surface-2)] text-xs font-extrabold uppercase text-[var(--text-muted)]">
+                    <thead className="bg-[var(--surface-2)] text-xs font-semibold uppercase text-[var(--text-muted)]">
                       <tr>
                         <th className="px-4 py-2.5">Item</th>
                         <th className="px-4 py-2.5 text-right">Qty</th>
@@ -456,7 +456,7 @@ export default function AdminDashboardPage() {
                             </span>
                             {item.name}
                           </td>
-                          <td className="px-4 py-3 text-right font-extrabold tabular-nums">
+                          <td className="px-4 py-3 text-right font-semibold tabular-nums">
                             {item.qty}
                           </td>
                           <td className="px-4 py-3 text-right font-bold text-[var(--primary)] tabular-nums">

@@ -118,7 +118,7 @@ function PrintJobTrackingContent() {
               <ArrowLeft className="h-5 w-5" />
             </Link>
             <div>
-              <h1 className="text-lg font-black text-[var(--text)]">
+              <h1 className="text-lg font-bold text-[var(--text)]">
                 Print Tracking {shortRef}
               </h1>
               <p className="text-xs text-[var(--text-muted)]">
@@ -157,7 +157,7 @@ function PrintJobTrackingContent() {
               >
                 <CheckCircle2 className="h-7 w-7 shrink-0" />
                 <div>
-                  <div className="text-base font-black">Your printouts are ready! 🎉</div>
+                  <div className="text-base font-bold">Your printouts are ready</div>
                   <div className="text-xs font-semibold">
                     Tap the card below to show your QR code at the print desk.
                   </div>
@@ -185,10 +185,10 @@ function PrintJobTrackingContent() {
                         <FileText className="h-6 w-6" />
                       </span>
                       <div className="min-w-0">
-                        <div className="text-xs font-black tracking-wider text-[var(--primary)]">
+                        <div className="text-xs font-bold tracking-wider text-[var(--primary)]">
                           {shortRef}
                         </div>
-                        <h2 className="truncate text-lg font-extrabold text-[var(--text)]">
+                        <h2 className="truncate text-lg font-semibold text-[var(--text)]">
                           {job.original_name}
                         </h2>
                       </div>
@@ -202,21 +202,21 @@ function PrintJobTrackingContent() {
                   <div className="my-5 grid grid-cols-2 gap-3 rounded-2xl bg-[var(--surface-2)] p-4 text-sm sm:grid-cols-4">
                     <div>
                       <div className="text-xs text-[var(--text-muted)]">Pages</div>
-                      <div className="font-extrabold">{job.pages}</div>
+                      <div className="font-semibold">{job.pages}</div>
                     </div>
                     <div>
                       <div className="text-xs text-[var(--text-muted)]">Colour</div>
-                      <div className="font-extrabold">{job.color ? 'Colour' : 'B&W'}</div>
+                      <div className="font-semibold">{job.color ? 'Colour' : 'B&W'}</div>
                     </div>
                     <div>
                       <div className="text-xs text-[var(--text-muted)]">Sides &amp; Size</div>
-                      <div className="font-extrabold">
+                      <div className="font-semibold">
                         {job.double_sided ? '2-sided' : '1-sided'} · {job.paper}
                       </div>
                     </div>
                     <div>
                       <div className="text-xs text-[var(--text-muted)]">Total Paid</div>
-                      <div className="font-black text-[var(--primary)]">
+                      <div className="font-bold text-[var(--primary)] tabular-nums">
                         {formatPaise(job.cost_paise)} ({job.copies}×)
                       </div>
                     </div>
@@ -246,7 +246,7 @@ function PrintJobTrackingContent() {
                       />
                     </div>
                   )}
-                  <div className="mt-3 text-lg font-black tracking-wider text-[var(--primary)]">
+                  <div className="mt-3 text-lg font-bold tracking-wider text-[var(--primary)]">
                     {shortRef}
                   </div>
                   {otp && (
@@ -263,7 +263,7 @@ function PrintJobTrackingContent() {
 
             {/* Progress Stepper */}
             <section className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
-              <h3 className="mb-4 text-sm font-extrabold uppercase tracking-wider text-[var(--text-muted)]">
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[var(--text-muted)]">
                 Print Status
               </h3>
 
@@ -279,7 +279,7 @@ function PrintJobTrackingContent() {
                     return (
                       <li key={step.key} className="flex items-start gap-3.5">
                         <span
-                          className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black ${
+                          className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                             done
                               ? 'bg-[var(--primary)] text-white'
                               : 'border border-[var(--border)] bg-[var(--surface-2)] text-[var(--text-muted)]'
@@ -288,7 +288,7 @@ function PrintJobTrackingContent() {
                           {done ? '✓' : idx + 1}
                         </span>
                         <div>
-                          <div className="text-sm font-extrabold text-[var(--text)]">
+                          <div className="text-sm font-semibold text-[var(--text)]">
                             {step.label}
                           </div>
                           <div className="text-xs text-[var(--text-muted)]">

@@ -87,7 +87,7 @@ export function DangerZonePanel({ onComplete }: { onComplete?: () => void }) {
           <AlertTriangle className="h-5 w-5" />
         </span>
         <div>
-          <h2 className="text-base font-black text-[var(--danger)]">
+          <h2 className="text-base font-bold text-[var(--danger)]">
             Danger Zone
           </h2>
           <p className="text-xs font-medium text-[var(--text-muted)]">
@@ -105,7 +105,7 @@ export function DangerZonePanel({ onComplete }: { onComplete?: () => void }) {
               className="flex flex-col justify-between gap-3 rounded-2xl border border-[var(--danger)]/30 bg-[var(--surface)] p-4"
             >
               <div>
-                <div className="flex items-center gap-2 text-sm font-extrabold text-[var(--text)]">
+                <div className="flex items-center gap-2 text-sm font-semibold text-[var(--text)]">
                   <Icon className="h-4 w-4 text-[var(--danger)]" />
                   <span>{item.label}</span>
                 </div>
@@ -119,7 +119,7 @@ export function DangerZonePanel({ onComplete }: { onComplete?: () => void }) {
                   setConfirmText('')
                   setSelected(item)
                 }}
-                className="min-h-[42px] self-start rounded-xl border border-[var(--danger)] bg-[var(--danger)]/10 px-4 text-xs font-extrabold text-[var(--danger)] hover:bg-[var(--danger)] hover:text-white transition-colors cursor-pointer"
+                className="min-h-[42px] self-start rounded-xl border border-[var(--danger)] bg-[var(--danger)]/10 px-4 text-xs font-semibold text-[var(--danger)] hover:bg-[var(--danger)] hover:text-white transition-colors cursor-pointer"
               >
                 {item.buttonText}
               </button>
@@ -132,7 +132,7 @@ export function DangerZonePanel({ onComplete }: { onComplete?: () => void }) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 p-4 backdrop-blur-sm">
           <div className="w-full max-w-md rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-2xl">
             <div className="mb-3 flex items-center justify-between">
-              <h3 className="text-lg font-black text-[var(--danger)]">
+              <h3 className="text-lg font-bold text-[var(--danger)]">
                 Confirm: {selected.label}
               </h3>
               <button
@@ -151,7 +151,7 @@ export function DangerZonePanel({ onComplete }: { onComplete?: () => void }) {
             <form onSubmit={handleRun} className="mt-4 space-y-4">
               <div>
                 <label className="mb-1.5 block text-xs font-bold text-[var(--text-muted)]">
-                  Type <span className="font-black text-[var(--danger)]">CONFIRM</span> to proceed
+                  Type <span className="font-bold text-[var(--danger)]">CONFIRM</span> to proceed
                 </label>
                 <input
                   type="text"
@@ -174,7 +174,7 @@ export function DangerZonePanel({ onComplete }: { onComplete?: () => void }) {
                 <button
                   type="submit"
                   disabled={submitting || confirmText.trim() !== 'CONFIRM'}
-                  className="flex min-h-[44px] flex-1 items-center justify-center rounded-xl bg-[var(--danger)] text-sm font-extrabold text-white disabled:opacity-45 cursor-pointer"
+                  className="flex min-h-[44px] flex-1 items-center justify-center rounded-xl bg-[var(--danger)] text-sm font-semibold text-white disabled:opacity-45 cursor-pointer"
                 >
                   {submitting ? (
                     <Loader2 className="h-4 w-4 animate-spin" />

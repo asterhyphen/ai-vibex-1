@@ -53,7 +53,7 @@ export function RejectModal({
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--danger)]/15 text-[var(--danger)]">
                 <XCircle className="h-5 w-5" />
               </span>
-              <h2 className="text-lg font-extrabold text-[var(--text)]">{title}</h2>
+              <h2 className="text-lg font-semibold text-[var(--text)]">{title}</h2>
             </div>
             <button
               type="button"
@@ -113,7 +113,7 @@ export function RejectModal({
               <button
                 type="submit"
                 disabled={submitting || reason.trim().length < 2}
-                className="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--danger)] text-sm font-extrabold text-white hover:opacity-90 disabled:opacity-50 cursor-pointer"
+                className="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-[var(--danger)] text-sm font-semibold text-white hover:opacity-90 disabled:opacity-50 cursor-pointer"
               >
                 {submitting ? (
                   <Loader2 className="h-4 w-4 animate-spin" />

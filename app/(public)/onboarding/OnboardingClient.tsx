@@ -97,16 +97,16 @@ export function OnboardingClient({
   const handleOtpVerify = async (codeOverride?: string) => {
     if (verifying) return
     const code = (codeOverride ?? otp).trim()
-    if (code.length !== 6) {
+    if (code.length !== 4) {
       setOtpError(true)
-      toast.error('Enter the 6-digit verification code')
+      toast.error('Enter the 4-digit verification code')
       return
     }
 
-    // Client-side immediate check against displayed code or 123456
-    if (code !== issuedCode && code !== '123456') {
+    // Client-side immediate check against displayed code or 1234
+    if (code !== issuedCode && code !== '1234') {
       setOtpError(true)
-      toast.error('Code does not match the SMS notification (or 123456)')
+      toast.error('Code does not match the SMS notification (1234)')
       return
     }
 
@@ -239,9 +239,9 @@ export function OnboardingClient({
                       />
                     </div>
                     <p className="mt-2 text-xs text-[var(--text-muted)]">
-                      Demo SMS: a verification bubble appears in the corner (or use{' '}
+                      Demo SMS: a verification bubble appears in the corner (Demo OTP:{' '}
                       <code className="font-mono font-semibold text-[var(--text)]">
-                        123456
+                        1234
                       </code>
                       ).
                     </p>
@@ -297,6 +297,7 @@ export function OnboardingClient({
                   </div>
 
                   <OtpInput
+                    length={4}
                     value={otp}
                     onChange={(val) => {
                       setOtp(val)
@@ -310,10 +311,17 @@ export function OnboardingClient({
                     idPrefix="onboarding-otp"
                   />
 
+                  <p className="text-center text-xs text-[var(--text-muted)]">
+                    Demo OTP:{' '}
+                    <code className="rounded bg-[var(--primary-soft)] px-1.5 py-0.5 font-mono font-bold text-[var(--primary)]">
+                      1234
+                    </code>
+                  </p>
+
                   <div className="space-y-2.5">
                     <button
                       type="submit"
-                      disabled={verifying || otp.length !== 6}
+                      disabled={verifying || otp.length !== 4}
                       className="inline-flex h-12 min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[var(--primary-hover)] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                     >
                       {verifying ? (

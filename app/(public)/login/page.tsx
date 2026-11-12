@@ -93,7 +93,7 @@ function LoginContent() {
         return false
       }
 
-      toast.success('OTP sent to your @mite.ac.in inbox')
+      toast.success(data.message || 'Verification code ready (Demo OTP: 1234)')
       setResendCooldown(RESEND_SECONDS)
       return true
     } catch {
@@ -133,7 +133,7 @@ function LoginContent() {
 
     if (!parsed.success) {
       setOtpError(true)
-      toast.error(parsed.error.issues[0]?.message || 'Enter the 6-digit OTP')
+      toast.error(parsed.error.issues[0]?.message || 'Enter the 4-digit OTP')
       return
     }
 
@@ -337,10 +337,17 @@ function LoginContent() {
                   </div>
 
                   <div>
-                    <label className="block text-center text-sm font-semibold text-[var(--text)] mb-3">
-                      Enter 6-digit verification code
+                    <label className="block text-center text-sm font-semibold text-[var(--text)] mb-1.5">
+                      Enter 4-digit verification code
                     </label>
+                    <p className="mb-3 text-center text-xs font-medium text-[var(--text-muted)]">
+                      Demo OTP:{' '}
+                      <code className="rounded bg-[var(--primary-soft)] px-1.5 py-0.5 font-mono font-bold text-[var(--primary)]">
+                        1234
+                      </code>
+                    </p>
                     <OtpInput
+                      length={4}
                       value={otp}
                       onChange={(val) => {
                         setOtp(val)
@@ -357,7 +364,7 @@ function LoginContent() {
 
                   <button
                     type="submit"
-                    disabled={verifyingOtp || otp.length !== 6}
+                    disabled={verifyingOtp || otp.length !== 4}
                     className="inline-flex h-12 min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[var(--primary-hover)] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                   >
                     {verifyingOtp ? (

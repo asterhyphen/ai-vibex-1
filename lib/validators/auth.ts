@@ -48,7 +48,7 @@ export const OtpVerifySchema = z.object({
   token: z
     .string()
     .trim()
-    .regex(/^\d{6}$/, 'Enter the 6-digit verification code'),
+    .regex(/^\d{4}$/, 'Enter the 4-digit verification code'),
 })
 
 export const IndianPhoneSchema = z
@@ -65,7 +65,7 @@ export const PhoneOtpVerifySchema = z.object({
   code: z
     .string()
     .trim()
-    .regex(/^\d{6}$/, 'Enter the 6-digit verification code'),
+    .regex(/^\d{4}$/, 'Enter the 4-digit verification code'),
 })
 
 export const PortalLoginSchema = z.object({

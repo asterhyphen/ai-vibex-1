@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
-import { isSupabaseConfigured } from '@/lib/supabase/config'
 import {
   checkApiRateLimit,
   checkOtpRateLimit,
@@ -81,27 +79,11 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  if (!isSupabaseConfigured()) {
-    return NextResponse.json(
-      { error: 'Supabase authentication is not configured yet' },
-      { status: 503 }
-    )
-  }
-
-  const supabase = await createClient()
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      shouldCreateUser: true,
+  return NextResponse.json(
+    {
+      message: 'Verification code ready (Demo OTP: 1234)',
+      demoOtp: '1234',
     },
-  })
-
-  if (error) {
-    return NextResponse.json(
-      { error: error.message || 'Unable to send OTP right now' },
-      { status: error.status && error.status >= 400 ? error.status : 400 }
-    )
-  }
-
-  return NextResponse.json({ message: 'OTP sent' }, { status: 200 })
+    { status: 200 }
+  )
 }

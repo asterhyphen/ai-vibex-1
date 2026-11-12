@@ -21,7 +21,7 @@ export function OtpInput({
   disabled = false,
   error = false,
   autoFocus = true,
-  length = 6,
+  length = 4,
   idPrefix = 'otp-box',
 }: OtpInputProps) {
   const inputRefs = useRef<Array<HTMLInputElement | null>>([])
@@ -120,7 +120,7 @@ export function OtpInput({
       transition={{ duration: 0.38 }}
       className="flex items-center justify-center gap-2 sm:gap-3"
       role="group"
-      aria-label="6-digit verification code"
+      aria-label={`${length}-digit verification code`}
     >
       {digits.map((digit, index) => {
         const isFilled = digit !== ''

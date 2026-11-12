@@ -1,10 +1,19 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 
+export function getSupabaseUrl(): string {
+  return (process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').trim().replace(/\/+$/, '')
+}
+
+export function getSupabasePublishableKey(): string {
+  return (
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    ''
+  ).trim()
+}
+
 export function isSupabaseConfigured(): boolean {
-  return Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() &&
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()
-  )
+  return Boolean(getSupabaseUrl() && getSupabasePublishableKey())
 }
 
 /**
@@ -12,8 +21,8 @@ export function isSupabaseConfigured(): boolean {
  * Returns null if not configured so callers can fall back gracefully.
  */
 export function createServiceRoleClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()
+  const url = getSupabaseUrl()
+  const serviceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY ?? '').trim()
   if (!url || !serviceKey) return null
 
   return createSupabaseClient(url, serviceKey, {

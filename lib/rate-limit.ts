@@ -1,3 +1,5 @@
+import { getSupabasePublishableKey, getSupabaseUrl } from './supabase/config'
+
 // In-memory token-bucket rate limiter (Edge & Node runtime compatible)
 
 export interface RateLimitResult {
@@ -130,16 +132,16 @@ export function logRateLimitBlocked(params: {
   retryAfter: number
   kind: 'api' | 'otp'
 }): Promise<void> {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()
+  const url = getSupabaseUrl()
   const apiKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()
+    (process.env.SUPABASE_SERVICE_ROLE_KEY ?? '').trim() ||
+    getSupabasePublishableKey()
 
   if (!url || !apiKey) {
     return Promise.resolve()
   }
 
-  const endpoint = `${url.replace(/\/+$/, '')}/rest/v1/audit_log`
+  const endpoint = `${url}/rest/v1/audit_log`
   return fetch(endpoint, {
     method: 'POST',
     headers: {

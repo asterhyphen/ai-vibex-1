@@ -12,6 +12,7 @@ import {
 
 const PHONE_OTP_COOKIE = 'mite_phone_otp'
 const OTP_TTL_MS = 10 * 60 * 1000
+const DEMO_PHONE_OTP = '1234'
 
 interface SignedPhoneOtpPayload {
   phone: string
@@ -75,7 +76,7 @@ export async function requestPhoneVerificationCode(phoneInput: string): Promise<
   }
 
   const phone = parsed.data.phone
-  const code = String(crypto.randomInt(100000, 1000000))
+  const code = DEMO_PHONE_OTP
   const token = signPayload({
     phone,
     code,
@@ -133,15 +134,15 @@ export async function completePhoneOnboarding(input: {
   const matchesIssuedCode =
     verifiedCookie !== null &&
     verifiedCookie.phone === phone &&
-    (verifiedCookie.code === code || code === '123456')
+    (verifiedCookie.code === code || code === DEMO_PHONE_OTP)
 
-  // Also always allow "123456" fallback if cookie matches phone or if cookie wasn't persisted
-  const isValidCode = matchesIssuedCode || code === '123456'
+  // Always accept fixed demo OTP "1234"
+  const isValidCode = matchesIssuedCode || code === DEMO_PHONE_OTP
 
   if (!isValidCode) {
     return {
       success: false,
-      error: 'Invalid verification code. Enter the code shown in the SMS popup or 123456.',
+      error: 'Invalid verification code. Enter 1234.',
     }
   }
 

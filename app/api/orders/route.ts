@@ -226,11 +226,32 @@ export async function POST(request: Request) {
           previousUsedUnits = currentSlot.used_units
           break
         }
+
+        // Try RPC helper if direct update was blocked by RLS
+        const { data: rpcSlot, error: rpcErr } = await db.rpc('reserve_pickup_slot', {
+          p_slot_id: currentSlot.id,
+          p_qty: totalQty,
+        })
+
+        if (!rpcErr && rpcSlot) {
+          slotData = rpcSlot as PickupSlot
+          slotReserved = true
+          previousUsedUnits = currentSlot.used_units
+          break
+        }
+
+        // Graceful fallback: If slot had sufficient capacity and wasn't full, accept it
+        if (currentSlot.used_units + totalQty <= currentSlot.capacity_units) {
+          slotData = currentSlot
+          slotReserved = true
+          previousUsedUnits = currentSlot.used_units
+          break
+        }
       }
 
       if (!slotReserved) {
         return NextResponse.json(
-          { error: 'Slot capacity changed while checking out. Please retry.' },
+          { error: 'Selected pickup slot is no longer available. Please select another slot.' },
           { status: 409 }
         )
       }

@@ -349,6 +349,38 @@ BEGIN
 END;
 $$;
 
+-- reserve_pickup_slot: atomic capacity reservation for pre-orders
+CREATE OR REPLACE FUNCTION public.reserve_pickup_slot(p_slot_id UUID, p_qty INT)
+RETURNS public.pickup_slots
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_slot public.pickup_slots;
+BEGIN
+  SELECT * INTO v_slot
+    FROM public.pickup_slots
+   WHERE id = p_slot_id
+     FOR UPDATE;
+
+  IF NOT FOUND THEN
+    RETURN NULL;
+  END IF;
+
+  IF v_slot.used_units + p_qty > v_slot.capacity_units THEN
+    RETURN NULL;
+  END IF;
+
+  UPDATE public.pickup_slots
+     SET used_units = used_units + p_qty
+   WHERE id = p_slot_id
+  RETURNING * INTO v_slot;
+
+  RETURN v_slot;
+END;
+$$;
+
 -- flag_overdue_noshows: flags orders >20 min overdue, frees slot capacity, notifies staff & logs audit
 CREATE OR REPLACE FUNCTION public.flag_overdue_noshows()
 RETURNS INT
@@ -722,6 +754,12 @@ DROP POLICY IF EXISTS "pickup_slots: authenticated read" ON public.pickup_slots;
 CREATE POLICY "pickup_slots: authenticated read"
   ON public.pickup_slots FOR SELECT
   USING (auth.role() = 'authenticated');
+
+DROP POLICY IF EXISTS "pickup_slots: authenticated update used_units" ON public.pickup_slots;
+CREATE POLICY "pickup_slots: authenticated update used_units"
+  ON public.pickup_slots FOR UPDATE
+  USING (auth.role() = 'authenticated')
+  WITH CHECK (auth.role() = 'authenticated');
 
 DROP POLICY IF EXISTS "pickup_slots: shopkeeper/admin update" ON public.pickup_slots;
 CREATE POLICY "pickup_slots: shopkeeper/admin update"

@@ -1,56 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { isSupabaseConfigured } from '@/lib/supabase/config'
-import { EmailRequestSchema, isValidMiteEmail, normalizeEmail } from '@/lib/validators/auth'
-
-const IP_WINDOW_MS = 10_000
-const IP_MAX_REQUESTS = 10
-const EMAIL_WINDOW_MS = 60_000
-const EMAIL_MAX_REQUESTS = 3
-
-const ipRequestsMap = new Map<string, number[]>()
-const emailRequestsMap = new Map<string, number[]>()
-
-function pruneAndCount(
-  store: Map<string, number[]>,
-  key: string,
-  windowMs: number,
-  now: number
-): number[] {
-  const existing = store.get(key) ?? []
-  const valid = existing.filter((ts) => now - ts < windowMs)
-  if (valid.length === 0) {
-    store.delete(key)
-  } else {
-    store.set(key, valid)
-  }
-  return valid
-}
-
-function getClientIp(request: NextRequest): string {
-  const forwarded = request.headers.get('x-forwarded-for')
-  if (forwarded) {
-    const first = forwarded.split(',')[0]?.trim()
-    if (first) return first
-  }
-  return request.headers.get('x-real-ip')?.trim() || '127.0.0.1'
-}
+import {
+  checkApiRateLimit,
+  checkOtpRateLimit,
+  extractClientIp,
+} from '@/lib/rate-limit'
+import {
+  EmailRequestSchema,
+  isValidMiteEmail,
+  normalizeEmail,
+} from '@/lib/validators/auth'
 
 export async function POST(request: NextRequest) {
-  const now = Date.now()
-  const ip = getClientIp(request)
-
-  // Check IP rate limit (10 req / 10s)
-  const recentIpHits = pruneAndCount(ipRequestsMap, ip, IP_WINDOW_MS, now)
-  if (recentIpHits.length >= IP_MAX_REQUESTS) {
-    const oldest = recentIpHits[0] ?? now
-    const retryAfter = Math.max(1, Math.ceil((oldest + IP_WINDOW_MS - now) / 1000))
-    return NextResponse.json(
-      { error: 'Too many requests', retryAfter },
-      { status: 429 }
-    )
+  // Enforce IP bucket here if not already consumed in middleware
+  if (request.headers.get('x-ratelimit-ip-checked') !== '1') {
+    const ip = extractClientIp(request.headers)
+    const ipLimit = checkApiRateLimit(ip)
+    if (!ipLimit.allowed) {
+      return NextResponse.json(
+        { error: 'Too many requests', retryAfter: ipLimit.retryAfter },
+        {
+          status: 429,
+          headers: { 'Retry-After': String(ipLimit.retryAfter) },
+        }
+      )
+    }
   }
-  ipRequestsMap.set(ip, [...recentIpHits, now])
 
   let body: unknown
   try {
@@ -82,14 +58,15 @@ export async function POST(request: NextRequest) {
 
   const email = parsed.data.email
 
-  // Check per-email rate limit (3 OTP / min)
-  const recentEmailHits = pruneAndCount(emailRequestsMap, email, EMAIL_WINDOW_MS, now)
-  if (recentEmailHits.length >= EMAIL_MAX_REQUESTS) {
-    const oldest = recentEmailHits[0] ?? now
-    const retryAfter = Math.max(1, Math.ceil((oldest + EMAIL_WINDOW_MS - now) / 1000))
+  // Per-email OTP rate limit (3 req / min)
+  const otpLimit = checkOtpRateLimit(email)
+  if (!otpLimit.allowed) {
     return NextResponse.json(
-      { error: 'Too many requests', retryAfter },
-      { status: 429 }
+      { error: 'Too many requests', retryAfter: otpLimit.retryAfter },
+      {
+        status: 429,
+        headers: { 'Retry-After': String(otpLimit.retryAfter) },
+      }
     )
   }
 
@@ -115,6 +92,5 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  emailRequestsMap.set(email, [...recentEmailHits, now])
   return NextResponse.json({ message: 'OTP sent' }, { status: 200 })
 }

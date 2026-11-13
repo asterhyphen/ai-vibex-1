@@ -275,6 +275,5 @@ vibex/
 
 <div align="center">
 
-Crafted with care for **Mangalore Institute of Technology & Engineering (MITE)**.
-
+Winners for the event
 </div>
